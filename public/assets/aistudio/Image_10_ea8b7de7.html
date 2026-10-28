@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#001a43","surface-container-lowest":"#ffffff","canvas-white":"#ffffff","secondary-fixed-dim":"#b8c7e5","on-tertiary":"#ffffff","tertiary-fixed":"#dae3ef","outline":"#727785","on-secondary-container":"#54637d","status-borrador":"#63666b","outline-variant":"#c2c6d6","on-tertiary-container":"#e8f1fd","on-tertiary-fixed-variant":"#3f4851","status-enviada-bg":"#e9f2fe","inverse-surface":"#2f3133","primary-container":"#1868db","status-pagada":"#22a06b","text-subtlest":"#63666b","border-subtle":"#dddee1","on-background":"#1a1c1e","text-secondary":"#505258","on-secondary":"#ffffff","surface-tint":"#0059c5","primary":"#0050b2","inverse-on-surface":"#f1f0f3","inverse-primary":"#aec6ff","status-pendiente":"#c75300","on-surface-variant":"#424753","surface-variant":"#e2e2e5","background":"#f9f9fc","secondary-fixed":"#d5e3ff","border-strong":"#b7b9be","surface-bright":"#f9f9fc","tertiary-fixed-dim":"#bec7d3","surface-dim":"#dadadc","status-enviada-text":"#1868db","status-vencida":"#ae2e24","surface-container-highest":"#e2e2e5","on-primary-container":"#ecefff","primary-hover":"#1558bc","on-error-container":"#93000a","tertiary":"#4d565f","on-secondary-fixed-variant":"#394760","error":"#ba1a1a","tertiary-container":"#656e78","on-tertiary-fixed":"#141c25","primary-fixed-dim":"#aec6ff","secondary":"#505f78","on-primary-fixed-variant":"#004397","surface-container":"#eeeef0","on-error":"#ffffff","surface":"#f9f9fc","error-container":"#ffdad6","primary-fixed":"#d8e2ff","text-primary":"#101214","surface-container-low":"#f3f3f6","secondary-container":"#d1e0ff","on-primary":"#ffffff","on-surface":"#1a1c1e","on-secondary-fixed":"#0c1c32","surface-container-high":"#e8e8ea"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{margin:"2rem","space-xl":"2rem","space-sm":"0.5rem","space-lg":"1.5rem","margin-mobile":"1rem","space-2xl":"2.5rem","space-md":"1rem","gutter-mobile":"1rem","space-xs":"0.25rem",gutter:"1.5rem"},fontFamily:{"button-label":["Inter"],"currency-display":["Inter"],"body-lg":["Inter"],"headline-sm":["Inter"],"badge-label":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"display-hero":["Inter"],"body-md":["Inter"],"headline-lg":["Inter"],"body-sm":["Inter"],"display-hero-mobile":["Inter"],caption:["Inter"]},fontSize:{"button-label":["15px",{lineHeight:"20px",fontWeight:"500"}],"currency-display":["32px",{lineHeight:"38px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["18px",{lineHeight:"26px",fontWeight:"400"}],"headline-sm":["22px",{lineHeight:"28px",fontWeight:"500"}],"badge-label":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg-mobile":["28px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["28px",{lineHeight:"36px",fontWeight:"500"}],"display-hero":["68px",{lineHeight:"76px",letterSpacing:"-0.02em",fontWeight:"600"}],"body-md":["15px",{lineHeight:"22px",fontWeight:"400"}],"headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"18px",fontWeight:"400"}],"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.01em",fontWeight:"600"}],caption:["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"500"}]}}}};</script></head><body class="bg-surface-container-lowest text-text-primary antialiased"><aside class="fixed top-0 left-0 h-screen w-[260px] bg-canvas-white border-r border-border-subtle z-50 flex flex-col justify-between select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md border-b border-border-subtle flex items-center gap-space-sm"><img alt="FreelanceOS Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UPjIui1s9BL9NKirY0IweaeQqYzzzU7jV3PCco0bBzEzalfY25GmIGilSZ5HciQenAketHAamhOhuMxI4mnN9B7TV_BC85HSqsc1r485ho11CgS4a8ykRd_VoPXHk8pLdZZGdweo_uiOBLj0RFl_WZ-7XbkJLkG-2VwFe_8Af5KzNKZDchxKLfR2X_UiaTk6abicFALKGxOxDNR46nznzDBpGIhqK2K5hF2v8tvLv8hYl9RGfwjd_ccQ"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-body-md font-semibold text-text-primary leading-tight truncate">FreelanceOS</span><span class="font-caption text-caption text-text-subtlest truncate">Gestión &amp; Facturación</span></div></div><div class="px-space-md py-space-sm"><div class="text-[11px] font-semibold text-text-subtlest uppercase tracking-wider px-space-xs mb-space-xs">Menú Principal</div><nav class="flex flex-col gap-1" data-active-classes="bg-status-enviada-bg text-status-enviada-text font-semibold rounded-[10000px]"><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span>Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="clientes" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Clientes</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="servicios" href="#"><span class="material-symbols-outlined text-[20px]">design_services</span><span>Servicios</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="facturas" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span>Facturas</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="cuentas-cobro" href="#"><span class="material-symbols-outlined text-[20px]">payments</span><span>Cuentas de Cobro</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="contratos" href="#"><span class="material-symbols-outlined text-[20px]">description</span><span>Contratos</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="configuracion" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Configuración</span></a></nav></div></div><div class="p-space-md border-t border-border-subtle bg-surface-container-lowest"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><div class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Carlos Mendoza</div><div class="font-caption text-caption text-text-subtlest truncate">carlos@mendoza.co</div></div></div><div class="mt-space-sm flex items-center justify-between"><span class="inline-flex items-center px-2 py-0.5 rounded-[10000px] font-badge-label text-[10px] uppercase tracking-wide bg-status-enviada-bg text-status-enviada-text border border-[#b3d4ff]">Plan Pro</span><span class="font-caption text-caption text-text-subtlest">COP $</span></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-canvas-white border-b border-border-subtle z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-lg"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-subtlest text-[20px]">search</span><input class="w-full h-10 pl-10 pr-space-md bg-canvas-white border border-border-strong rounded-[3px] text-body-sm font-body-sm text-text-primary placeholder:text-text-subtlest focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Buscar clientes, facturas, contratos..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-surface-container-low rounded-[10000px] text-body-sm font-body-sm text-text-secondary border border-border-subtle"><span class="material-symbols-outlined text-[16px] text-status-pagada">monetization_on</span><span class="font-semibold text-text-primary">COP</span><span class="text-text-subtlest">(Pesos Colombianos)</span></div><button class="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><button class="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-vencida"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1200px] mx-auto px-space-md md:px-space-xl py-space-xl space-y-space-xl">
+<!-- Top Action Breadcrumb Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm text-text-subtlest font-caption text-caption">
+<a class="hover:text-text-primary transition-colors flex items-center gap-1 font-body-sm text-body-sm text-text-secondary" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Clientes</span>
+</a>
+<span>/</span>
+<span class="font-body-sm text-body-sm font-semibold text-text-primary">Nu Colombia S.A.</span>
+<span class="px-2 py-0.5 rounded-[10000px] bg-surface-container-high text-text-secondary font-caption text-[11px] font-semibold">ID: CLI-0089</span>
+</div>
+<!-- Action Buttons Suite -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">description</span>
+<span>+ Nuevo contrato</span>
+</button>
+<button class="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">receipt_long</span>
+<span>+ Nueva factura</span>
+</button>
+<button class="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">payments</span>
+<span>+ Nueva cuenta de cobro</span>
+</button>
+<!-- Single Primary Pill Button (Rule Mandate) -->
+<button class="h-10 px-6 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label transition-all flex items-center gap-2 cursor-pointer shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span>Editar perfil</span>
+</button>
+</div>
+</div>
+<!-- Header / Client Identity Hero Card -->
+<div class="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col lg:flex-row lg:items-center justify-between gap-space-xl">
+<div class="flex flex-col sm:flex-row sm:items-center gap-space-lg">
+<div class="w-20 h-20 rounded-[16px] bg-[#531253] text-canvas-white flex items-center justify-center font-headline-md text-headline-md font-bold shadow-sm shrink-0">
+          Nu
+        </div>
+<div class="flex flex-col space-y-1.5">
+<div class="flex flex-wrap items-center gap-space-sm">
+<h1 class="font-headline-md text-headline-md text-text-primary font-semibold tracking-tight">Nu Colombia S.A.</h1>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-pagada mr-1.5"></span>
+              Activo
+            </span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-surface-container-low text-text-secondary border border-border-subtle">
+              Fintech
+            </span>
+</div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-4 text-text-secondary font-body-sm text-body-sm">
+<span class="flex items-center gap-1 font-semibold text-text-primary">
+<span class="text-text-subtlest font-normal">NIT:</span> 901.345.890-1
+            </span>
+<span class="text-border-strong">•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-text-subtlest">person</span>
+              Laura Restrepo (Lead Product Designer)
+            </span>
+<span class="text-border-strong">•</span>
+<a class="flex items-center gap-1 hover:text-primary-container text-text-secondary transition-colors" href="mailto:lrestrepo@nu.com.co">
+<span class="material-symbols-outlined text-[16px] text-text-subtlest">mail</span>
+              lrestrepo@nu.com.co
+            </a>
+<span class="text-border-strong">•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-text-subtlest">call</span>
+              +57 310 456 7890
+            </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-md border-t lg:border-t-0 lg:border-l border-border-subtle pt-4 lg:pt-0 lg:pl-space-xl shrink-0">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider">Moneda Principal</span>
+<span class="font-headline-sm text-body-lg font-semibold text-text-primary flex items-center gap-1">
+            COP ($) <span class="text-text-subtlest font-normal text-body-sm">Pesos</span>
+</span>
+</div>
+<div class="h-8 w-[1px] bg-border-subtle"></div>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider">Ciclo Comercial</span>
+<span class="font-headline-sm text-body-lg font-semibold text-status-pagada flex items-center gap-1">
+            Al día
+          </span>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs (Pill Pattern) -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 border-b border-border-subtle select-none">
+<button class="h-9 px-4 rounded-[10000px] bg-text-primary text-canvas-white font-badge-label text-badge-label flex items-center whitespace-nowrap cursor-pointer" type="button">
+        Información
+      </button>
+<button class="h-9 px-4 rounded-[10000px] bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors font-badge-label text-badge-label flex items-center whitespace-nowrap cursor-pointer" type="button">
+        Servicios
+      </button>
+<button class="h-9 px-4 rounded-[10000px] bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors font-badge-label text-badge-label flex items-center gap-1.5 whitespace-nowrap cursor-pointer" type="button">
+<span>Contratos</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-text-secondary text-[11px]">2</span>
+</button>
+<button class="h-9 px-4 rounded-[10000px] bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors font-badge-label text-badge-label flex items-center gap-1.5 whitespace-nowrap cursor-pointer" type="button">
+<span>Facturas</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-text-secondary text-[11px]">4</span>
+</button>
+<button class="h-9 px-4 rounded-[10000px] bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors font-badge-label text-badge-label flex items-center gap-1.5 whitespace-nowrap cursor-pointer" type="button">
+<span>Cuentas de cobro</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-text-secondary text-[11px]">3</span>
+</button>
+<button class="h-9 px-4 rounded-[10000px] bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors font-badge-label text-badge-label flex items-center whitespace-nowrap cursor-pointer" type="button">
+        Notas
+      </button>
+</div>
+<!-- Financial Performance Overview Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Card: Facturado Histórico -->
+<div class="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase tracking-wider font-semibold text-text-subtlest">Facturado Histórico</span>
+<span class="w-8 h-8 rounded-full bg-status-enviada-bg text-status-enviada-text flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+</span>
+</div>
+<div class="my-4">
+<div class="font-currency-display text-currency-display font-semibold text-text-primary tracking-tight">
+            $42.500.000 <span class="font-body-sm text-body-sm text-text-subtlest font-normal">COP</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">4 facturas y 3 cuentas de cobro liquidadas</p>
+</div>
+<div class="flex items-center gap-1.5 text-[12px] font-semibold text-status-pagada">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>100% de cumplimiento en pagos</span>
+</div>
+</div>
+<!-- Card: Saldo Pendiente -->
+<div class="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase tracking-wider font-semibold text-text-subtlest">Saldo Pendiente</span>
+<span class="w-8 h-8 rounded-full bg-[#e3fcef] text-status-pagada flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</span>
+</div>
+<div class="my-4">
+<div class="font-currency-display text-currency-display font-semibold text-text-primary tracking-tight">
+            $0 <span class="font-body-sm text-body-sm text-text-subtlest font-normal">COP</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">No hay cobros exigibles ni en mora</p>
+</div>
+<div class="flex items-center gap-1.5 text-[12px] font-semibold text-text-subtlest">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Cartera totalmente saneada</span>
+</div>
+</div>
+<!-- Card: Último Pago Recibido (Navy Anchor Card) -->
+<div class="bg-[#1c2b42] border border-[#1c2b42] rounded-[20px] p-6 md:p-space-xl text-canvas-white flex flex-col justify-between">
+<div class="flex items-center justify-between text-[#b7b9be]">
+<span class="font-caption text-caption uppercase tracking-wider font-semibold text-canvas-white">Último Pago Recibido</span>
+<span class="w-8 h-8 rounded-full bg-white/10 text-canvas-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">credit_score</span>
+</span>
+</div>
+<div class="my-4">
+<div class="font-currency-display text-currency-display font-semibold text-canvas-white tracking-tight">
+            Hace 5 días
+          </div>
+<p class="font-body-sm text-body-sm text-[#bec7d3] mt-1">$9.500.000 COP acreditados vía PSE</p>
+</div>
+<div class="flex items-center justify-between text-[12px] text-[#bec7d3] border-t border-white/10 pt-3">
+<span>Ref: CC-2024-003</span>
+<span class="text-canvas-white font-medium">Bancolombia Empresarial</span>
+</div>
+</div>
+</div>
+<!-- Fiscal Data & Operational Parameters Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
+<!-- Fiscal Profile Box -->
+<div class="lg:col-span-2 bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl">
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-secondary text-[22px]">domain</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary font-semibold">Datos Fiscales y Comerciales</h2>
+</div>
+<span class="font-caption text-caption px-2 py-0.5 rounded-[10000px] bg-surface-container text-text-secondary border border-border-subtle">RUT Vigente 2024</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-space-lg gap-x-space-xl mt-space-lg">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider mb-1">Razón Social Legal</span>
+<span class="font-body-md text-body-md font-semibold text-text-primary">Nu Colombia Compañía de Financiamiento S.A.</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-0.5">Personería Jurídica Nacional</span>
+</div>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider mb-1">Régimen Tributario</span>
+<span class="font-body-md text-body-md font-semibold text-text-primary">Gran Contribuyente</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-0.5">Resolución DIAN No. 012220 / Autorretenedor</span>
+</div>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider mb-1">Tarifa ICA (Bogotá)</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-text-primary">9.66 por mil (0.966%)</span>
+<span class="px-2 py-0.2 rounded-full bg-surface-container text-[11px] font-semibold text-text-secondary">Cód 6201</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary mt-0.5">Actividades de desarrollo de sistemas y diseño UI/UX</span>
+</div>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider mb-1">Retención en la Fuente Aplicable</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-text-primary">4.0%</span>
+<span class="px-2 py-0.2 rounded-full bg-surface-container text-[11px] font-semibold text-text-secondary">Servicios Generales / Honorarios</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary mt-0.5">Declaración directa de persona natural no responsable de IVA</span>
+</div>
+<div class="flex flex-col md:col-span-2">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider mb-1">Dirección Fiscal Notificaciones</span>
+<span class="font-body-md text-body-md font-semibold text-text-primary">Cra. 11 #79-52, Oficina 801</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-0.5">Bogotá D.C., Colombia — Código Postal 110221</span>
+</div>
+</div>
+</div>
+<!-- Quick Stakeholders & Key Contacts Info -->
+<div class="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<h3 class="font-headline-sm text-body-lg font-semibold text-text-primary">Contactos Clave</h3>
+<span class="material-symbols-outlined text-text-subtlest text-[20px]">contacts</span>
+</div>
+<div class="mt-space-md space-y-4">
+<!-- Contact 1 -->
+<div class="flex items-start gap-space-sm p-3 rounded-[12px] bg-surface-container-low">
+<div class="w-9 h-9 rounded-full bg-[#531253] text-canvas-white font-semibold flex items-center justify-center text-[12px] shrink-0">
+                LR
+              </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Laura Restrepo</span>
+<span class="font-caption text-caption text-text-secondary">Lead Product Designer • Aprobador</span>
+<a class="font-caption text-caption text-primary-container truncate hover:underline mt-1" href="mailto:lrestrepo@nu.com.co">lrestrepo@nu.com.co</a>
+</div>
+</div>
+<!-- Contact 2 -->
+<div class="flex items-start gap-space-sm p-3 rounded-[12px] bg-surface-container-low">
+<div class="w-9 h-9 rounded-full bg-secondary text-canvas-white font-semibold flex items-center justify-center text-[12px] shrink-0">
+                FM
+              </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Felipe Morales</span>
+<span class="font-caption text-caption text-text-secondary">Procurement &amp; Pagos a Proveedores</span>
+<a class="font-caption text-caption text-primary-container truncate hover:underline mt-1" href="mailto:fmorales@nu.com.co">fmorales@nu.com.co</a>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-border-subtle mt-4">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-text-subtlest">Términos de pago acordados:</span>
+<span class="font-semibold text-text-primary">Neto 15 días</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity & Linked Documents Table Card -->
+<div class="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-lg border-b border-border-subtle">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-text-secondary text-[22px]">history_edu</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-text-primary font-semibold">Documentos e Historial Vinculado</h2>
+<p class="font-body-sm text-body-sm text-text-secondary">Facturas electrónicas, contratos marco y cuentas de cobro emitidas</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative">
+<input class="h-9 pl-8 pr-3 bg-canvas-white border border-border-strong rounded-[3px] text-body-sm font-body-sm text-text-primary placeholder:text-text-subtlest focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container w-64" placeholder="Filtrar por consecutivo o concepto..." type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-text-subtlest">search</span>
+</div>
+<button class="h-9 px-3 rounded-[3px] bg-canvas-white border border-border-strong text-text-secondary hover:text-text-primary flex items-center gap-1 font-body-sm text-body-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Filtros</span>
+</button>
+</div>
+</div>
+<!-- Clean Data Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-subtle text-text-subtlest font-caption text-caption uppercase tracking-wider">
+<th class="py-3 px-4 font-semibold">Tipo &amp; Documento</th>
+<th class="py-3 px-4 font-semibold">Concepto / Servicio</th>
+<th class="py-3 px-4 font-semibold">Fecha Emisión</th>
+<th class="py-3 px-4 font-semibold">Vencimiento</th>
+<th class="py-3 px-4 font-semibold text-right">Valor Total (COP)</th>
+<th class="py-3 px-4 font-semibold text-center">Estado</th>
+<th class="py-3 px-4 font-semibold text-right">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle text-body-sm font-body-sm">
+<!-- Row 1: Cuenta de Cobro Reciente -->
+<tr class="hover:bg-[#f7f8f9] transition-colors">
+<td class="py-4 px-4 font-medium text-text-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-subtlest text-[18px]">payments</span>
+<span class="font-semibold">CC-2024-003</span>
+</div>
+</td>
+<td class="py-4 px-4 text-text-secondary max-w-xs truncate">
+                Rediseño Flujo de Onboarding Tarjeta de Crédito (Sprint 4 &amp; 5)
+              </td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">02 Oct, 2024</td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">17 Oct, 2024</td>
+<td class="py-4 px-4 text-right font-semibold text-text-primary whitespace-nowrap">
+                $9.500.000
+              </td>
+<td class="py-4 px-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Pagada
+                </span>
+</td>
+<td class="py-4 px-4 text-right">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Factura Electrónica Pagada -->
+<tr class="hover:bg-[#f7f8f9] transition-colors">
+<td class="py-4 px-4 font-medium text-text-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-subtlest text-[18px]">receipt_long</span>
+<span class="font-semibold">FE-0042</span>
+</div>
+</td>
+<td class="py-4 px-4 text-text-secondary max-w-xs truncate">
+                Consultoría en Sistema de Diseño y Tokens UI Multiplataforma
+              </td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">01 Sep, 2024</td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">16 Sep, 2024</td>
+<td class="py-4 px-4 text-right font-semibold text-text-primary whitespace-nowrap">
+                $14.000.000
+              </td>
+<td class="py-4 px-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Pagada
+                </span>
+</td>
+<td class="py-4 px-4 text-right">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Contrato Marco Vigente -->
+<tr class="hover:bg-[#f7f8f9] transition-colors">
+<td class="py-4 px-4 font-medium text-text-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-subtlest text-[18px]">description</span>
+<span class="font-semibold">CTR-2024-NU</span>
+</div>
+</td>
+<td class="py-4 px-4 text-text-secondary max-w-xs truncate">
+                Contrato de Prestación de Servicios de Diseño de Producto 2024
+              </td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">15 Ene, 2024</td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">31 Dic, 2024</td>
+<td class="py-4 px-4 text-right font-semibold text-text-primary whitespace-nowrap">
+                $76.000.000
+              </td>
+<td class="py-4 px-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-[#e9f2fe] text-status-enviada-text border border-[#b3d4ff]">
+                  En ejecución
+                </span>
+</td>
+<td class="py-4 px-4 text-right">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Cuenta de Cobro Liquidada -->
+<tr class="hover:bg-[#f7f8f9] transition-colors">
+<td class="py-4 px-4 font-medium text-text-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-subtlest text-[18px]">payments</span>
+<span class="font-semibold">CC-2024-002</span>
+</div>
+</td>
+<td class="py-4 px-4 text-text-secondary max-w-xs truncate">
+                Validación de Accesibilidad WCAG 2.1 AA en App Mobile
+              </td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">10 Jul, 2024</td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">25 Jul, 2024</td>
+<td class="py-4 px-4 text-right font-semibold text-text-primary whitespace-nowrap">
+                $11.000.000
+              </td>
+<td class="py-4 px-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Pagada
+                </span>
+</td>
+<td class="py-4 px-4 text-right">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Factura Histórica Anterior -->
+<tr class="hover:bg-[#f7f8f9] transition-colors">
+<td class="py-4 px-4 font-medium text-text-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-subtlest text-[18px]">receipt_long</span>
+<span class="font-semibold">FE-0038</span>
+</div>
+</td>
+<td class="py-4 px-4 text-text-secondary max-w-xs truncate">
+                Arquitectura de Información para Portafolio de Cuentas de Ahorro
+              </td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">14 May, 2024</td>
+<td class="py-4 px-4 text-text-secondary whitespace-nowrap">29 May, 2024</td>
+<td class="py-4 px-4 text-right font-semibold text-text-primary whitespace-nowrap">
+                $8.000.000
+              </td>
+<td class="py-4 px-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] text-[12px] font-semibold bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Pagada
+                </span>
+</td>
+<td class="py-4 px-4 text-right">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Summary Footer -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pt-space-md border-t border-border-subtle text-caption font-caption text-text-secondary">
+<div>Mostrando 5 de 9 documentos emitidos a Nu Colombia S.A.</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded-[3px] border border-border-strong text-text-secondary hover:text-text-primary disabled:opacity-40" disabled="" type="button">Anterior</button>
+<button class="px-2.5 py-1 rounded-[3px] bg-primary text-on-primary font-semibold" type="button">1</button>
+<button class="px-2.5 py-1 rounded-[3px] border border-border-strong text-text-secondary hover:text-text-primary" type="button">2</button>
+<button class="px-2.5 py-1 rounded-[3px] border border-border-strong text-text-secondary hover:text-text-primary" type="button">Siguiente</button>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

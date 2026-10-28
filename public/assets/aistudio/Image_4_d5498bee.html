@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#001a43","surface-container-lowest":"#ffffff","canvas-white":"#ffffff","secondary-fixed-dim":"#b8c7e5","on-tertiary":"#ffffff","tertiary-fixed":"#dae3ef","outline":"#727785","on-secondary-container":"#54637d","status-borrador":"#63666b","outline-variant":"#c2c6d6","on-tertiary-container":"#e8f1fd","on-tertiary-fixed-variant":"#3f4851","status-enviada-bg":"#e9f2fe","inverse-surface":"#2f3133","primary-container":"#1868db","status-pagada":"#22a06b","text-subtlest":"#63666b","border-subtle":"#dddee1","on-background":"#1a1c1e","text-secondary":"#505258","on-secondary":"#ffffff","surface-tint":"#0059c5","primary":"#0050b2","inverse-on-surface":"#f1f0f3","inverse-primary":"#aec6ff","status-pendiente":"#c75300","on-surface-variant":"#424753","surface-variant":"#e2e2e5","background":"#f9f9fc","secondary-fixed":"#d5e3ff","border-strong":"#b7b9be","surface-bright":"#f9f9fc","tertiary-fixed-dim":"#bec7d3","surface-dim":"#dadadc","status-enviada-text":"#1868db","status-vencida":"#ae2e24","surface-container-highest":"#e2e2e5","on-primary-container":"#ecefff","primary-hover":"#1558bc","on-error-container":"#93000a","tertiary":"#4d565f","on-secondary-fixed-variant":"#394760","error":"#ba1a1a","tertiary-container":"#656e78","on-tertiary-fixed":"#141c25","primary-fixed-dim":"#aec6ff","secondary":"#505f78","on-primary-fixed-variant":"#004397","surface-container":"#eeeef0","on-error":"#ffffff","surface":"#f9f9fc","error-container":"#ffdad6","primary-fixed":"#d8e2ff","text-primary":"#101214","surface-container-low":"#f3f3f6","secondary-container":"#d1e0ff","on-primary":"#ffffff","on-surface":"#1a1c1e","on-secondary-fixed":"#0c1c32","surface-container-high":"#e8e8ea"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{margin:"2rem","space-xl":"2rem","space-sm":"0.5rem","space-lg":"1.5rem","margin-mobile":"1rem","space-2xl":"2.5rem","space-md":"1rem","gutter-mobile":"1rem","space-xs":"0.25rem",gutter:"1.5rem"},fontFamily:{"button-label":["Inter"],"currency-display":["Inter"],"body-lg":["Inter"],"headline-sm":["Inter"],"badge-label":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"display-hero":["Inter"],"body-md":["Inter"],"headline-lg":["Inter"],"body-sm":["Inter"],"display-hero-mobile":["Inter"],caption:["Inter"]},fontSize:{"button-label":["15px",{lineHeight:"20px",fontWeight:"500"}],"currency-display":["32px",{lineHeight:"38px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["18px",{lineHeight:"26px",fontWeight:"400"}],"headline-sm":["22px",{lineHeight:"28px",fontWeight:"500"}],"badge-label":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg-mobile":["28px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["28px",{lineHeight:"36px",fontWeight:"500"}],"display-hero":["68px",{lineHeight:"76px",letterSpacing:"-0.02em",fontWeight:"600"}],"body-md":["15px",{lineHeight:"22px",fontWeight:"400"}],"headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"18px",fontWeight:"400"}],"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.01em",fontWeight:"600"}],caption:["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"500"}]}}}};</script></head><body class="bg-surface-container-lowest text-text-primary antialiased"><aside class="fixed top-0 left-0 h-screen w-[260px] bg-canvas-white border-r border-border-subtle z-50 flex flex-col justify-between select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md border-b border-border-subtle flex items-center gap-space-sm"><img alt="FreelanceOS Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UPjIui1s9BL9NKirY0IweaeQqYzzzU7jV3PCco0bBzEzalfY25GmIGilSZ5HciQenAketHAamhOhuMxI4mnN9B7TV_BC85HSqsc1r485ho11CgS4a8ykRd_VoPXHk8pLdZZGdweo_uiOBLj0RFl_WZ-7XbkJLkG-2VwFe_8Af5KzNKZDchxKLfR2X_UiaTk6abicFALKGxOxDNR46nznzDBpGIhqK2K5hF2v8tvLv8hYl9RGfwjd_ccQ"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-body-md font-semibold text-text-primary leading-tight truncate">FreelanceOS</span><span class="font-caption text-caption text-text-subtlest truncate">Gestión &amp; Facturación</span></div></div><div class="px-space-md py-space-sm"><div class="text-[11px] font-semibold text-text-subtlest uppercase tracking-wider px-space-xs mb-space-xs">Menú Principal</div><nav class="flex flex-col gap-1" data-active-classes="bg-status-enviada-bg text-status-enviada-text font-semibold rounded-[10000px]"><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span>Dashboard</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2 transition-colors bg-status-enviada-bg text-status-enviada-text font-semibold rounded-[10000px]" data-path="clientes" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Clientes</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="servicios" href="#"><span class="material-symbols-outlined text-[20px]">design_services</span><span>Servicios</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="facturas" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span>Facturas</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="cuentas-cobro" href="#"><span class="material-symbols-outlined text-[20px]">payments</span><span>Cuentas de Cobro</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="contratos" href="#"><span class="material-symbols-outlined text-[20px]">description</span><span>Contratos</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="configuracion" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Configuración</span></a></nav></div></div><div class="p-space-md border-t border-border-subtle bg-surface-container-lowest"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><div class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Carlos Mendoza</div><div class="font-caption text-caption text-text-subtlest truncate">carlos@mendoza.co</div></div></div><div class="mt-space-sm flex items-center justify-between"><span class="inline-flex items-center px-2 py-0.5 rounded-[10000px] font-badge-label text-[10px] uppercase tracking-wide bg-status-enviada-bg text-status-enviada-text border border-[#b3d4ff]">Plan Pro</span><span class="font-caption text-caption text-text-subtlest">COP $</span></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-canvas-white border-b border-border-subtle z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-lg"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-subtlest text-[20px]">search</span><input class="w-full h-10 pl-10 pr-space-md bg-canvas-white border border-border-strong rounded-[3px] text-body-sm font-body-sm text-text-primary placeholder:text-text-subtlest focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Buscar clientes, facturas, contratos..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-surface-container-low rounded-[10000px] text-body-sm font-body-sm text-text-secondary border border-border-subtle"><span class="material-symbols-outlined text-[16px] text-status-pagada">monetization_on</span><span class="font-semibold text-text-primary">COP</span><span class="text-text-subtlest">(Pesos Colombianos)</span></div><button class="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><button class="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-vencida"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1200px] mx-auto px-space-md py-space-xl sm:px-space-xl flex flex-col gap-space-lg">
+<!-- Header Section with Strict Single Primary CTA Rule -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-sm border-b border-border-subtle">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-baseline gap-space-sm">
+<h1 class="font-currency-display text-currency-display text-text-primary tracking-tight font-medium">Clientes</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-[10000px] bg-surface-container-low text-text-subtlest font-caption text-caption">18 registrados</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Directorio corporativo, datos tributarios y balance comercial consolidado.</p>
+</div>
+<!-- ÚNICO Botón Primario de la Pantalla -->
+<button class="h-10 px-6 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-surface-container-lowest font-button-label text-button-label inline-flex items-center justify-center gap-1.5 transition-colors self-start sm:self-auto shrink-0 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Nuevo cliente</span>
+</button>
+</div>
+<!-- Quick Stats Metric Tiles -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-md">
+<div class="bg-surface-container-lowest p-space-md rounded-[20px] border border-border-subtle flex flex-col gap-1">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider">Total Clientes</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-headline-sm text-headline-sm text-text-primary font-semibold">18</span>
+<span class="font-caption text-caption text-status-pagada flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +3 este mes
+          </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-[20px] border border-border-subtle flex flex-col gap-1">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider">Activos en Facturación</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-headline-sm text-headline-sm text-status-pagada font-semibold">14</span>
+<span class="font-caption text-caption text-text-secondary">78% de la cartera</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-[20px] border border-border-subtle flex flex-col gap-1">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wider">Cartera Pendiente COP</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-headline-sm text-headline-sm text-status-pendiente font-semibold">$9.000.000</span>
+<span class="font-caption text-caption text-status-pendiente">2 clientes</span>
+</div>
+</div>
+<div class="bg-[#1c2b42] p-space-md rounded-[20px] border border-[#1c2b42] flex flex-col gap-1 text-surface-container-lowest">
+<span class="font-caption text-caption text-border-strong uppercase tracking-wider">Facturado 2024</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest font-semibold">$148.5M</span>
+<span class="font-caption text-caption text-secondary-fixed">COP</span>
+</div>
+</div>
+</div>
+<!-- Filters & Action Toolbar -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md">
+<!-- Search Bar -->
+<div class="relative flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-subtlest text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-space-md bg-surface-container-lowest border border-border-strong rounded-[3px] text-body-md font-body-md text-text-primary placeholder:text-text-subtlest focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Buscar por razón social, NIT o contacto..." type="text"/>
+</div>
+<!-- Filter Tabs & Secondary Actions -->
+<div class="flex flex-wrap items-center gap-space-sm justify-between lg:justify-end">
+<div class="flex items-center p-1 bg-surface-container-low rounded-[10000px] border border-border-subtle overflow-x-auto">
+<button class="px-3 py-1.5 rounded-[10000px] bg-surface-container-lowest text-text-primary font-body-sm text-body-sm font-medium shadow-sm transition-colors whitespace-nowrap" type="button">
+            Todos (18)
+          </button>
+<button class="px-3 py-1.5 rounded-[10000px] text-text-secondary hover:text-text-primary font-body-sm text-body-sm transition-colors whitespace-nowrap" type="button">
+            Activos (14)
+          </button>
+<button class="px-3 py-1.5 rounded-[10000px] text-text-secondary hover:text-text-primary font-body-sm text-body-sm transition-colors whitespace-nowrap" type="button">
+            Con saldo (2)
+          </button>
+<button class="px-3 py-1.5 rounded-[10000px] text-text-secondary hover:text-text-primary font-body-sm text-body-sm transition-colors whitespace-nowrap" type="button">
+            Inactivos (4)
+          </button>
+</div>
+<div class="flex items-center gap-space-xs">
+<!-- Secondary Pill Buttons -->
+<button class="h-10 px-4 rounded-[10000px] bg-surface-container-lowest border border-border-strong hover:bg-surface-container-low hover:border-text-primary text-text-primary font-body-sm text-body-sm font-medium inline-flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">file_download</span>
+<span>Exportar CSV</span>
+</button>
+<button class="w-10 h-10 rounded-[10000px] bg-surface-container-lowest border border-border-strong hover:bg-surface-container-low hover:border-text-primary text-text-secondary hover:text-text-primary inline-flex items-center justify-center transition-colors" title="Filtros avanzados" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Client Directory Card Container -->
+<div class="bg-surface-container-lowest rounded-[20px] border border-border-subtle overflow-hidden flex flex-col">
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse min-w-[920px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-border-subtle">
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider" scope="col">Cliente / Empresa</th>
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider" scope="col">NIT / Documento</th>
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider" scope="col">Contacto Principal</th>
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider" scope="col">Teléfono</th>
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider text-right" scope="col">Saldo Pendiente</th>
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider text-center" scope="col">Estado</th>
+<th class="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider text-right" scope="col">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle">
+<!-- Row 1: Nu Colombia S.A. -->
+<tr class="hover:bg-[#f7f8f9] transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-[#820ad1]/10 text-[#820ad1] font-semibold flex items-center justify-center shrink-0 text-body-sm">
+                    NC
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary hover:text-primary-container cursor-pointer truncate">Nu Colombia S.A.</span>
+<span class="font-caption text-caption text-text-subtlest truncate">Sector Fintech • Bogotá D.C.</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                901.345.890-1
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-text-primary font-medium truncate">Laura Restrepo</span>
+<a class="font-caption text-caption text-text-subtlest hover:text-primary-container truncate" href="mailto:lrestrepo@nu.com.co">lrestrepo@nu.com.co</a>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                +57 310 456 7890
+              </td>
+<td class="py-space-md px-space-md text-right font-body-sm text-body-sm font-semibold text-text-primary whitespace-nowrap">
+                $0 <span class="font-caption text-caption text-text-subtlest font-normal">COP</span>
+</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Activo
+                </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Ver perfil" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Crear factura" type="button">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" title="Más opciones" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Rappi SAS -->
+<tr class="hover:bg-[#f7f8f9] transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-[#ff441f]/10 text-[#ff441f] font-semibold flex items-center justify-center shrink-0 text-body-sm">
+                    RP
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary hover:text-primary-container cursor-pointer truncate">Rappi SAS</span>
+<span class="font-caption text-caption text-text-subtlest truncate">Tecnología • Logística</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                900.874.123-4
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-text-primary font-medium truncate">Andrés Gómez</span>
+<a class="font-caption text-caption text-text-subtlest hover:text-primary-container truncate" href="mailto:agomez@rappi.com">agomez@rappi.com</a>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                +57 320 890 1234
+              </td>
+<td class="py-space-md px-space-md text-right font-body-sm text-body-sm font-semibold text-status-pendiente whitespace-nowrap">
+                $3.800.000 <span class="font-caption text-caption text-text-subtlest font-normal">COP</span>
+</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Activo
+                </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Ver perfil" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Crear factura" type="button">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" title="Más opciones" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Habi Technologies -->
+<tr class="hover:bg-[#f7f8f9] transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-[#1868db]/10 text-primary-container font-semibold flex items-center justify-center shrink-0 text-body-sm">
+                    HB
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary hover:text-primary-container cursor-pointer truncate">Habi Technologies</span>
+<span class="font-caption text-caption text-text-subtlest truncate">Proptech • Real Estate</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                901.223.456-7
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-text-primary font-medium truncate">Carolina Mejía</span>
+<a class="font-caption text-caption text-text-subtlest hover:text-primary-container truncate" href="mailto:cmejia@habi.co">cmejia@habi.co</a>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                +57 301 234 5678
+              </td>
+<td class="py-space-md px-space-md text-right font-body-sm text-body-sm font-semibold text-status-vencida whitespace-nowrap">
+                $5.200.000 <span class="font-caption text-caption text-text-subtlest font-normal">COP</span>
+</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#fff0b3] text-status-pendiente border border-[#ffe380]">
+                  Pendiente
+                </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Ver perfil" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Crear factura" type="button">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" title="Más opciones" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Bold Pagos SAS -->
+<tr class="hover:bg-[#f7f8f9] transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container text-text-secondary font-semibold flex items-center justify-center shrink-0 text-body-sm">
+                    BP
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary hover:text-primary-container cursor-pointer truncate">Bold Pagos SAS</span>
+<span class="font-caption text-caption text-text-subtlest truncate">Pasarelas de Pago • Bogotá</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                901.554.321-9
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-text-primary font-medium truncate">Felipe Jaramillo</span>
+<a class="font-caption text-caption text-text-subtlest hover:text-primary-container truncate" href="mailto:fjaramillo@bold.co">fjaramillo@bold.co</a>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                +57 315 678 9012
+              </td>
+<td class="py-space-md px-space-md text-right font-body-sm text-body-sm font-semibold text-text-primary whitespace-nowrap">
+                $0 <span class="font-caption text-caption text-text-subtlest font-normal">COP</span>
+</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#e3fcef] text-status-pagada border border-[#abf5d1]">
+                  Activo
+                </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Ver perfil" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Crear factura" type="button">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" title="Más opciones" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: LaHaus Proptech -->
+<tr class="hover:bg-[#f7f8f9] transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-text-subtlest font-semibold flex items-center justify-center shrink-0 text-body-sm">
+                    LH
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary hover:text-primary-container cursor-pointer truncate">LaHaus Proptech</span>
+<span class="font-caption text-caption text-text-subtlest truncate">Inmobiliaria Digital • Medellín</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                900.998.776-5
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-text-primary font-medium truncate">Sebastián Ruiz</span>
+<a class="font-caption text-caption text-text-subtlest hover:text-primary-container truncate" href="mailto:sruiz@lahaus.com">sruiz@lahaus.com</a>
+</div>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-text-secondary whitespace-nowrap">
+                +57 312 345 6789
+              </td>
+<td class="py-space-md px-space-md text-right font-body-sm text-body-sm font-semibold text-text-primary whitespace-nowrap">
+                $0 <span class="font-caption text-caption text-text-subtlest font-normal">COP</span>
+</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#f4f5f7] text-status-borrador border border-border-subtle">
+                  Inactivo
+                </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Ver perfil" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors" title="Reactivar cliente" type="button">
+<span class="material-symbols-outlined text-[18px]">restore</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" title="Más opciones" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Atlassian Pagination Footer -->
+<div class="px-space-md py-space-sm bg-surface-container-lowest border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="font-body-sm text-body-sm text-text-subtlest">
+          Mostrando <span class="font-medium text-text-primary">1-5</span> de <span class="font-medium text-text-primary">18</span> clientes
+        </div>
+<div class="flex items-center gap-1 select-none">
+<button class="w-8 h-8 rounded-[3px] flex items-center justify-center text-text-subtlest opacity-50 cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-[3px] bg-status-enviada-bg text-status-enviada-text font-body-sm text-body-sm font-semibold flex items-center justify-center" type="button">
+            1
+          </button>
+<button class="w-8 h-8 rounded-[3px] hover:bg-surface-container-low text-text-secondary font-body-sm text-body-sm flex items-center justify-center transition-colors" type="button">
+            2
+          </button>
+<button class="w-8 h-8 rounded-[3px] hover:bg-surface-container-low text-text-secondary font-body-sm text-body-sm flex items-center justify-center transition-colors" type="button">
+            3
+          </button>
+<button class="w-8 h-8 rounded-[3px] hover:bg-surface-container-low text-text-secondary font-body-sm text-body-sm flex items-center justify-center transition-colors" type="button">
+            4
+          </button>
+<button class="w-8 h-8 rounded-[3px] hover:bg-surface-container-low text-text-secondary flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Colombian Tax Alert / DIAN Reference Box -->
+<div class="bg-surface-container-low p-space-md rounded-[20px] border border-border-subtle flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-status-enviada-bg text-status-enviada-text flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary">Validación de RUT y Representación Legal</span>
+<p class="font-body-sm text-body-sm text-text-secondary">
+          Todos los clientes listados cuentan con NIT validado frente al registro RUES / DIAN. Recuerda que para la emisión de Cuentas de Cobro con retención en la fuente a título de ICA o Renta, debes verificar la clasificación de contribuyente en la ficha de cada empresa.
+        </p>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

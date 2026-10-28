@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#001a43","surface-container-lowest":"#ffffff","canvas-white":"#ffffff","secondary-fixed-dim":"#b8c7e5","on-tertiary":"#ffffff","tertiary-fixed":"#dae3ef","outline":"#727785","on-secondary-container":"#54637d","status-borrador":"#63666b","outline-variant":"#c2c6d6","on-tertiary-container":"#e8f1fd","on-tertiary-fixed-variant":"#3f4851","status-enviada-bg":"#e9f2fe","inverse-surface":"#2f3133","primary-container":"#1868db","status-pagada":"#22a06b","text-subtlest":"#63666b","border-subtle":"#dddee1","on-background":"#1a1c1e","text-secondary":"#505258","on-secondary":"#ffffff","surface-tint":"#0059c5","primary":"#0050b2","inverse-on-surface":"#f1f0f3","inverse-primary":"#aec6ff","status-pendiente":"#c75300","on-surface-variant":"#424753","surface-variant":"#e2e2e5","background":"#f9f9fc","secondary-fixed":"#d5e3ff","border-strong":"#b7b9be","surface-bright":"#f9f9fc","tertiary-fixed-dim":"#bec7d3","surface-dim":"#dadadc","status-enviada-text":"#1868db","status-vencida":"#ae2e24","surface-container-highest":"#e2e2e5","on-primary-container":"#ecefff","primary-hover":"#1558bc","on-error-container":"#93000a","tertiary":"#4d565f","on-secondary-fixed-variant":"#394760","error":"#ba1a1a","tertiary-container":"#656e78","on-tertiary-fixed":"#141c25","primary-fixed-dim":"#aec6ff","secondary":"#505f78","on-primary-fixed-variant":"#004397","surface-container":"#eeeef0","on-error":"#ffffff","surface":"#f9f9fc","error-container":"#ffdad6","primary-fixed":"#d8e2ff","text-primary":"#101214","surface-container-low":"#f3f3f6","secondary-container":"#d1e0ff","on-primary":"#ffffff","on-surface":"#1a1c1e","on-secondary-fixed":"#0c1c32","surface-container-high":"#e8e8ea"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{margin:"2rem","space-xl":"2rem","space-sm":"0.5rem","space-lg":"1.5rem","margin-mobile":"1rem","space-2xl":"2.5rem","space-md":"1rem","gutter-mobile":"1rem","space-xs":"0.25rem",gutter:"1.5rem"},fontFamily:{"button-label":["Inter"],"currency-display":["Inter"],"body-lg":["Inter"],"headline-sm":["Inter"],"badge-label":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"display-hero":["Inter"],"body-md":["Inter"],"headline-lg":["Inter"],"body-sm":["Inter"],"display-hero-mobile":["Inter"],caption:["Inter"]},fontSize:{"button-label":["15px",{lineHeight:"20px",fontWeight:"500"}],"currency-display":["32px",{lineHeight:"38px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["18px",{lineHeight:"26px",fontWeight:"400"}],"headline-sm":["22px",{lineHeight:"28px",fontWeight:"500"}],"badge-label":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg-mobile":["28px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["28px",{lineHeight:"36px",fontWeight:"500"}],"display-hero":["68px",{lineHeight:"76px",letterSpacing:"-0.02em",fontWeight:"600"}],"body-md":["15px",{lineHeight:"22px",fontWeight:"400"}],"headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"18px",fontWeight:"400"}],"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.01em",fontWeight:"600"}],caption:["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"500"}]}}}};</script></head><body class="bg-surface-container-lowest text-text-primary antialiased"><aside class="fixed top-0 left-0 h-screen w-[260px] bg-canvas-white border-r border-border-subtle z-50 flex flex-col justify-between select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md border-b border-border-subtle flex items-center gap-space-sm"><img alt="FreelanceOS Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UPjIui1s9BL9NKirY0IweaeQqYzzzU7jV3PCco0bBzEzalfY25GmIGilSZ5HciQenAketHAamhOhuMxI4mnN9B7TV_BC85HSqsc1r485ho11CgS4a8ykRd_VoPXHk8pLdZZGdweo_uiOBLj0RFl_WZ-7XbkJLkG-2VwFe_8Af5KzNKZDchxKLfR2X_UiaTk6abicFALKGxOxDNR46nznzDBpGIhqK2K5hF2v8tvLv8hYl9RGfwjd_ccQ"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-body-md font-semibold text-text-primary leading-tight truncate">FreelanceOS</span><span class="font-caption text-caption text-text-subtlest truncate">Gestión &amp; Facturación</span></div></div><div class="px-space-md py-space-sm"><div class="text-[11px] font-semibold text-text-subtlest uppercase tracking-wider px-space-xs mb-space-xs">Menú Principal</div><nav class="flex flex-col gap-1" data-active-classes="bg-status-enviada-bg text-status-enviada-text font-semibold rounded-[10000px]"><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span>Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="clientes" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Clientes</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="servicios" href="#"><span class="material-symbols-outlined text-[20px]">design_services</span><span>Servicios</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="facturas" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span>Facturas</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="cuentas-cobro" href="#"><span class="material-symbols-outlined text-[20px]">payments</span><span>Cuentas de Cobro</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="contratos" href="#"><span class="material-symbols-outlined text-[20px]">description</span><span>Contratos</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm" data-path="configuracion" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Configuración</span></a></nav></div></div><div class="p-space-md border-t border-border-subtle bg-surface-container-lowest"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><div class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Carlos Mendoza</div><div class="font-caption text-caption text-text-subtlest truncate">carlos@mendoza.co</div></div></div><div class="mt-space-sm flex items-center justify-between"><span class="inline-flex items-center px-2 py-0.5 rounded-[10000px] font-badge-label text-[10px] uppercase tracking-wide bg-status-enviada-bg text-status-enviada-text border border-[#b3d4ff]">Plan Pro</span><span class="font-caption text-caption text-text-subtlest">COP $</span></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-canvas-white border-b border-border-subtle z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-lg"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-subtlest text-[20px]">search</span><input class="w-full h-10 pl-10 pr-space-md bg-canvas-white border border-border-strong rounded-[3px] text-body-sm font-body-sm text-text-primary placeholder:text-text-subtlest focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Buscar clientes, facturas, contratos..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-surface-container-low rounded-[10000px] text-body-sm font-body-sm text-text-secondary border border-border-subtle"><span class="material-symbols-outlined text-[16px] text-status-pagada">monetization_on</span><span class="font-semibold text-text-primary">COP</span><span class="text-text-subtlest">(Pesos Colombianos)</span></div><button class="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><button class="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-vencida"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full">
+<script>
+    (function activateSidebar() {
+      const links = document.querySelectorAll('aside nav a');
+      links.forEach(link => {
+        if (link.getAttribute('data-path') === 'cuentas-cobro') {
+          link.className = 'flex items-center gap-space-sm px-space-md py-2 bg-status-enviada-bg text-status-enviada-text font-semibold rounded-[10000px] text-body-sm font-body-sm transition-colors';
+          const icon = link.querySelector('.material-symbols-outlined');
+          if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+        } else {
+          link.className = 'flex items-center gap-space-sm px-space-md py-2 rounded-[10000px] text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors text-body-sm font-body-sm';
+          const icon = link.querySelector('.material-symbols-outlined');
+          if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+        }
+      });
+    })();
+  </script>
+<!-- Encabezado de Navegación y Contexto -->
+<div class="w-full max-w-[1360px] mx-auto px-space-xl pt-space-lg pb-space-md">
+<div class="flex items-center gap-2 font-caption text-caption text-text-subtlest uppercase tracking-widest mb-1.5">
+<span class="hover:text-primary cursor-pointer transition-colors">Cuentas de Cobro</span>
+<span class="material-symbols-outlined text-[13px] text-outline">chevron_right</span>
+<span class="text-text-primary font-semibold">Nueva Cuenta de Cobro</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
+<div>
+<h1 class="font-headline-md text-headline-md font-semibold text-text-primary tracking-tight">Generar Cuenta de Cobro</h1>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">Emisión oficial para contratistas independientes con validación tributaria colombiana vigente (Art. 437 E.T.).</p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10000px] bg-status-enviada-bg text-status-enviada-text font-badge-label text-badge-label border border-border-subtle">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+          Modo Edición en Vivo
+        </span>
+</div>
+</div>
+</div>
+<!-- Contenedor Principal Split-View (Grid 12 Columnas) -->
+<div class="w-full max-w-[1360px] mx-auto px-space-xl pb-32">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- COLUMNA IZQUIERDA: FORMULARIO TÉCNICO (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Tarjeta 1: Parámetros del Documento y Cliente -->
+<div class="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
+<div class="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
+<div class="flex items-center gap-space-sm">
+<span class="w-7 h-7 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-badge-label text-badge-label font-bold">1</span>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-text-primary">Destinatario y Emisión</h2>
+</div>
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wide">Paso obligatorio</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="md:col-span-2 flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary flex items-center justify-between">
+<span>Cliente / Pagador</span>
+<span class="font-caption text-caption text-primary font-normal cursor-pointer hover:underline">+ Nuevo pagador</span>
+</label>
+<div class="relative">
+<select class="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container appearance-none pr-10 cursor-pointer" id="input-cliente">
+<option selected="" value="Bancolombia S.A.">Bancolombia S.A. — NIT: 890.903.938-8</option>
+<option value="Rappi Colombia S.A.S.">Rappi Colombia S.A.S. — NIT: 900.843.820-1</option>
+<option value="Habi Tech S.A.S.">Habi Tech S.A.S. — NIT: 901.328.712-4</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-subtlest pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Consecutivo oficial</label>
+<div class="relative">
+<input class="w-full h-10 px-3 bg-surface-container-low border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary font-medium focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container uppercase" id="input-consecutivo" type="text" value="CC-2025-018"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-subtlest text-[18px]">lock</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Referencia Contrato / OC</label>
+<input class="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="input-contrato" type="text" value="FOS-2025-089"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Fecha de emisión</label>
+<input class="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="input-fecha-emision" type="date" value="2025-05-28"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Fecha acordada de pago</label>
+<input class="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="input-fecha-pago" type="date" value="2025-06-05"/>
+</div>
+</div>
+</div>
+<!-- Tarjeta 2: Concepto, Honorarios y Valor en Letras -->
+<div class="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
+<div class="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
+<div class="flex items-center gap-space-sm">
+<span class="w-7 h-7 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-badge-label text-badge-label font-bold">2</span>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-text-primary">Concepto y Liquidación</h2>
+</div>
+<span class="font-caption text-caption text-text-subtlest">COP Moneda Legal</span>
+</div>
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Detalle descriptivo del servicio prestado</label>
+<textarea class="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container resize-none leading-relaxed" id="input-concepto" rows="4">Por concepto de honorarios profesionales correspondientes al Hito 2: Consultoría en Arquitectura UX y Sistema de Diseño para Banca Móvil durante el mes de Mayo 2025 según Contrato FOS-2025-089.</textarea>
+<p class="font-caption text-caption text-text-subtlest">Sea explícito indicando período, entregables alcanzados y número de contrato de prestación de servicios.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Valor bruto honorarios (COP)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-text-subtlest font-medium">$</span>
+<input class="w-full h-10 pl-8 pr-12 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary font-semibold text-right focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="input-monto" type="text" value="2.800.000"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 font-caption text-caption text-text-subtlest font-bold">COP</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Monto en letras (Automático)</label>
+<input class="w-full h-10 px-3 bg-surface-container-low border border-border-strong rounded-[3px] font-body-sm text-body-sm text-text-secondary select-none font-medium truncate" id="input-monto-letras" readonly="" type="text" value="DOS MILLONES OCHOCIENTOS MIL PESOS M/CTE"/>
+</div>
+</div>
+<!-- Panel Informativo Retenciones -->
+<div class="bg-surface-container-low p-space-md rounded-[4px] border border-border-subtle flex items-start gap-space-sm mt-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">info</span>
+<div class="flex flex-col text-body-sm font-body-sm text-text-secondary">
+<span class="font-semibold text-text-primary">Retención en la fuente a título de renta</span>
+<span>Al no estar obligado a facturar electrónicamente, la empresa pagadora aplicará la tabla de retención para independientes según declaración juramentada de costos (Decreto 1625 de 2016).</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tarjeta 3: Declaraciones Legales y Datos Bancarios -->
+<div class="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
+<div class="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
+<div class="flex items-center gap-space-sm">
+<span class="w-7 h-7 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-badge-label text-badge-label font-bold">3</span>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-text-primary">Marco Tributario y Canales de Pago</h2>
+</div>
+<span class="inline-flex items-center gap-1 font-badge-label text-[11px] text-status-pagada font-semibold uppercase">
+<span class="material-symbols-outlined text-[15px]">verified</span> Validado
+            </span>
+</div>
+<div class="flex flex-col gap-space-md">
+<!-- Selector de Declaración IVA -->
+<div class="border border-border-subtle rounded-[4px] p-space-md bg-canvas-white">
+<div class="flex items-start gap-space-sm">
+<input checked="" class="mt-1 w-4 h-4 text-primary rounded-[2px] border-border-strong focus:ring-0 cursor-pointer" id="check-iva" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-text-primary cursor-pointer leading-normal" for="check-iva">
+<span class="font-semibold text-text-primary block">No responsable del Impuesto sobre las Ventas (IVA)</span>
+                  Manifestación expresa bajo la gravedad de juramento de pertenecer al régimen de no responsables de IVA de conformidad con el <strong class="text-text-primary">Artículo 437 del Estatuto Tributario</strong>.
+                </label>
+</div>
+</div>
+<!-- Selector de Aportes Seguridad Social -->
+<div class="border border-border-subtle rounded-[4px] p-space-md bg-canvas-white">
+<div class="flex items-start gap-space-sm">
+<input checked="" class="mt-1 w-4 h-4 text-primary rounded-[2px] border-border-strong focus:ring-0 cursor-pointer" id="check-pila" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-text-primary cursor-pointer leading-normal" for="check-pila">
+<span class="font-semibold text-text-primary block">Certificación de Seguridad Social e Independiente (Ley 2277)</span>
+                  Declaro que he realizado los aportes al Sistema de Seguridad Social Integral (Salud, Pensión y ARL) correspondientes a los ingresos percibidos, anexando soporte de planilla PILA.
+                </label>
+</div>
+</div>
+<!-- Datos Bancarios -->
+<div class="flex flex-col gap-1.5 pt-space-xs">
+<label class="font-body-sm text-body-sm font-semibold text-text-primary">Instrucciones de Pago / Consignación</label>
+<textarea class="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-sm text-body-sm text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container resize-none leading-relaxed" id="input-banco" rows="2">Bancolombia — Cuenta de Ahorros No. 245-098765-12 a nombre de Carlos Mendoza (C.C. 1.032.456.789)</textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMNA DERECHA: VISTA PREVIA HOJA OFICIAL (5 Cols Sticky) -->
+<div class="lg:col-span-5 sticky top-20">
+<div class="flex items-center justify-between pb-space-sm mb-space-xs px-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">preview</span>
+<span class="font-badge-label text-badge-label font-bold uppercase tracking-wider text-text-secondary">Vista Previa Documento Oficial</span>
+</div>
+<button class="font-caption text-caption font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">zoom_in</span> Aumentar
+          </button>
+</div>
+<!-- Hoja Física Simulación Papel Carta Formal Atlassian Style -->
+<div class="bg-canvas-white border border-border-subtle rounded-[20px] p-8 transition-all flex flex-col justify-between text-text-primary relative" style="min-height: 720px;">
+<!-- Watermark sutil de validez -->
+<div class="absolute right-8 top-8 opacity-5 pointer-events-none select-none">
+<span class="material-symbols-outlined text-[140px] text-text-primary">receipt_long</span>
+</div>
+<div>
+<!-- Cabecera de la Cuenta de Cobro -->
+<div class="flex flex-col items-center text-center pb-6 border-b border-border-subtle">
+<span class="font-caption text-[11px] uppercase tracking-widest text-text-subtlest font-semibold">Documento Equivalente Electrónico / Físico</span>
+<h2 class="font-headline-sm text-headline-sm font-bold tracking-tight text-text-primary mt-1" id="prev-titulo">CUENTA DE COBRO N° CC-2025-018</h2>
+<div class="mt-2 inline-flex items-center gap-2 text-caption font-caption text-text-secondary">
+<span>Fecha: <strong class="text-text-primary font-semibold" id="prev-fecha">28 de Mayo de 2025</strong></span>
+<span>•</span>
+<span>Vence: <strong class="text-text-primary font-semibold" id="prev-vence">05 de Junio de 2025</strong></span>
+</div>
+</div>
+<!-- Cuerpo Legal: DEUDOR Y ACREEDOR -->
+<div class="py-6 flex flex-col gap-4 text-body-sm font-body-sm leading-relaxed border-b border-border-subtle">
+<div>
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wide block font-semibold mb-0.5">Pagador / Deudor:</span>
+<p class="text-body-md font-body-md font-semibold text-text-primary" id="prev-cliente">Bancolombia S.A. — NIT: 890.903.938-8</p>
+</div>
+<div class="bg-surface-container-low p-3.5 rounded-[3px] border border-border-subtle">
+<span class="font-caption text-caption text-primary uppercase tracking-wide block font-bold mb-1">Debe A:</span>
+<p class="font-body-md text-body-md font-bold text-text-primary">CARLOS ALBERTO MENDOZA SILVA</p>
+<p class="font-body-sm text-body-sm text-text-secondary">C.C. 1.032.456.789 de Bogotá D.C.</p>
+<p class="font-caption text-caption text-text-subtlest">Tel: +57 (310) 845-9201 • carlos@mendoza.co</p>
+</div>
+<div>
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wide block font-semibold mb-0.5">La suma de:</span>
+<p class="font-body-sm text-body-sm font-bold text-text-primary leading-tight uppercase" id="prev-monto-letras">DOS MILLONES OCHOCIENTOS MIL PESOS M/CTE</p>
+<p class="text-headline-sm font-headline-sm font-extrabold text-primary mt-1" id="prev-monto-numero">$ 2.800.000 COP</p>
+</div>
+<div>
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wide block font-semibold mb-1">Por concepto de:</span>
+<p class="text-body-sm font-body-sm text-text-secondary italic pl-3 border-l-2 border-primary-container leading-relaxed" id="prev-concepto">
+                  "Por concepto de honorarios profesionales correspondientes al Hito 2: Consultoría en Arquitectura UX y Sistema de Diseño para Banca Móvil durante el mes de Mayo 2025 según Contrato FOS-2025-089."
+                </p>
+</div>
+</div>
+<!-- Certificaciones y Cláusulas Legales -->
+<div class="py-5 flex flex-col gap-3 text-[11px] font-caption leading-normal text-text-subtlest border-b border-border-subtle">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[15px] text-status-pagada shrink-0 mt-0.5">check_circle</span>
+<p id="prev-iva-txt"><strong class="text-text-primary">Régimen Tributario:</strong> Manifiesto bajo la gravedad de juramento que no soy responsable del Impuesto sobre las Ventas (IVA) conforme al Art. 437 del Estatuto Tributario Nacional.</p>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[15px] text-status-pagada shrink-0 mt-0.5">check_circle</span>
+<p><strong class="text-text-primary">Seguridad Social:</strong> Para efectos del Artículo 108 del E.T. y Ley 2277 de 2022, declaro haber efectuado mis aportes independientes al Sistema General de Seguridad Social en Salud, Pensión y ARL.</p>
+</div>
+</div>
+<!-- Canales Bancarios -->
+<div class="pt-4 pb-2">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wide block font-semibold mb-1">Forma de Pago / Abono:</span>
+<p class="font-body-sm text-body-sm font-medium text-text-primary" id="prev-banco">
+                Bancolombia — Cuenta de Ahorros No. 245-098765-12 a nombre de Carlos Mendoza (C.C. 1.032.456.789)
+              </p>
+</div>
+</div>
+<!-- Espacio Firma Digital -->
+<div class="mt-8 pt-6 border-t border-dashed border-border-strong flex items-end justify-between">
+<div class="flex flex-col">
+<div class="h-10 mb-1 flex items-center">
+<!-- Firma vectorial estilizada -->
+<svg class="w-36 h-8 text-primary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 160 40">
+<path d="M10 28 C 30 10, 45 35, 60 15 C 75 -2, 70 38, 90 22 C 105 10, 115 30, 130 18 C 140 10, 150 25, 155 20"></path>
+<path d="M45 28 L 140 28" opacity="0.6" stroke-dasharray="2 3"></path>
+</svg>
+</div>
+<span class="font-body-sm text-body-sm font-bold text-text-primary">Carlos Mendoza</span>
+<span class="font-caption text-caption text-text-subtlest">C.C. 1.032.456.789</span>
+<span class="font-caption text-[10px] text-status-pagada flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[12px]">fingerprint</span> Firma Digital Certificada FreelanceOS
+              </span>
+</div>
+<div class="flex flex-col items-end">
+<div class="w-16 h-16 border border-border-subtle p-1 bg-surface-container-low rounded-[3px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[42px] text-text-primary">qr_code_2</span>
+</div>
+<span class="font-caption text-[9px] text-text-subtlest mt-1">Verificación DIAN / FOS</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- BARRA INFERIOR STICKY: ACCIONES Y RESUMEN TOTAL -->
+<div class="fixed bottom-0 left-[260px] right-0 h-20 bg-canvas-white border-t border-border-subtle z-40 px-space-xl flex items-center justify-between">
+<!-- Información de Liquidación -->
+<div class="flex items-center gap-space-lg">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-text-subtlest uppercase tracking-wide font-semibold">Resumen de Cuenta</span>
+<span class="font-body-md text-body-md font-semibold text-text-primary flex items-center gap-2">
+          1 Documento 
+          <span class="text-border-strong">•</span>
+<span class="text-status-pagada font-bold">$2.800.000 COP</span>
+<span class="text-text-subtlest font-normal">a Cobrar</span>
+</span>
+</div>
+<div class="hidden sm:flex items-center gap-2 pl-space-md border-l border-border-subtle">
+<span class="w-2.5 h-2.5 rounded-full bg-status-pagada"></span>
+<span class="font-caption text-caption text-text-secondary">Sin IVA declarado (Art. 437)</span>
+</div>
+</div>
+<!-- Acciones Atlassian Style: 1 Botón Primario Único + Secundario -->
+<div class="flex items-center gap-space-md">
+<button class="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low transition-colors focus:outline-none" type="button">
+        Guardar borrador
+      </button>
+<!-- BOTÓN PRIMARIO ÚNICO EN PANTALLA: PÍLDORA 10000px, AZUL #1868db, 58px ALTO -->
+<button class="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2" id="btn-generar" type="button">
+<span class="material-symbols-outlined text-[22px]">download</span>
+<span>Generar y Descargar PDF</span>
+</button>
+</div>
+</div>
+<!-- Micro-interacción: Sincronización Reactiva Formulario -> Vista Previa -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputConsecutivo = document.getElementById('input-consecutivo');
+      const inputCliente = document.getElementById('input-cliente');
+      const inputConcepto = document.getElementById('input-concepto');
+      const inputMonto = document.getElementById('input-monto');
+      const inputMontoLetras = document.getElementById('input-monto-letras');
+      const inputBanco = document.getElementById('input-banco');
+      const inputFechaEmision = document.getElementById('input-fecha-emision');
+      const inputFechaPago = document.getElementById('input-fecha-pago');
+      const checkIva = document.getElementById('check-iva');
+
+      const prevTitulo = document.getElementById('prev-titulo');
+      const prevCliente = document.getElementById('prev-cliente');
+      const prevConcepto = document.getElementById('prev-concepto');
+      const prevMontoNumero = document.getElementById('prev-monto-numero');
+      const prevMontoLetras = document.getElementById('prev-monto-letras');
+      const prevBanco = document.getElementById('prev-banco');
+      const prevFecha = document.getElementById('prev-fecha');
+      const prevVence = document.getElementById('prev-vence');
+      const prevIvaTxt = document.getElementById('prev-iva-txt');
+
+      function formatFecha(str) {
+        if (!str) return '';
+        const partes = str.split('-');
+        if (partes.length !== 3) return str;
+        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const mesIdx = parseInt(partes[1], 10) - 1;
+        return `${partes[2]} de ${meses[mesIdx] || ''} de ${partes[0]}`;
+      }
+
+      inputConsecutivo?.addEventListener('input', (e) => {
+        prevTitulo.textContent = `CUENTA DE COBRO N° ${e.target.value.toUpperCase()}`;
+      });
+
+      inputCliente?.addEventListener('change', (e) => {
+        prevCliente.textContent = e.target.value;
+      });
+
+      inputConcepto?.addEventListener('input', (e) => {
+        prevConcepto.textContent = `"${e.target.value}"`;
+      });
+
+      inputMonto?.addEventListener('input', (e) => {
+        prevMontoNumero.textContent = `$ ${e.target.value} COP`;
+      });
+
+      inputBanco?.addEventListener('input', (e) => {
+        prevBanco.textContent = e.target.value;
+      });
+
+      inputFechaEmision?.addEventListener('change', (e) => {
+        prevFecha.textContent = formatFecha(e.target.value);
+      });
+
+      inputFechaPago?.addEventListener('change', (e) => {
+        prevVence.textContent = formatFecha(e.target.value);
+      });
+
+      checkIva?.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          prevIvaTxt.innerHTML = '<strong class="text-text-primary">Régimen Tributario:</strong> Manifiesto bajo la gravedad de juramento que no soy responsable del Impuesto sobre las Ventas (IVA) conforme al Art. 437 del Estatuto Tributario Nacional.';
+        } else {
+          prevIvaTxt.innerHTML = '<strong class="text-text-primary">Régimen Tributario:</strong> Responsable de Impuesto sobre las Ventas (IVA). Documento facturado conforme al régimen ordinario.';
+        }
+      });
+
+      // Feedback botón primario
+      const btnGenerar = document.getElementById('btn-generar');
+      btnGenerar?.addEventListener('click', () => {
+        const originalContent = btnGenerar.innerHTML;
+        btnGenerar.innerHTML = '<span class="material-symbols-outlined text-[22px] animate-spin">progress_activity</span><span>Compilando PDF oficial...</span>';
+        btnGenerar.classList.add('opacity-90', 'pointer-events-none');
+        
+        setTimeout(() => {
+          btnGenerar.innerHTML = '<span class="material-symbols-outlined text-[22px]">check_circle</span><span>¡Cuenta Descargada!</span>';
+          setTimeout(() => {
+            btnGenerar.innerHTML = originalContent;
+            btnGenerar.classList.remove('opacity-90', 'pointer-events-none');
+          }, 2000);
+        }, 1200);
+      });
+    });
+  </script>
+</div></main></div></body></html>
