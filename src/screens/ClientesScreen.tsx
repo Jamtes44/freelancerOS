@@ -42,7 +42,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-sm border-b border-border-subtle">
           <div className="flex flex-col gap-0.5">
-            <div className="flex items-baseline gap-space-sm">
+            <div className="flex flex-wrap items-baseline gap-space-sm">
               <h1 className="font-currency-display text-currency-display text-text-primary tracking-tight font-medium">
                 Clientes
               </h1>
@@ -50,14 +50,14 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 18 registrados
               </span>
             </div>
-            <p className="font-body-sm text-body-sm text-text-secondary">
+            <p className="font-body-sm text-body-sm text-text-secondary text-balance">
               Directorio corporativo, datos tributarios y balance comercial consolidado.
             </p>
           </div>
 
           {/* ÚNICO Botón Primario de la Pantalla */}
           <button
-            className="h-10 px-6 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-surface-container-lowest font-button-label text-button-label inline-flex items-center justify-center gap-1.5 transition-colors self-start sm:self-auto shrink-0 shadow-sm cursor-pointer"
+            className="h-10 px-6 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-surface-container-lowest font-button-label text-button-label inline-flex items-center justify-center gap-1.5 transition-colors w-full sm:w-auto self-stretch sm:self-auto shrink-0 shadow-sm cursor-pointer"
             type="button"
             onClick={() => setShowAddModal(true)}
           >
@@ -211,7 +211,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
         {/* Main Client Directory Card Container */}
         <div className="bg-surface-container-lowest rounded-[20px] border border-border-subtle overflow-hidden flex flex-col">
           <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[920px]">
+            <table className="w-full text-left border-collapse min-w-[880px] sm:min-w-[920px]">
               <thead>
                 <tr className="bg-surface-container-low border-b border-border-subtle">
                   <th className="py-3 px-space-md text-[11px] font-semibold text-text-subtlest uppercase tracking-wider">
@@ -374,7 +374,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
           </div>
 
           {/* Atlassian Pagination Footer */}
-          <div className="px-space-md py-space-sm bg-surface-container-lowest border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+          <div className="px-space-md py-space-sm bg-surface-container-lowest border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left">
             <div className="font-body-sm text-body-sm text-text-subtlest">
               Mostrando <span className="font-medium text-text-primary">1-5</span> de{' '}
               <span className="font-medium text-text-primary">18</span> clientes
@@ -424,7 +424,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
             <span className="font-body-sm text-body-sm font-semibold text-text-primary">
               Validación de RUT y Representación Legal
             </span>
-            <p className="font-body-sm text-body-sm text-text-secondary">
+            <p className="font-body-sm text-body-sm text-text-secondary text-balance">
               Todos los clientes listados cuentan con NIT validado frente al registro RUES / DIAN.
               Recuerda que para la emisión de Cuentas de Cobro con retención en la fuente a título
               de ICA o Renta, debes verificar la clasificación de contribuyente en la ficha de cada

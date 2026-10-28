@@ -18,11 +18,11 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
         {/* Header de Página */}
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
           <div className="flex flex-col gap-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center px-2 py-0.5 rounded-[10000px] font-caption text-caption uppercase tracking-wider bg-surface-container text-text-secondary font-semibold">
                 FreelanceOS v2.4
               </span>
-              <span className="text-text-subtlest font-caption text-caption">•</span>
+              <span className="hidden sm:inline text-text-subtlest font-caption text-caption">•</span>
               <span className="font-caption text-caption text-text-subtlest font-medium">
                 Zona Horaria: America/Bogota (COT)
               </span>
@@ -30,15 +30,15 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
             <h1 className="font-headline-md text-headline-md text-text-primary font-medium tracking-tight">
               Panel de Control
             </h1>
-            <p className="font-body-md text-body-md text-text-secondary">
+            <p className="font-body-md text-body-md text-text-secondary text-balance">
               Resumen operativo, balance impositivo y flujo de cobros actualizado al 24 de Octubre de 2024.
             </p>
           </div>
 
           {/* ÚNICO Botón Primario de Píldora Azul en la Pantalla */}
-          <div className="shrink-0">
+          <div className="shrink-0 w-full md:w-auto">
             <button
-              className="inline-flex items-center gap-space-sm h-11 px-6 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label hover:bg-primary-hover active:bg-[#09326c] transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container/20 cursor-pointer shadow-sm"
+              className="w-full md:w-auto inline-flex items-center justify-center gap-space-sm h-11 px-6 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label hover:bg-primary-hover active:bg-[#09326c] transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container/20 cursor-pointer shadow-sm"
               type="button"
               onClick={() => onNavigate('facturas')}
             >
@@ -49,7 +49,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
         </header>
 
         {/* Banner Destacado Atlassian */}
-        <section className="bg-[#1c2b42] text-surface-container-lowest rounded-[20px] p-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg relative overflow-hidden">
+        <section className="bg-[#1c2b42] text-surface-container-lowest rounded-[20px] p-space-lg md:p-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg relative overflow-hidden">
           <div className="flex items-start gap-space-md max-w-3xl">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5">
               <span className="material-symbols-outlined text-[#d8e2ff] text-[22px]">
@@ -57,13 +57,13 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-space-sm">
+              <div className="flex flex-wrap items-center gap-space-sm">
                 <span className="font-badge-label text-badge-label uppercase tracking-widest text-[#bec7d3] font-semibold">
                   Alerta DIAN &amp; Retenciones
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ffbdad]"></span>
               </div>
-              <p className="font-body-md text-body-md text-white font-normal leading-relaxed">
+              <p className="font-body-md text-body-md text-white font-normal leading-relaxed text-balance">
                 <strong className="font-semibold text-white">Cierre tributario Q2:</strong> Tienes 3
                 cuentas de cobro pendientes por radicar. Genera tu certificado de retención en la
                 fuente en un solo clic para conciliar tu contabilidad.
@@ -87,7 +87,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg">
           {/* Métrica 1: Ingresos del Mes */}
           <div
-            className="bg-surface-container-lowest rounded-[20px] p-space-xl flex flex-col justify-between gap-space-lg"
+            className="bg-surface-container-lowest rounded-[20px] p-space-lg md:p-space-xl flex flex-col justify-between gap-space-lg"
             style={{ outline: '1px solid #dddee1' }}
           >
             <div className="flex items-center justify-between">
@@ -99,11 +99,11 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="font-currency-display text-currency-display text-text-primary tracking-tight">
+              <div className="font-currency-display text-currency-display text-text-primary tracking-tight break-words">
                 $14.850.000{' '}
                 <span className="font-caption text-caption text-text-subtlest uppercase">COP</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span
                   className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#e3fcef] text-[#22a06b]"
                   style={{ outline: '1px solid #abf5d1' }}
@@ -118,7 +118,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
 
           {/* Métrica 2: Facturas Pendientes */}
           <div
-            className="bg-surface-container-lowest rounded-[20px] p-space-xl flex flex-col justify-between gap-space-lg"
+            className="bg-surface-container-lowest rounded-[20px] p-space-lg md:p-space-xl flex flex-col justify-between gap-space-lg"
             style={{ outline: '1px solid #dddee1' }}
           >
             <div className="flex items-center justify-between">
@@ -130,11 +130,11 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="font-currency-display text-currency-display text-text-primary tracking-tight">
+              <div className="font-currency-display text-currency-display text-text-primary tracking-tight break-words">
                 $5.200.000{' '}
                 <span className="font-caption text-caption text-text-subtlest uppercase">COP</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span
                   className="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#fff0b3] text-[#c75300]"
                   style={{ outline: '1px solid #ffe380' }}
@@ -148,7 +148,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
 
           {/* Métrica 3: Contratos por Vencer */}
           <div
-            className="bg-surface-container-lowest rounded-[20px] p-space-xl flex flex-col justify-between gap-space-lg"
+            className="bg-surface-container-lowest rounded-[20px] p-space-lg md:p-space-xl flex flex-col justify-between gap-space-lg"
             style={{ outline: '1px solid #dddee1' }}
           >
             <div className="flex items-center justify-between">
@@ -161,14 +161,14 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               <div className="font-currency-display text-currency-display text-text-primary tracking-tight">
                 2 contratos
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span
                   className="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-[#fff0b3] text-[#c75300]"
                   style={{ outline: '1px solid #ffe380' }}
                 >
                   Próx. 15 días
                 </span>
-                <span className="font-caption text-caption text-text-subtlest truncate">
+                <span className="font-caption text-caption text-text-subtlest truncate max-w-[140px]">
                   Bancolombia, Platzi
                 </span>
               </div>
@@ -177,7 +177,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
 
           {/* Métrica 4: Clientes Activos */}
           <div
-            className="bg-surface-container-lowest rounded-[20px] p-space-xl flex flex-col justify-between gap-space-lg"
+            className="bg-surface-container-lowest rounded-[20px] p-space-lg md:p-space-xl flex flex-col justify-between gap-space-lg"
             style={{ outline: '1px solid #dddee1' }}
           >
             <div className="flex items-center justify-between">
@@ -192,7 +192,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               <div className="font-currency-display text-currency-display text-text-primary tracking-tight">
                 12 empresas
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span
                   className="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-status-enviada-bg text-status-enviada-text"
                   style={{ outline: '1px solid #b3d4ff' }}
@@ -433,7 +433,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-space-md bg-surface-container-low/60 flex items-center justify-between text-caption font-caption text-text-subtlest">
+            <div className="p-space-md bg-surface-container-low/60 flex flex-col md:flex-row md:items-center justify-between gap-1 text-caption font-caption text-text-subtlest text-center md:text-left">
               <span>Mostrando 5 de 28 documentos emitidos este año</span>
               <span className="font-medium text-text-secondary">
                 Totales con retención en la fuente (ICA / ReteFuente)
@@ -467,8 +467,8 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 className="p-space-md rounded-[12px] bg-surface-container-lowest flex flex-col gap-space-sm"
                 style={{ outline: '1px solid #dddee1' }}
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-col">
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <div className="flex flex-col min-w-0">
                     <span className="font-body-sm text-body-sm font-semibold text-text-primary">
                       Bancolombia S.A.
                     </span>
@@ -483,7 +483,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     Vence en 2 días
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-2">
+                <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
                   <div className="flex flex-col">
                     <span className="font-caption text-caption text-text-subtlest">Monto neto</span>
                     <span className="font-body-sm text-body-sm font-semibold text-text-primary">
@@ -491,7 +491,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     </span>
                   </div>
                   <button
-                    className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer"
+                    className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer w-full sm:w-auto"
                     style={{ outline: '1px solid #b7b9be' }}
                     type="button"
                     onClick={() => onNavigate('cuentas-cobro')}
@@ -506,8 +506,8 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 className="p-space-md rounded-[12px] bg-surface-container-lowest flex flex-col gap-space-sm"
                 style={{ outline: '1px solid #dddee1' }}
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-col">
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <div className="flex flex-col min-w-0">
                     <span className="font-body-sm text-body-sm font-semibold text-text-primary">
                       Platzi Inc.
                     </span>
@@ -522,7 +522,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     Vence en 6 días
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-2">
+                <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
                   <div className="flex flex-col">
                     <span className="font-caption text-caption text-text-subtlest">Monto neto</span>
                     <span className="font-body-sm text-body-sm font-semibold text-text-primary">
@@ -530,7 +530,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     </span>
                   </div>
                   <button
-                    className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer"
+                    className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer w-full sm:w-auto"
                     style={{ outline: '1px solid #b7b9be' }}
                     type="button"
                     onClick={() => onNavigate('cuentas-cobro')}
@@ -545,8 +545,8 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 className="p-space-md rounded-[12px] bg-surface-container-lowest flex flex-col gap-space-sm"
                 style={{ outline: '1px solid #dddee1' }}
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-col">
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <div className="flex flex-col min-w-0">
                     <span className="font-body-sm text-body-sm font-semibold text-text-primary">
                       Habi Colombia
                     </span>
@@ -558,7 +558,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     Vence en 14 días
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-2">
+                <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
                   <div className="flex flex-col">
                     <span className="font-caption text-caption text-text-subtlest">Monto neto</span>
                     <span className="font-body-sm text-body-sm font-semibold text-text-primary">
@@ -566,7 +566,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     </span>
                   </div>
                   <button
-                    className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer"
+                    className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer w-full sm:w-auto"
                     style={{ outline: '1px solid #b7b9be' }}
                     type="button"
                     onClick={() => onNavigate('cuentas-cobro')}
