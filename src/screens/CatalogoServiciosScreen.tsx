@@ -127,7 +127,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
         </div>
 
         {/* Visual Status & Metric Overview Anchor */}
-        <div className="rounded-[20px] bg-[#1c2b42] text-canvas-white p-space-lg md:p-space-xl flex flex-col md:flex-row items-stretch justify-between gap-space-xl">
+        <div className="rounded-[20px] bg-[#1c2b42] text-canvas-white p-space-lg md:p-space-xl flex flex-col lg:flex-row items-stretch justify-between gap-space-xl">
           <div className="flex flex-col justify-between max-w-md">
             <div>
               <span className="font-caption text-caption uppercase tracking-wider text-secondary-fixed-dim">
@@ -151,13 +151,13 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <span className="font-caption text-caption text-border-strong">Resolución 000165</span>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-space-md items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-md items-stretch w-full lg:w-auto min-w-0">
             {/* Metric 1 */}
-            <div className="flex flex-col p-space-md rounded-xl bg-canvas-white/5 border border-white/10">
+            <div className="flex flex-col p-space-md rounded-xl bg-canvas-white/5 border border-white/10 min-h-[96px] justify-between">
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Tarifa Hora Promedio
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap">
+              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap break-keep">
                 $175.000
               </span>
               <span className="font-caption text-caption text-status-pagada mt-1 flex items-center gap-0.5">
@@ -165,11 +165,11 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               </span>
             </div>
             {/* Metric 2 */}
-            <div className="flex flex-col p-space-md rounded-xl bg-canvas-white/5 border border-white/10">
+            <div className="flex flex-col p-space-md rounded-xl bg-canvas-white/5 border border-white/10 min-h-[96px] justify-between">
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Ticket Proyecto Base
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap">
+              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap break-keep">
                 $4.430.000
               </span>
               <span className="font-caption text-caption text-secondary-fixed-dim mt-1">
@@ -177,7 +177,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               </span>
             </div>
             {/* Metric 3 */}
-            <div className="flex flex-col p-space-md rounded-xl bg-canvas-white/5 border border-white/10 col-span-2 sm:col-span-1">
+            <div className="flex flex-col p-space-md rounded-xl bg-canvas-white/5 border border-white/10 min-h-[96px] justify-between">
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Tarifas Exentas IVA
               </span>
