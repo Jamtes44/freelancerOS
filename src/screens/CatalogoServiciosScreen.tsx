@@ -127,7 +127,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
         </div>
 
         {/* Visual Status & Metric Overview Anchor */}
-        <div className="rounded-[20px] bg-[#1c2b42] text-canvas-white p-space-lg md:p-space-xl flex flex-col lg:flex-row items-stretch justify-between gap-space-xl">
+        <div className="rounded-[20px] bg-[#1c2b42] text-canvas-white p-3 sm:p-4 md:p-5 flex flex-col lg:flex-row items-stretch justify-between gap-3 sm:gap-4">
           <div className="flex flex-col justify-between max-w-md">
             <div>
               <span className="font-caption text-caption uppercase tracking-wider text-secondary-fixed-dim">
@@ -151,40 +151,40 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <span className="font-caption text-caption text-border-strong">Resolución 000165</span>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-sm md:gap-space-md items-stretch w-full lg:w-auto min-w-0">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2 items-stretch w-full lg:w-auto min-w-0">
             {/* Metric 1 */}
-            <div className="flex flex-col p-space-sm md:p-space-md rounded-xl bg-canvas-white/5 border border-white/10 min-h-[88px] md:min-h-[96px] justify-between overflow-hidden">
-              <span className="font-caption text-caption text-secondary-fixed-dim">
+            <div className="flex flex-col px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-lg bg-canvas-white/5 border border-white/10 min-h-[62px] sm:min-h-[68px] md:min-h-[72px] justify-between overflow-hidden min-w-0">
+              <span className="font-caption text-[8px] sm:text-[9px] leading-tight text-secondary-fixed-dim truncate">
                 Tarifa Hora Promedio
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap leading-tight text-[9px] xs:text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[17px]">
+              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-canvas-white text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px]">
                 $175.000
               </span>
-              <span className="font-caption text-caption text-status-pagada mt-1 flex items-center gap-0.5">
-                <span className="material-symbols-outlined text-[12px]">trending_up</span> +8.5% YoY
+              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-status-pagada flex items-center gap-0.5 truncate">
+                <span className="material-symbols-outlined text-[9px] sm:text-[10px]">trending_up</span> +8.5% YoY
               </span>
             </div>
             {/* Metric 2 */}
-            <div className="flex flex-col p-space-sm md:p-space-md rounded-xl bg-canvas-white/5 border border-white/10 min-h-[88px] md:min-h-[96px] justify-between overflow-hidden">
-              <span className="font-caption text-caption text-secondary-fixed-dim">
+            <div className="flex flex-col px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-lg bg-canvas-white/5 border border-white/10 min-h-[62px] sm:min-h-[68px] md:min-h-[72px] justify-between overflow-hidden min-w-0">
+              <span className="font-caption text-[8px] sm:text-[9px] leading-tight text-secondary-fixed-dim truncate">
                 Ticket Proyecto Base
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap leading-tight text-[9px] xs:text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[17px]">
+              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-canvas-white text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px]">
                 $4.430.000
               </span>
-              <span className="font-caption text-caption text-secondary-fixed-dim mt-1">
+              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-secondary-fixed-dim truncate">
                 4 servicios
               </span>
             </div>
             {/* Metric 3 */}
-            <div className="flex flex-col p-space-sm md:p-space-md rounded-xl bg-canvas-white/5 border border-white/10 min-h-[88px] md:min-h-[96px] justify-between overflow-hidden">
-              <span className="font-caption text-caption text-secondary-fixed-dim">
+            <div className="flex flex-col px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-lg bg-canvas-white/5 border border-white/10 min-h-[62px] sm:min-h-[68px] md:min-h-[72px] justify-between overflow-hidden min-w-0">
+              <span className="font-caption text-[8px] sm:text-[9px] leading-tight text-secondary-fixed-dim truncate">
                 Tarifas Exentas IVA
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-status-pagada mt-1 tabular-nums whitespace-nowrap leading-tight text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px]">
+              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-status-pagada text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px]">
                 1 Servicio
               </span>
-              <span className="font-caption text-caption text-secondary-fixed-dim mt-1">
+              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-secondary-fixed-dim truncate">
                 Art. 476 E.T.
               </span>
             </div>
