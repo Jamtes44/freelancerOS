@@ -101,8 +101,8 @@
 }
 
 /* Custom typography utilities for FreelanceOS */
-.font-currency-display { font-family: var(--font-sans); font-weight: 600; letter-spacing: -0.01em; }
-.text-currency-display { font-size: clamp(22px, 4vw, 32px); line-height: 1.15; }
+.font-currency-display { font-family: var(--font-sans); font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+.text-currency-display { font-size: clamp(16px, 2.4vw, 24px); line-height: 1.12; }
 
 .font-button-label { font-family: var(--font-sans); font-weight: 500; }
 .text-button-label { font-size: clamp(14px, 1.2vw, 15px); line-height: 20px; }
@@ -141,5 +141,9 @@
   }
   .text-balance {
     text-wrap: balance;
+  }
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
   }
 }

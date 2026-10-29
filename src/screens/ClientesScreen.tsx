@@ -294,11 +294,13 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                       <td className="py-space-md px-space-md text-right font-body-sm text-body-sm font-semibold whitespace-nowrap">
                         <span
                           className={
-                            client.pendingBalance > 0
-                              ? client.status === 'Pendiente'
-                                ? 'text-status-vencida'
-                                : 'text-status-pendiente'
-                              : 'text-text-primary'
+                            `tabular-nums whitespace-nowrap ${
+                              client.pendingBalance > 0
+                                ? client.status === 'Pendiente'
+                                  ? 'text-status-vencida'
+                                  : 'text-status-pendiente'
+                                : 'text-text-primary'
+                            }`
                           }
                         >
                           {formatCOP(client.pendingBalance)}

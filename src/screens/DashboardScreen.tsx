@@ -99,7 +99,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="font-currency-display text-currency-display text-text-primary tracking-tight break-words">
+              <div className="font-currency-display text-currency-display text-text-primary tracking-tight break-words tabular-nums whitespace-nowrap">
                 $14.850.000{' '}
                 <span className="font-caption text-caption text-text-subtlest uppercase">COP</span>
               </div>
@@ -130,7 +130,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="font-currency-display text-currency-display text-text-primary tracking-tight break-words">
+              <div className="font-currency-display text-currency-display text-text-primary tracking-tight break-words tabular-nums whitespace-nowrap">
                 $5.200.000{' '}
                 <span className="font-caption text-caption text-text-subtlest uppercase">COP</span>
               </div>
@@ -486,7 +486,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
                   <div className="flex flex-col">
                     <span className="font-caption text-caption text-text-subtlest">Monto neto</span>
-                    <span className="font-body-sm text-body-sm font-semibold text-text-primary">
+                    <span className="font-body-sm text-body-sm font-semibold text-text-primary tabular-nums whitespace-nowrap">
                       $2.800.000 COP
                     </span>
                   </div>
@@ -525,7 +525,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
                   <div className="flex flex-col">
                     <span className="font-caption text-caption text-text-subtlest">Monto neto</span>
-                    <span className="font-body-sm text-body-sm font-semibold text-text-primary">
+                    <span className="font-body-sm text-body-sm font-semibold text-text-primary tabular-nums whitespace-nowrap">
                       $1.500.000 COP
                     </span>
                   </div>
@@ -561,7 +561,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
                   <div className="flex flex-col">
                     <span className="font-caption text-caption text-text-subtlest">Monto neto</span>
-                    <span className="font-body-sm text-body-sm font-semibold text-text-primary">
+                    <span className="font-body-sm text-body-sm font-semibold text-text-primary tabular-nums whitespace-nowrap">
                       $900.000 COP
                     </span>
                   </div>
