@@ -28,16 +28,16 @@ insert into public.invoices (id,number,client_id,client_name,nit,date,due_date,a
 values
 ('fac-042','FAC-2025-042','cli-0090','Rappi S.A.S.','900.843.898-1','22 Oct 2024','21 Nov 2024',4500000,'Pagada'),
 ('fac-041','FAC-2025-041','cli-0089','Nu Colombia Compañía de Financiamiento','901.442.238-3','18 Oct 2024','17 Nov 2024',3200000,'Enviada'),
-('fac-040','FAC-2025-040','cli-0095','Mercadolibre Colombia Ltda.','830.067.412-2','10 Oct 2024','09 Nov 2024',2000000,'Pendiente'),
+('fac-040','FAC-2025-040',null,'Mercadolibre Colombia Ltda.','830.067.412-2','10 Oct 2024','09 Nov 2024',2000000,'Pendiente'),
 ('fac-039','FAC-2025-039','cli-0092','Bold Pagos Colombia','901.277.632-4','28 Sep 2024','28 Oct 2024',1850000,'Vencida'),
-('fac-038','FAC-2025-038','cli-0096','Platzi Inc. Sucursal Colombia','900.751.291-0','25 Sep 2024','25 Oct 2024',3300000,'Borrador')
+('fac-038','FAC-2025-038',null,'Platzi Inc. Sucursal Colombia','900.751.291-0','25 Sep 2024','25 Oct 2024',3300000,'Borrador')
 on conflict (id) do nothing;
 
 -- cuentas_cobro
 insert into public.cuentas_cobro (id,number,client_id,client_name,nit,contract_ref,date,due_date,amount,concept,status)
 values
 ('cc-018','CC-2025-018','cli-0094','Bancolombia S.A.','890.903.938-8','FOS-2025-089','2025-05-28','2025-06-05',2800000,'Por concepto de honorarios profesionales correspondientes al Hito 2: Consultoría en Arquitectura UX y Sistema de Diseño para Banca Móvil durante el mes de Mayo 2025 según Contrato FOS-2025-089.','Pendiente'),
-('cc-019','CC-2025-019','cli-0096','Platzi Inc.','900.751.291-0','FOS-2025-044','2025-05-20','2025-05-26',1500000,'Producción de Contenido Técnico Curso Go','Pendiente'),
+('cc-019','CC-2025-019',null,'Platzi Inc.','900.751.291-0','FOS-2025-044','2025-05-20','2025-05-26',1500000,'Producción de Contenido Técnico Curso Go','Pendiente'),
 ('cc-020','CC-2025-020','cli-0091','Habi Colombia','901.223.456-7','FOS-2025-012','2025-05-15','2025-05-29',900000,'Auditoría Frontend y Accesibilidad WCAG','Pendiente')
 on conflict (id) do nothing;
 

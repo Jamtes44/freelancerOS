@@ -208,3 +208,39 @@ export async function createClient(client: Partial<Client>) {
   if (error) throw error;
   return data;
 }
+
+export async function updateClient(id: string, client: Partial<Client>) {
+  if (!useSupabase()) return null;
+  const payload: any = {
+    name: client.name,
+    legal_name: client.legalName,
+    nit: client.nit,
+    sector: client.sector,
+    city: client.city,
+    address: client.address,
+    contact_name: client.contactName,
+    contact_role: client.contactRole,
+    email: client.email,
+    phone: client.phone,
+    pending_balance: client.pendingBalance,
+    total_billed: client.totalBilled,
+    status: client.status,
+    avatar_initials: client.avatarInitials,
+    avatar_bg: client.avatarBg,
+    avatar_color: client.avatarColor,
+    tax_regime: client.taxRegime,
+    ica_rate: client.icaRate,
+    rete_fuente_rate: client.reteFuenteRate,
+  };
+  Object.keys(payload).forEach((k) => payload[k] === undefined && delete payload[k]);
+  const { data, error } = await supabase.from('clients').update(payload).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteClient(id: string) {
+  if (!useSupabase()) return null;
+  const { error } = await supabase.from('clients').delete().eq('id', id);
+  if (error) throw error;
+  return true;
+}

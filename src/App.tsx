@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScreenId } from './types';
+import { ScreenId, Client, Invoice, CuentaCobro, ServiceItem, Contract } from './types';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardScreen } from './screens/DashboardScreen';
@@ -36,19 +36,30 @@ const SCREEN_TITLES: Record<ScreenId, string> = {
   'configuracion': 'Configuración - FreelanceOS',
 };
 
+const hasSupabaseEnv = () => {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  return Boolean(url && key);
+};
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [clients, setClients] = useState(INITIAL_CLIENTS);
-  const [invoices, setInvoices] = useState(INITIAL_INVOICES);
-  const [cuentasCobro, setCuentasCobro] = useState(INITIAL_CUENTAS_COBRO);
-  const [services, setServices] = useState(INITIAL_SERVICES);
-  const [contract, setContract] = useState(INITIAL_CONTRACT);
+  const [clients, setClients] = useState<Client[]>(INITIAL_CLIENTS);
+  const [invoices, setInvoices] = useState<Invoice[]>(INITIAL_INVOICES);
+  const [cuentasCobro, setCuentasCobro] = useState<CuentaCobro[]>(INITIAL_CUENTAS_COBRO);
+  const [services, setServices] = useState<ServiceItem[]>(INITIAL_SERVICES);
+  const [contract, setContract] = useState<Contract>(INITIAL_CONTRACT);
+  const [usingSupabase, setUsingSupabase] = useState(hasSupabaseEnv());
 
   useEffect(() => {
     let mounted = true;
     (async () => {
+      if (!hasSupabaseEnv()) {
+        setUsingSupabase(false);
+        return;
+      }
       try {
         const [c, inv, cc, serv, ctr] = await Promise.all([
           getClients(),
@@ -58,13 +69,15 @@ export default function App() {
           getContract(),
         ]);
         if (!mounted) return;
-        if (Array.isArray(c) && c.length) setClients(c);
-        if (Array.isArray(inv) && inv.length) setInvoices(inv);
-        if (Array.isArray(cc) && cc.length) setCuentasCobro(cc);
-        if (Array.isArray(serv) && serv.length) setServices(serv);
+        setUsingSupabase(true);
+        setClients(Array.isArray(c) ? c : []);
+        setInvoices(Array.isArray(inv) ? inv : []);
+        setCuentasCobro(Array.isArray(cc) ? cc : []);
+        setServices(Array.isArray(serv) ? serv : []);
         if (ctr) setContract(ctr);
       } catch (e) {
         console.warn('Error cargando datos desde Supabase, usando mocks', e);
+        if (mounted) setUsingSupabase(false);
       }
     })();
     return () => {
