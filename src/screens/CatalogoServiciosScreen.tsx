@@ -157,7 +157,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Tarifa Hora Promedio
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap break-keep">
+              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap text-[clamp(14px,1.6vw,18px)] leading-tight">
                 $175.000
               </span>
               <span className="font-caption text-caption text-status-pagada mt-1 flex items-center gap-0.5">
@@ -169,7 +169,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Ticket Proyecto Base
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap break-keep">
+              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap text-[clamp(14px,1.6vw,18px)] leading-tight">
                 $4.430.000
               </span>
               <span className="font-caption text-caption text-secondary-fixed-dim mt-1">
