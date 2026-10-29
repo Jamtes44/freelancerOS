@@ -17,6 +17,13 @@ import {
   INITIAL_SERVICES,
   INITIAL_CONTRACT,
 } from './data/mockData';
+import {
+  getClients,
+  getInvoices,
+  getCuentasCobro,
+  getServices,
+  getContract,
+} from './services/supabaseService';
 
 const SCREEN_TITLES: Record<ScreenId, string> = {
   'dashboard': 'Dashboard - FreelanceOS',
@@ -33,11 +40,37 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [clients] = useState(INITIAL_CLIENTS);
-  const [invoices] = useState(INITIAL_INVOICES);
-  const [cuentasCobro] = useState(INITIAL_CUENTAS_COBRO);
-  const [services] = useState(INITIAL_SERVICES);
-  const [contract] = useState(INITIAL_CONTRACT);
+  const [clients, setClients] = useState(INITIAL_CLIENTS);
+  const [invoices, setInvoices] = useState(INITIAL_INVOICES);
+  const [cuentasCobro, setCuentasCobro] = useState(INITIAL_CUENTAS_COBRO);
+  const [services, setServices] = useState(INITIAL_SERVICES);
+  const [contract, setContract] = useState(INITIAL_CONTRACT);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const [c, inv, cc, serv, ctr] = await Promise.all([
+          getClients(),
+          getInvoices(),
+          getCuentasCobro(),
+          getServices(),
+          getContract(),
+        ]);
+        if (!mounted) return;
+        if (Array.isArray(c) && c.length) setClients(c);
+        if (Array.isArray(inv) && inv.length) setInvoices(inv);
+        if (Array.isArray(cc) && cc.length) setCuentasCobro(cc);
+        if (Array.isArray(serv) && serv.length) setServices(serv);
+        if (ctr) setContract(ctr);
+      } catch (e) {
+        console.warn('Error cargando datos desde Supabase, usando mocks', e);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     document.title = SCREEN_TITLES[currentScreen] || 'FreelanceOS';
