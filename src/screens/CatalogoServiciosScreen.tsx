@@ -153,38 +153,38 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2 items-stretch w-full lg:w-auto min-w-0">
             {/* Metric 1 */}
-            <div className="flex flex-col px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-lg bg-canvas-white/5 border border-white/10 min-h-[62px] sm:min-h-[68px] md:min-h-[72px] justify-between overflow-hidden min-w-0">
+            <div className="flex flex-col px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg bg-canvas-white/5 border border-white/10 h-auto justify-between overflow-hidden min-w-0">
               <span className="font-caption text-[8px] sm:text-[9px] leading-tight text-secondary-fixed-dim truncate">
                 Tarifa Hora Promedio
               </span>
-              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-canvas-white text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px]">
+              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-canvas-white text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px] mt-0.5">
                 $175.000
               </span>
-              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-status-pagada flex items-center gap-0.5 truncate">
+              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-status-pagada flex items-center gap-0.5 truncate mt-0.5">
                 <span className="material-symbols-outlined text-[9px] sm:text-[10px]">trending_up</span> +8.5% YoY
               </span>
             </div>
             {/* Metric 2 */}
-            <div className="flex flex-col px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-lg bg-canvas-white/5 border border-white/10 min-h-[62px] sm:min-h-[68px] md:min-h-[72px] justify-between overflow-hidden min-w-0">
+            <div className="flex flex-col px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg bg-canvas-white/5 border border-white/10 h-auto justify-between overflow-hidden min-w-0">
               <span className="font-caption text-[8px] sm:text-[9px] leading-tight text-secondary-fixed-dim truncate">
                 Ticket Proyecto Base
               </span>
-              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-canvas-white text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px]">
+              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-canvas-white text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px] mt-0.5">
                 $4.430.000
               </span>
-              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-secondary-fixed-dim truncate">
+              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-secondary-fixed-dim truncate mt-0.5">
                 4 servicios
               </span>
             </div>
             {/* Metric 3 */}
-            <div className="flex flex-col px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-lg bg-canvas-white/5 border border-white/10 min-h-[62px] sm:min-h-[68px] md:min-h-[72px] justify-between overflow-hidden min-w-0">
+            <div className="flex flex-col px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg bg-canvas-white/5 border border-white/10 h-auto justify-between overflow-hidden min-w-0">
               <span className="font-caption text-[8px] sm:text-[9px] leading-tight text-secondary-fixed-dim truncate">
                 Tarifas Exentas IVA
               </span>
-              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-status-pagada text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px]">
+              <span className="tabular-nums whitespace-nowrap leading-none font-semibold text-status-pagada text-[9px] xs:text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] xl:text-[14px] mt-0.5">
                 1 Servicio
               </span>
-              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-secondary-fixed-dim truncate">
+              <span className="font-caption text-[7px] sm:text-[8px] leading-tight text-secondary-fixed-dim truncate mt-0.5">
                 Art. 476 E.T.
               </span>
             </div>
