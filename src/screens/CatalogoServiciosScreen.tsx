@@ -49,14 +49,14 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
           </div>
 
           {/* Single Primary Action */}
-          <div className="flex items-center shrink-0">
+          <div className="flex items-center shrink-0 w-full md:w-auto">
             <button
-              className="inline-flex items-center justify-center gap-space-xs h-[44px] px-6 rounded-full bg-primary-container text-on-primary hover:bg-primary-hover active:bg-[#09326c] transition-colors font-button-label text-button-label cursor-pointer shadow-sm"
+              className="inline-flex items-center justify-center gap-space-xs h-[44px] px-6 rounded-full bg-primary-container text-on-primary hover:bg-primary-hover active:bg-[#09326c] transition-colors font-button-label text-button-label cursor-pointer shadow-sm w-full md:w-auto"
               type="button"
               onClick={() => setShowAddModal(true)}
             >
               <span className="material-symbols-outlined text-[20px]">add</span>
-              <span>+ Nuevo servicio</span>
+              <span>Nuevo servicio</span>
             </button>
           </div>
         </div>
@@ -127,7 +127,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
         </div>
 
         {/* Visual Status & Metric Overview Anchor */}
-        <div className="rounded-[20px] bg-[#1c2b42] text-canvas-white p-space-xl flex flex-col md:flex-row items-stretch justify-between gap-space-xl">
+        <div className="rounded-[20px] bg-[#1c2b42] text-canvas-white p-space-lg md:p-space-xl flex flex-col md:flex-row items-stretch justify-between gap-space-xl">
           <div className="flex flex-col justify-between max-w-md">
             <div>
               <span className="font-caption text-caption uppercase tracking-wider text-secondary-fixed-dim">
@@ -136,12 +136,12 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <h2 className="font-headline-md text-headline-md mt-space-xs text-canvas-white">
                 Honorarios estandarizados
               </h2>
-              <p className="font-body-sm text-body-sm text-border-strong mt-space-xs">
+              <p className="font-body-sm text-body-sm text-border-strong mt-space-xs text-balance">
                 Asegura márgenes consistentes y simplifica la emisión de cuentas de cobro bajo
                 normatividad DIAN 2024.
               </p>
             </div>
-            <div className="mt-space-md flex items-center gap-space-sm">
+            <div className="mt-space-md flex flex-wrap items-center gap-space-sm">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-canvas-white/10 text-canvas-white font-badge-label text-badge-label">
                 <span className="material-symbols-outlined text-[14px] text-status-pagada">
                   verified
@@ -157,7 +157,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Tarifa Hora Promedio
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1">
+              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap">
                 $175.000
               </span>
               <span className="font-caption text-caption text-status-pagada mt-1 flex items-center gap-0.5">
@@ -169,7 +169,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <span className="font-caption text-caption text-secondary-fixed-dim">
                 Ticket Proyecto Base
               </span>
-              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1">
+              <span className="font-headline-sm text-headline-sm font-semibold text-canvas-white mt-1 tabular-nums whitespace-nowrap">
                 $4.430.000
               </span>
               <span className="font-caption text-caption text-secondary-fixed-dim mt-1">
@@ -236,8 +236,8 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
 
                   {/* Rates Display */}
                   <div className="mt-space-md pb-space-md">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="font-currency-display text-currency-display text-text-primary font-semibold tracking-tight">
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                      <span className="font-currency-display text-currency-display text-text-primary font-semibold tracking-tight tabular-nums whitespace-nowrap">
                         {formatCOP(service.price)}
                       </span>
                       <span className="font-body-sm text-body-sm text-text-subtlest">
@@ -282,9 +282,9 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
                 </div>
 
                 {/* Action Row */}
-                <div className="mt-space-lg pt-space-md flex items-center justify-between border-t border-border-subtle">
+                <div className="mt-space-lg pt-space-md flex items-center justify-between gap-2 border-t border-border-subtle">
                   <button
-                    className="inline-flex items-center justify-center h-[38px] px-5 rounded-full bg-surface-container-lowest text-text-primary hover:bg-surface-container-low transition-colors font-button-label text-body-sm border border-border-strong cursor-pointer"
+                    className="inline-flex items-center justify-center h-[38px] px-5 rounded-full bg-surface-container-lowest text-text-primary hover:bg-surface-container-low transition-colors font-button-label text-body-sm border border-border-strong cursor-pointer w-full sm:w-auto"
                     type="button"
                     onClick={() => onNavigate('facturas')}
                   >
@@ -307,12 +307,12 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
         </div>
 
         {/* Bottom Informational Banner: Retention and Tax Calculation */}
-        <section className="rounded-[20px] bg-status-enviada-bg p-space-xl flex flex-col md:flex-row items-start md:items-center gap-space-lg border border-[#b3d4ff]">
+        <section className="rounded-[20px] bg-status-enviada-bg p-space-lg md:p-space-xl flex flex-col md:flex-row items-start md:items-center gap-space-lg border border-[#b3d4ff]">
           <div className="w-12 h-12 rounded-full bg-canvas-white flex items-center justify-center shrink-0 text-primary-container shadow-sm border border-[#b3d4ff]">
             <span className="material-symbols-outlined text-[28px]">calculate</span>
           </div>
           <div className="flex-1 flex flex-col gap-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h4 className="font-headline-sm text-body-md font-semibold text-text-primary">
                 Cálculo Automático de Impuestos y Retenciones en Facturas
               </h4>
@@ -320,7 +320,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
                 DIAN 2024
               </span>
             </div>
-            <p className="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+            <p className="font-body-sm text-body-sm text-text-secondary leading-relaxed text-balance">
               Al añadir ítems de este catálogo a tus facturas o cuentas de cobro, el sistema
               discriminará automáticamente el{' '}
               <strong className="text-text-primary font-medium">IVA (19% o Exento)</strong>, la{' '}
@@ -334,7 +334,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
           <div className="shrink-0 flex items-center gap-space-sm w-full md:w-auto justify-end">
             {/* Target for: //button[contains(., 'Ajustar Tasas Fiscales')] */}
             <button
-              className="h-10 px-4 rounded-full bg-canvas-white text-text-primary hover:bg-surface-container-low transition-colors font-button-label text-body-sm border border-border-strong cursor-pointer shadow-sm"
+              className="h-10 px-4 rounded-full bg-canvas-white text-text-primary hover:bg-surface-container-low transition-colors font-button-label text-body-sm border border-border-strong cursor-pointer shadow-sm w-full md:w-auto"
               type="button"
               onClick={() => onNavigate('configuracion')}
             >
