@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { ScreenId, InvoiceItem, Client, Invoice, FreelancerProfile } from '../types';
-import { formatCOP, calculateTaxSummary, nextDocumentNumber } from '../utils/calculations';
+import {
+  formatCOP,
+  calculateTaxSummary,
+  nextDocumentNumber,
+  addDaysISO,
+  itemSubtotal,
+} from '../utils/calculations';
+import { createInvoice } from '../services/supabaseService';
 
 interface GeneradorFacturaScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -8,7 +15,17 @@ interface GeneradorFacturaScreenProps {
   invoices: Invoice[];
   profile: FreelancerProfile;
   initialClientId?: string;
+  onSaved: (invoice: Invoice) => void;
 }
+
+const emptyItem = (): InvoiceItem => ({
+  id: crypto.randomUUID(),
+  description: '',
+  quantity: '1',
+  unitPrice: 0,
+  ivaRate: 0.19,
+  subtotal: 0,
+});
 
 export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
   onNavigate,
@@ -16,30 +33,16 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
   invoices,
   profile,
   initialClientId,
+  onSaved,
 }) => {
   const [selectedClient, setSelectedClient] = useState(initialClientId ?? clients[0]?.id ?? '');
-  const [emissionDate, setEmissionDate] = useState('2025-05-14');
-  const [dueDate, setDueDate] = useState('2025-06-13');
+  const [emissionDate, setEmissionDate] = useState(() => addDaysISO(0));
+  const [dueDate, setDueDate] = useState(() => addDaysISO(30));
   const [paymentMethod, setPaymentMethod] = useState('Transferencia bancaria');
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
-  const [items, setItems] = useState<InvoiceItem[]>([
-    {
-      id: 'item-1',
-      description: 'Diseño y Arquitectura de Producto UX/UI',
-      quantity: '40 hrs',
-      unitPrice: 150000,
-      ivaRate: 0.19,
-      subtotal: 6000000,
-    },
-    {
-      id: 'item-2',
-      description: 'Implementación Front-end Tailwind & React',
-      quantity: '1 Proyecto',
-      unitPrice: 4500000,
-      ivaRate: 0.19,
-      subtotal: 4500000,
-    },
-  ]);
+  const [items, setItems] = useState<InvoiceItem[]>(() => [emptyItem()]);
 
   const [notes, setNotes] = useState(
     'Favor consignar a la cuenta de ahorros informada en el comprobante. Certificado tributario de retenciones a aplicar sobre el valor sin IVA antes de finalizar el periodo bimestral.'
@@ -62,11 +65,41 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
       prev.map((it) => {
         if (it.id === id) {
           const updated = { ...it, ...updates };
-          return updated;
+          return { ...updated, subtotal: itemSubtotal(updated.quantity, updated.unitPrice) };
         }
         return it;
       })
     );
+  };
+
+  const handleSave = async (status: 'Borrador' | 'Enviada') => {
+    const filled = items.filter((it) => it.description.trim() && it.subtotal > 0);
+    if (!clientInfo) return setSaveError('Selecciona un cliente.');
+    if (filled.length === 0) return setSaveError('Agrega al menos un concepto con descripción, cantidad y precio.');
+    if (!emissionDate || !dueDate) return setSaveError('Completa las fechas de emisión y vencimiento.');
+    if (dueDate < emissionDate) return setSaveError('La fecha de vencimiento no puede ser anterior a la de emisión.');
+    setSaving(true);
+    setSaveError('');
+    try {
+      const saved = await createInvoice({
+        id: crypto.randomUUID(),
+        number: invoiceNumber,
+        clientId: clientInfo.id,
+        clientName: clientInfo.legalName || clientInfo.name,
+        nit: clientInfo.nit,
+        date: emissionDate,
+        dueDate,
+        amount: calculateTaxSummary(filled, 0.04).total,
+        status,
+        items: filled,
+      });
+      onSaved(saved);
+    } catch (e) {
+      // Form stays as typed so nothing is lost.
+      setSaveError(`No se pudo guardar: ${(e as any)?.message ?? e}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -96,12 +129,6 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-status-enviada-bg text-status-enviada-text">
                 Borrador Activo
               </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-text-subtlest font-body-sm text-body-sm bg-surface-container-low px-3 py-1.5 rounded-[10000px] border border-border-subtle">
-              <span className="w-2 h-2 rounded-full bg-status-pagada animate-pulse"></span>
-              <span>Sincronizado en tiempo real</span>
             </div>
           </div>
         </div>
@@ -297,10 +324,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                           value={formatCOP(item.unitPrice)}
                           onChange={(e) => {
                             const val = parseInt(e.target.value.replace(/\D/g, ''), 10) || 0;
-                            handleUpdateItem(item.id, {
-                              unitPrice: val,
-                              subtotal: val,
-                            });
+                            handleUpdateItem(item.id, { unitPrice: val });
                           }}
                         />
                       </div>
@@ -328,15 +352,14 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                 </div>
               ))}
 
-              {/* Add Item Action (Target for: //button[contains(., '  Agregar servicio del catálogo')]) */}
               <div>
                 <button
                   className="h-11 px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container transition-colors flex items-center justify-center gap-2 font-button-label text-button-label text-text-primary border border-border-strong cursor-pointer shadow-sm"
                   type="button"
-                  onClick={() => onNavigate('servicios')}
+                  onClick={() => setItems((prev) => [...prev, emptyItem()])}
                 >
                   <span className="material-symbols-outlined text-[18px]">add_circle</span>
-                  <span>  Agregar servicio del catálogo</span>
+                  <span>Agregar concepto</span>
                 </button>
               </div>
             </div>
@@ -565,38 +588,37 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
         <div className="max-w-[1360px] mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="flex flex-col">
-              <span className="font-caption text-caption text-text-subtlest">
-                Liquidación Lista Para Firma
-              </span>
+              <span className="font-caption text-caption text-text-subtlest">{invoiceNumber}</span>
               <span className="font-body-md text-body-md font-bold text-text-primary">
-                1 Factura • {formatCOP(taxSummary.total, true)} a Cobrar
+                {formatCOP(taxSummary.total, true)} a cobrar
               </span>
+              {saveError && (
+                <span role="alert" className="font-body-sm text-body-sm text-status-vencida">
+                  {saveError}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Action Buttons Container */}
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             <button
-              className="h-[44px] px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container font-button-label text-button-label text-text-primary border border-border-strong transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="h-[44px] px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container font-button-label text-button-label text-text-primary border border-border-strong transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               type="button"
-              onClick={() => {
-                alert('Esta función todavía no está disponible.');
-              }}
+              disabled={saving}
+              onClick={() => handleSave('Borrador')}
             >
               <span className="material-symbols-outlined text-[18px]">save</span>
               <span>Guardar como borrador</span>
             </button>
 
-            {/* Target for: //button[contains(., 'Generar y Descargar PDF')] */}
             <button
-              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
               type="button"
-              onClick={() => {
-                alert('Esta función todavía no está disponible.');
-              }}
+              disabled={saving}
+              onClick={() => handleSave('Enviada')}
             >
-              <span className="material-symbols-outlined text-[22px]">download_for_offline</span>
-              <span className="text-[16px] font-semibold">Generar y Descargar PDF</span>
+              <span className="material-symbols-outlined text-[22px]">send</span>
+              <span className="text-[16px] font-semibold">{saving ? 'Guardando...' : 'Emitir factura'}</span>
             </button>
           </div>
         </div>

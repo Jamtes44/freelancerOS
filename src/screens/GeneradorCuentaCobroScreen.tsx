@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScreenId, Client, CuentaCobro, FreelancerProfile } from '../types';
-import { formatCOP, numeroALetrasCOP, nextDocumentNumber } from '../utils/calculations';
+import { formatCOP, numeroALetrasCOP, nextDocumentNumber, addDaysISO } from '../utils/calculations';
+import { createCuentaCobro } from '../services/supabaseService';
 
 interface GeneradorCuentaCobroScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -8,6 +9,7 @@ interface GeneradorCuentaCobroScreenProps {
   cuentasCobro: CuentaCobro[];
   profile: FreelancerProfile;
   initialClientId?: string;
+  onSaved: (cc: CuentaCobro) => void;
 }
 
 export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProps> = ({
@@ -16,18 +18,19 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
   cuentasCobro,
   profile,
   initialClientId,
+  onSaved,
 }) => {
   const [selectedClient, setSelectedClient] = useState(initialClientId ?? clients[0]?.id ?? '');
   const [consecutivo, setConsecutivo] = useState(() =>
     nextDocumentNumber('CC', cuentasCobro.map((c) => c.number))
   );
-  const [contratoRef, setContratoRef] = useState('FOS-2025-089');
-  const [emissionDate, setEmissionDate] = useState('2025-05-28');
-  const [dueDate, setDueDate] = useState('2025-06-05');
-  const [monto, setMonto] = useState('2.800.000');
-  const [concepto, setConcepto] = useState(
-    'Por concepto de honorarios profesionales correspondientes al Hito 2: Consultoría en Arquitectura UX y Sistema de Diseño para Banca Móvil durante el mes de Mayo 2025 según Contrato FOS-2025-089.'
-  );
+  const [contratoRef, setContratoRef] = useState('');
+  const [emissionDate, setEmissionDate] = useState(() => addDaysISO(0));
+  const [dueDate, setDueDate] = useState(() => addDaysISO(15));
+  const [monto, setMonto] = useState('');
+  const [concepto, setConcepto] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [isNoIva, setIsNoIva] = useState(true);
   const [isPilaChecked, setIsPilaChecked] = useState(true);
   const [bancoInfo, setBancoInfo] = useState(() =>
@@ -40,6 +43,40 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
   const montoLetras = numeroALetrasCOP(numericMonto);
 
   const client = clients.find((c) => c.id === selectedClient);
+
+  const handleSave = async (status: 'Borrador' | 'Pendiente') => {
+    const number = consecutivo.trim();
+    if (!client) return setSaveError('Selecciona un cliente.');
+    if (!number) return setSaveError('Escribe el consecutivo.');
+    if (cuentasCobro.some((c) => c.number === number)) return setSaveError(`Ya existe una cuenta de cobro ${number}.`);
+    if (numericMonto <= 0) return setSaveError('Escribe el monto a cobrar.');
+    if (!concepto.trim()) return setSaveError('Escribe el concepto.');
+    if (!emissionDate || !dueDate) return setSaveError('Completa las fechas de emisión y vencimiento.');
+    if (dueDate < emissionDate) return setSaveError('La fecha límite no puede ser anterior a la de emisión.');
+    setSaving(true);
+    setSaveError('');
+    try {
+      const saved = await createCuentaCobro({
+        id: crypto.randomUUID(),
+        number,
+        clientId: client.id,
+        clientName: client.legalName || client.name,
+        nit: client.nit,
+        contractRef: contratoRef.trim(),
+        date: emissionDate,
+        dueDate,
+        amount: numericMonto,
+        concept: concepto.trim(),
+        status,
+      });
+      onSaved(saved);
+    } catch (e) {
+      // Form stays as typed so nothing is lost.
+      setSaveError(`No se pudo guardar: ${(e as any)?.message ?? e}`);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const formatFechaLegible = (dateStr: string) => {
     if (!dateStr) return '';
@@ -577,38 +614,35 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
           <div className="hidden sm:flex items-center gap-2 pl-space-md border-l border-border-subtle">
             <span className="w-2.5 h-2.5 rounded-full bg-status-pagada"></span>
             <span className="font-caption text-caption text-text-secondary">
-              Sin IVA declarado (Art. 437)
+              {isNoIva ? 'Sin IVA declarado (Art. 437)' : 'Responsable de IVA'}
             </span>
           </div>
+          {saveError && (
+            <span role="alert" className="font-body-sm text-body-sm text-status-vencida">
+              {saveError}
+            </span>
+          )}
         </div>
 
-        {/* Acciones Atlassian Style: 1 Botón Primario Único + Secundario */}
         <div className="flex items-center gap-space-md">
           <button
-            className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low transition-colors focus:outline-none cursor-pointer"
+            className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low transition-colors focus:outline-none cursor-pointer disabled:opacity-60"
             type="button"
-            onClick={() => {
-              alert('Esta función todavía no está disponible.');
-            }}
+            disabled={saving}
+            onClick={() => handleSave('Borrador')}
           >
             Guardar borrador
           </button>
 
-          {/* BOTÓN PRIMARIO ÚNICO EN PANTALLA: PÍLDORA 10000px, AZUL #1868db, 58px ALTO */}
           <button
-            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 cursor-pointer shadow-md"
+            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 cursor-pointer shadow-md disabled:opacity-60"
             id="btn-generar"
             type="button"
-            onClick={() => {
-              alert('Esta función todavía no está disponible.');
-            }}
+            disabled={saving}
+            onClick={() => handleSave('Pendiente')}
           >
-            <span className="material-symbols-outlined text-[22px]">
-              download
-            </span>
-            <span>
-              Generar y Descargar PDF
-            </span>
+            <span className="material-symbols-outlined text-[22px]">send</span>
+            <span>{saving ? 'Guardando...' : 'Emitir cuenta de cobro'}</span>
           </button>
         </div>
       </div>

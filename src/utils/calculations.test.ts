@@ -10,7 +10,22 @@ import {
   parseFecha,
   formatFecha,
   withOverdueStatus,
+  addDaysISO,
+  itemSubtotal,
 } from './calculations';
+
+test('addDaysISO returns local calendar dates across month and year ends', () => {
+  assert.equal(addDaysISO(0, new Date(2026, 9, 29, 23, 30)), '2026-10-29'); // late evening stays the same day
+  assert.equal(addDaysISO(30, new Date(2026, 9, 29)), '2026-11-28');
+  assert.equal(addDaysISO(5, new Date(2026, 11, 30)), '2027-01-04');
+});
+
+test('itemSubtotal multiplies the leading number of a free-text quantity', () => {
+  assert.equal(itemSubtotal('40 hrs', 150000), 6000000);
+  assert.equal(itemSubtotal('1 Proyecto', 4500000), 4500000);
+  assert.equal(itemSubtotal('1,5 meses', 1000000), 1500000);
+  assert.equal(itemSubtotal('Proyecto', 4500000), 0); // no number, no amount
+});
 
 test('withOverdueStatus marks unpaid documents past their due date as Vencida', () => {
   const today = new Date(2026, 9, 29, 15, 0); // 29 Oct 2026, afternoon

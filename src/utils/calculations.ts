@@ -194,6 +194,18 @@ export function formatFecha(iso: string | null | undefined): string {
   return `${String(d.getDate()).padStart(2, '0')} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+/** Local date `days` after `from` as "YYYY-MM-DD" (toISOString would shift to UTC). */
+export function addDaysISO(days: number, from: Date = new Date()): string {
+  const d = new Date(from.getFullYear(), from.getMonth(), from.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+/** Item subtotal from a free-text quantity like "40 hrs" or "1,5 meses" (the leading number). */
+export function itemSubtotal(quantity: string, unitPrice: number): number {
+  const qty = parseFloat(quantity.replace(',', '.'));
+  return Math.round((isNaN(qty) ? 0 : qty) * unitPrice);
+}
+
 /** Statuses of a document that is issued but not yet paid. */
 export const OPEN_STATUSES = ['Enviada', 'Pendiente', 'Vencida'];
 

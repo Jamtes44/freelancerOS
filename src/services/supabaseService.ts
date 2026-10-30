@@ -7,7 +7,7 @@ import {
   INITIAL_CONTRACT,
   INITIAL_FREELANCER_PROFILE,
 } from '../data/mockData';
-import { Client, Invoice, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from '../types';
+import { Client, Invoice, InvoiceItem, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from '../types';
 
 // Mock data is only used when Supabase is not configured. Real errors are thrown
 // so the UI can show them instead of silently displaying fake data.
@@ -179,6 +179,61 @@ export async function saveFreelancerProfile(p: FreelancerProfile): Promise<void>
     transfiya_phone: p.transfiyaPhone,
   });
   if (error) throw error;
+}
+
+/** Saves an invoice and its items. In mock mode it is returned as-is (kept only in memory). */
+export async function createInvoice(invoice: Invoice & { items: InvoiceItem[] }): Promise<Invoice> {
+  if (!isSupabaseConfigured) return invoice;
+  const { error } = await supabase.from('invoices').insert({
+    id: invoice.id,
+    number: invoice.number,
+    client_id: invoice.clientId,
+    client_name: invoice.clientName,
+    nit: invoice.nit,
+    date: invoice.date,
+    due_date: invoice.dueDate,
+    amount: invoice.amount,
+    status: invoice.status,
+  });
+  if (error) throw error;
+  const { error: itemsError } = await supabase.from('invoice_items').insert(
+    invoice.items.map((it, i) => ({
+      id: crypto.randomUUID(),
+      invoice_id: invoice.id,
+      description: it.description,
+      quantity: it.quantity,
+      unit_price: it.unitPrice,
+      iva_rate: it.ivaRate,
+      subtotal: it.subtotal,
+      sort_order: i,
+    }))
+  );
+  if (itemsError) {
+    // No transaction across the two inserts: remove the header so no invoice is left without items.
+    await supabase.from('invoices').delete().eq('id', invoice.id);
+    throw itemsError;
+  }
+  return invoice;
+}
+
+/** In mock mode the cuenta de cobro is returned as-is (kept only in memory). */
+export async function createCuentaCobro(cc: CuentaCobro): Promise<CuentaCobro> {
+  if (!isSupabaseConfigured) return cc;
+  const { error } = await supabase.from('cuentas_cobro').insert({
+    id: cc.id,
+    number: cc.number,
+    client_id: cc.clientId,
+    client_name: cc.clientName,
+    nit: cc.nit,
+    contract_ref: cc.contractRef,
+    date: cc.date,
+    due_date: cc.dueDate,
+    amount: cc.amount,
+    concept: cc.concept,
+    status: cc.status,
+  });
+  if (error) throw error;
+  return cc;
 }
 
 /** In mock mode the client is returned as-is (kept only in memory). */

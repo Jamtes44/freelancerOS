@@ -203,6 +203,10 @@ export default function App() {
               invoices={invoices}
               profile={profile}
               initialClientId={selectedClientId}
+              onSaved={(inv) => {
+                setInvoices((prev) => [withOverdueStatus(inv), ...prev]);
+                openClient(inv.clientId);
+              }}
             />
           )}
 
@@ -227,6 +231,10 @@ export default function App() {
               cuentasCobro={cuentasCobro}
               profile={profile}
               initialClientId={selectedClientId}
+              onSaved={(cc) => {
+                setCuentasCobro((prev) => [withOverdueStatus(cc), ...prev]);
+                openClient(cc.clientId);
+              }}
             />
           )}
 
