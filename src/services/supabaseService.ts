@@ -100,38 +100,91 @@ export async function getServices(): Promise<ServiceItem[]> {
   }));
 }
 
-/** Returns null when there is no contract stored yet. */
-export async function getContract(): Promise<Contract | null> {
-  if (!isSupabaseConfigured) return INITIAL_CONTRACT;
-  const { data: contractRow, error: cErr } = await supabase.from('contracts').select('*').limit(1).maybeSingle();
+/** Creates or updates a catalog service (same id = update). In mock mode nothing is persisted. */
+export async function saveService(s: ServiceItem): Promise<void> {
+  if (!isSupabaseConfigured) return;
+  const { error } = await supabase.from('services').upsert({
+    id: s.id,
+    title: s.title,
+    code: s.code,
+    category: s.category,
+    unit: s.unit,
+    price: s.price,
+    iva_text: s.ivaText,
+    description: s.description,
+    tags: s.tags,
+  });
+  if (error) throw error;
+}
+
+export async function deleteService(id: string): Promise<void> {
+  if (!isSupabaseConfigured) return;
+  const { error } = await supabase.from('services').delete().eq('id', id);
+  if (error) throw error;
+}
+
+/** All saved contracts with their clauses, newest first. Mock mode returns the template contract. */
+export async function getContracts(): Promise<Contract[]> {
+  if (!isSupabaseConfigured) return [INITIAL_CONTRACT];
+  const [{ data: rows, error: cErr }, { data: clauses, error: clErr }] = await Promise.all([
+    supabase.from('contracts').select('*').order('created_at', { ascending: false }),
+    supabase.from('contract_clauses').select('*').order('sort_order'),
+  ]);
   if (cErr) throw cErr;
-  if (!contractRow) return null;
-  const { data: clauses, error: clErr } = await supabase
-    .from('contract_clauses')
-    .select('*')
-    .eq('contract_id', contractRow.id)
-    .order('sort_order');
   if (clErr) throw clErr;
-  return {
-    id: contractRow.id,
-    number: contractRow.number,
-    clientId: contractRow.client_id,
-    clientName: contractRow.client_name,
-    nit: contractRow.nit,
-    object: contractRow.object,
-    scope: contractRow.scope,
-    duration: contractRow.duration,
-    totalValue: Number(contractRow.total_value ?? 0),
-    paymentSchedule: contractRow.payment_schedule,
-    status: contractRow.status,
-    clauses: (clauses ?? []).map((cl: any) => ({
-      id: cl.id,
+  return (rows ?? []).map((row: any) => ({
+    id: row.id,
+    number: row.number,
+    clientId: row.client_id,
+    clientName: row.client_name,
+    nit: row.nit,
+    object: row.object,
+    scope: row.scope,
+    duration: row.duration,
+    totalValue: Number(row.total_value ?? 0),
+    paymentSchedule: row.payment_schedule,
+    status: row.status,
+    date: row.created_at ? String(row.created_at).slice(0, 10) : '',
+    clauses: (clauses ?? [])
+      .filter((cl: any) => cl.contract_id === row.id)
+      .map((cl: any) => ({ id: cl.id, title: cl.title, icon: cl.icon, content: cl.content, isOpen: cl.is_open })),
+  }));
+}
+
+/** Saves a new contract and its clauses. In mock mode it is returned as-is (kept only in memory). */
+export async function createContract(c: Contract): Promise<Contract> {
+  if (!isSupabaseConfigured) return c;
+  const { error } = await supabase.from('contracts').insert({
+    id: c.id,
+    number: c.number,
+    client_id: c.clientId,
+    client_name: c.clientName,
+    nit: c.nit,
+    object: c.object,
+    scope: c.scope,
+    duration: c.duration,
+    total_value: c.totalValue,
+    payment_schedule: c.paymentSchedule,
+    status: c.status,
+  });
+  if (error) throw error;
+  const { error: clausesError } = await supabase.from('contract_clauses').insert(
+    c.clauses.map((cl, i) => ({
+      id: crypto.randomUUID(),
+      contract_id: c.id,
       title: cl.title,
       icon: cl.icon,
       content: cl.content,
-      isOpen: cl.is_open,
-    })),
-  };
+      is_open: false,
+      sort_order: i,
+    }))
+  );
+  if (clausesError) {
+    // No transaction across the two inserts: remove the header so no contract is left without clauses.
+    await supabase.from('contracts').delete().eq('id', c.id);
+    throw clausesError;
+  }
+  return c;
 }
 
 /** Returns null when the profile row does not exist yet. */
@@ -179,6 +232,25 @@ export async function saveFreelancerProfile(p: FreelancerProfile): Promise<void>
     transfiya_phone: p.transfiyaPhone,
   });
   if (error) throw error;
+}
+
+/** Line items of a saved invoice, in their original order. Mock invoices have none. */
+export async function getInvoiceItems(invoiceId: string): Promise<InvoiceItem[]> {
+  if (!isSupabaseConfigured) return [];
+  const { data, error } = await supabase
+    .from('invoice_items')
+    .select('*')
+    .eq('invoice_id', invoiceId)
+    .order('sort_order');
+  if (error) throw error;
+  return (data ?? []).map((row: any) => ({
+    id: row.id,
+    description: row.description ?? '',
+    quantity: row.quantity ?? '',
+    unitPrice: Number(row.unit_price ?? 0),
+    ivaRate: Number(row.iva_rate ?? 0),
+    subtotal: Number(row.subtotal ?? 0),
+  }));
 }
 
 /** Saves an invoice and its items. In mock mode it is returned as-is (kept only in memory). */
@@ -236,14 +308,14 @@ export async function createCuentaCobro(cc: CuentaCobro): Promise<CuentaCobro> {
   return cc;
 }
 
-/** Changes the stored status of an invoice or cuenta de cobro. In mock mode nothing is persisted. */
+/** Changes the stored status of an invoice, cuenta de cobro or contract. In mock mode nothing is persisted. */
 export async function updateDocumentStatus(
-  kind: 'invoice' | 'cuenta',
+  kind: 'invoice' | 'cuenta' | 'contrato',
   id: string,
-  status: Invoice['status'] | CuentaCobro['status']
+  status: Invoice['status'] | CuentaCobro['status'] | Contract['status']
 ): Promise<void> {
   if (!isSupabaseConfigured) return;
-  const table = kind === 'invoice' ? 'invoices' : 'cuentas_cobro';
+  const table = kind === 'invoice' ? 'invoices' : kind === 'cuenta' ? 'cuentas_cobro' : 'contracts';
   const { error } = await supabase.from(table).update({ status }).eq('id', id);
   if (error) throw error;
 }

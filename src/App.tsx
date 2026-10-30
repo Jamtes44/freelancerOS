@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScreenId, Client, Invoice, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from './types';
+import { ScreenId, Client, Invoice, InvoiceItem, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from './types';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardScreen } from './screens/DashboardScreen';
@@ -20,8 +20,9 @@ import {
   getInvoices,
   getCuentasCobro,
   getServices,
-  getContract,
+  getContracts,
   getFreelancerProfile,
+  getInvoiceItems,
 } from './services/supabaseService';
 import { withDocumentTotals, withOverdueStatus } from './utils/calculations';
 
@@ -62,11 +63,19 @@ export default function App() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [cuentasCobro, setCuentasCobro] = useState<CuentaCobro[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
-  // Contract generator starts from the template until a contract is stored.
-  const [contract, setContract] = useState<Contract>(INITIAL_CONTRACT);
+  const [contracts, setContracts] = useState<Contract[]>([]);
   const [profile, setProfile] = useState<FreelancerProfile>(EMPTY_PROFILE);
   const [selectedClientId, setSelectedClientId] = useState<string | undefined>();
   const [documentsClientFilter, setDocumentsClientFilter] = useState<string | undefined>();
+  // First invoice line chosen with "Usar en Factura" in the services catalog.
+  const [invoiceStartItem, setInvoiceStartItem] = useState<InvoiceItem | undefined>();
+  // A saved document opened read-only in its generator (to review it or download its PDF again).
+  const [viewing, setViewing] = useState<
+    | { kind: 'invoice'; invoice: Invoice; items: InvoiceItem[] }
+    | { kind: 'cuenta'; cuenta: CuentaCobro }
+    | { kind: 'contrato'; contract: Contract }
+    | undefined
+  >();
   // Screens mount only after the first load, so forms never start from empty data.
   const [dataLoaded, setDataLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -95,7 +104,7 @@ export default function App() {
           getInvoices(),
           getCuentasCobro(),
           getServices(),
-          getContract(),
+          getContracts(),
           getFreelancerProfile(),
         ]);
         if (!mounted) return;
@@ -103,7 +112,7 @@ export default function App() {
         setInvoices(inv.map((d) => withOverdueStatus(d)));
         setCuentasCobro(cc.map((d) => withOverdueStatus(d)));
         setServices(serv);
-        if (ctr) setContract(ctr);
+        setContracts(ctr);
         setProfile(prof ?? EMPTY_PROFILE);
         setDataLoaded(true);
       } catch (e) {
@@ -122,6 +131,8 @@ export default function App() {
 
   const handleNavigate = (screen: ScreenId) => {
     setDocumentsClientFilter(undefined); // only openDocuments() sets a client filter
+    setViewing(undefined); // only openDocument() opens a saved document
+    setInvoiceStartItem(undefined);
     setCurrentScreen(screen);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -132,16 +143,55 @@ export default function App() {
     handleNavigate('perfil-cliente');
   };
 
+  const openDocument = async (kind: 'invoice' | 'cuenta' | 'contrato', id: string) => {
+    if (kind === 'contrato') {
+      const contract = contracts.find((c) => c.id === id);
+      if (!contract) return;
+      handleNavigate('contratos');
+      setViewing({ kind, contract });
+      return;
+    }
+    if (kind === 'cuenta') {
+      const cuenta = cuentasCobro.find((c) => c.id === id);
+      if (!cuenta) return;
+      handleNavigate('cuentas-cobro');
+      setViewing({ kind, cuenta });
+      return;
+    }
+    const invoice = invoices.find((i) => i.id === id);
+    if (!invoice) return;
+    try {
+      const items = await getInvoiceItems(id);
+      handleNavigate('facturas');
+      setViewing({ kind, invoice, items });
+    } catch (e) {
+      window.alert(`No se pudo abrir la factura: ${(e as any)?.message ?? e}`);
+    }
+  };
+
+  const addServiceToInvoice = (service: ServiceItem) => {
+    handleNavigate('facturas');
+    setInvoiceStartItem({
+      id: crypto.randomUUID(),
+      description: service.title,
+      quantity: '1',
+      unitPrice: service.price,
+      ivaRate: service.ivaText.includes('Exento') ? 0 : 0.19,
+      subtotal: service.price,
+    });
+  };
+
   const openDocuments = (clientId?: string) => {
     handleNavigate('documentos');
     setDocumentsClientFilter(clientId);
   };
 
-  const handleStatusChanged = (kind: 'invoice' | 'cuenta', id: string, status: string) => {
+  const handleStatusChanged = (kind: 'invoice' | 'cuenta' | 'contrato', id: string, status: string) => {
     const update = <T extends { id: string; status: string; dueDate: string }>(d: T): T =>
       d.id === id ? withOverdueStatus({ ...d, status }) : d;
     if (kind === 'invoice') setInvoices((prev) => prev.map(update));
-    else setCuentasCobro((prev) => prev.map(update));
+    else if (kind === 'cuenta') setCuentasCobro((prev) => prev.map(update));
+    else setContracts((prev) => prev.map((c) => (c.id === id ? { ...c, status: status as Contract['status'] } : c)));
   };
 
   const handleClientUpdated = (c: Client) => setClients((prev) => prev.map((p) => (p.id === c.id ? c : p)));
@@ -212,10 +262,12 @@ export default function App() {
               onOpenClient={openClient}
               invoices={invoices}
               cuentasCobro={cuentasCobro}
+              contracts={contracts}
               clients={clientsWithTotals}
               clientFilter={documentsClientFilter}
               onClearClientFilter={() => setDocumentsClientFilter(undefined)}
               onStatusChanged={handleStatusChanged}
+              onOpenDocument={openDocument}
             />
           )}
 
@@ -236,16 +288,26 @@ export default function App() {
 
           {dataLoaded && currentScreen === 'contratos' && (
             <GeneradorContratoScreen
+              key={viewing?.kind === 'contrato' ? viewing.contract.id : 'new'}
+              existing={viewing?.kind === 'contrato' ? viewing.contract : undefined}
               onNavigate={handleNavigate}
-              contract={contract}
+              template={INITIAL_CONTRACT}
+              contracts={contracts}
               clients={clientsWithTotals}
               profile={profile}
               initialClientId={selectedClientId}
+              onSaved={(c) => {
+                setContracts((prev) => [c, ...prev]);
+                openClient(c.clientId);
+              }}
             />
           )}
 
           {dataLoaded && currentScreen === 'facturas' && (
             <GeneradorFacturaScreen
+              key={viewing?.kind === 'invoice' ? viewing.invoice.id : invoiceStartItem?.id ?? 'new'}
+              existing={viewing?.kind === 'invoice' ? viewing : undefined}
+              initialItem={invoiceStartItem}
               onNavigate={handleNavigate}
               clients={clientsWithTotals}
               invoices={invoices}
@@ -264,19 +326,30 @@ export default function App() {
               client={clientsWithTotals.find((c) => c.id === selectedClientId)}
               invoices={invoices}
               cuentasCobro={cuentasCobro}
-              contract={contract}
+              contracts={contracts}
               onClientUpdated={handleClientUpdated}
               onClientDeleted={handleClientDeleted}
+              onOpenDocument={openDocument}
               onOpenDocuments={openDocuments}
             />
           )}
 
           {dataLoaded && currentScreen === 'servicios' && (
-            <CatalogoServiciosScreen onNavigate={handleNavigate} services={services} />
+            <CatalogoServiciosScreen
+              onNavigate={handleNavigate}
+              services={services}
+              onServiceSaved={(svc) =>
+                setServices((prev) => (prev.some((p) => p.id === svc.id) ? prev.map((p) => (p.id === svc.id ? svc : p)) : [...prev, svc]))
+              }
+              onServiceDeleted={(id) => setServices((prev) => prev.filter((p) => p.id !== id))}
+              onUseInInvoice={addServiceToInvoice}
+            />
           )}
 
           {dataLoaded && currentScreen === 'cuentas-cobro' && (
             <GeneradorCuentaCobroScreen
+              key={viewing?.kind === 'cuenta' ? viewing.cuenta.id : 'new'}
+              existing={viewing?.kind === 'cuenta' ? viewing.cuenta : undefined}
               onNavigate={handleNavigate}
               clients={clientsWithTotals}
               cuentasCobro={cuentasCobro}

@@ -11,6 +11,8 @@ interface GeneradorCuentaCobroScreenProps {
   profile: FreelancerProfile;
   initialClientId?: string;
   onSaved: (cc: CuentaCobro) => void;
+  /** When set, shows this saved cuenta de cobro read-only (to review it or download its PDF again). */
+  existing?: CuentaCobro;
 }
 
 export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProps> = ({
@@ -20,16 +22,19 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
   profile,
   initialClientId,
   onSaved,
+  existing,
 }) => {
-  const [selectedClient, setSelectedClient] = useState(initialClientId ?? clients[0]?.id ?? '');
-  const [consecutivo, setConsecutivo] = useState(() =>
-    nextDocumentNumber('CC', cuentasCobro.map((c) => c.number))
+  const [selectedClient, setSelectedClient] = useState(
+    existing?.clientId || initialClientId || clients[0]?.id || ''
   );
-  const [contratoRef, setContratoRef] = useState('');
-  const [emissionDate, setEmissionDate] = useState(() => addDaysISO(0));
-  const [dueDate, setDueDate] = useState(() => addDaysISO(15));
-  const [monto, setMonto] = useState('');
-  const [concepto, setConcepto] = useState('');
+  const [consecutivo, setConsecutivo] = useState(() =>
+    existing?.number ?? nextDocumentNumber('CC', cuentasCobro.map((c) => c.number))
+  );
+  const [contratoRef, setContratoRef] = useState(existing?.contractRef ?? '');
+  const [emissionDate, setEmissionDate] = useState(() => existing?.date ?? addDaysISO(0));
+  const [dueDate, setDueDate] = useState(() => existing?.dueDate ?? addDaysISO(15));
+  const [monto, setMonto] = useState(existing ? existing.amount.toLocaleString('es-CO') : '');
+  const [concepto, setConcepto] = useState(existing?.concept ?? '');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [isNoIva, setIsNoIva] = useState(true);
@@ -113,12 +118,12 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             Cuentas de Cobro
           </span>
           <span className="material-symbols-outlined text-[13px] text-outline">chevron_right</span>
-          <span className="text-text-primary font-semibold">Nueva Cuenta de Cobro</span>
+          <span className="text-text-primary font-semibold">{existing ? existing.number : 'Nueva Cuenta de Cobro'}</span>
         </div>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
           <div>
             <h1 className="font-headline-md text-headline-md font-semibold text-text-primary tracking-tight">
-              Generar Cuenta de Cobro
+              {existing ? `Cuenta de cobro ${existing.number}` : 'Generar Cuenta de Cobro'}
             </h1>
             <p className="font-body-sm text-body-sm text-text-secondary mt-0.5">
               Emisión oficial para contratistas independientes con validación tributaria colombiana
@@ -126,10 +131,11 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             </p>
           </div>
           <div className="flex items-center gap-space-sm shrink-0">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10000px] bg-status-enviada-bg text-status-enviada-text font-badge-label text-badge-label border border-border-subtle">
-              <span className="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
-              Modo Edición en Vivo
-            </span>
+            {existing && (
+              <span className="inline-flex items-center px-3 py-1 rounded-[10000px] bg-status-enviada-bg text-status-enviada-text font-badge-label text-badge-label border border-border-subtle">
+                {existing.status}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -137,8 +143,8 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
       {/* Contenedor Principal Split-View */}
       <div className="w-full max-w-[1360px] mx-auto px-space-xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
-          {/* COLUMNA IZQUIERDA: FORMULARIO TÉCNICO (7 Cols) */}
-          <div className="lg:col-span-7 flex flex-col gap-space-lg">
+          {/* COLUMNA IZQUIERDA: FORMULARIO TÉCNICO (7 Cols), read-only when viewing a saved document */}
+          <fieldset disabled={!!existing} className="lg:col-span-7 flex flex-col gap-space-lg min-w-0 border-0 p-0 m-0 disabled:opacity-80">
             {/* Tarjeta 1: Parámetros del Documento y Cliente */}
             <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
               <div className="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
@@ -419,7 +425,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                 </div>
               </div>
             </div>
-          </div>
+          </fieldset>
 
           {/* COLUMNA DERECHA: VISTA PREVIA HOJA OFICIAL (5 Cols Sticky) */}
           <div className="lg:col-span-5 sticky top-20">
@@ -623,6 +629,26 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
           )}
         </div>
 
+        {existing ? (
+          <div className="flex items-center gap-space-md">
+            <button
+              className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low transition-colors cursor-pointer flex items-center gap-2"
+              type="button"
+              onClick={() => onNavigate('documentos')}
+            >
+              <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+              Volver a Documentos
+            </button>
+            <button
+              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 cursor-pointer shadow-md"
+              type="button"
+              onClick={() => printDocument(existing.number)}
+            >
+              <span className="material-symbols-outlined text-[22px]">picture_as_pdf</span>
+              <span>Descargar PDF</span>
+            </button>
+          </div>
+        ) : (
         <div className="flex items-center gap-space-md">
           <button
             className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low transition-colors focus:outline-none cursor-pointer disabled:opacity-60"
@@ -644,6 +670,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             <span>{saving ? 'Guardando...' : 'Emitir cuenta de cobro'}</span>
           </button>
         </div>
+        )}
       </div>
     </div>
   );

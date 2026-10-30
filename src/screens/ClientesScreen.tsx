@@ -24,12 +24,16 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
   onClientDeleted,
 }) => {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
+  const [deletingId, setDeletingId] = useState('');
 
   const handleDeleteClient = async (client: Client) => {
     try {
-      if (await confirmAndDeleteClient(client)) onClientDeleted(client.id);
+      // The confirm dialog runs first; the row only dims once deletion actually starts.
+      if (await confirmAndDeleteClient(client, undefined, () => setDeletingId(client.id))) onClientDeleted(client.id);
     } catch (e) {
       window.alert(`No se pudo eliminar: ${(e as any)?.message ?? e}`);
+    } finally {
+      setDeletingId('');
     }
   };
   const [filter, setFilter] = useState<'all' | 'active' | 'withBalance' | 'inactive'>('all');
@@ -341,7 +345,10 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
                   return (
                     <tr
                       key={client.id}
-                      className="hover:bg-[#f7f8f9] transition-colors group"
+                      aria-busy={deletingId === client.id}
+                      className={`hover:bg-[#f7f8f9] transition-colors group ${
+                        deletingId === client.id ? 'opacity-50 pointer-events-none' : ''
+                      }`}
                     >
                       <td className="py-space-md px-space-md">
                         <div className="flex items-center gap-space-sm">

@@ -17,6 +17,10 @@ interface GeneradorFacturaScreenProps {
   profile: FreelancerProfile;
   initialClientId?: string;
   onSaved: (invoice: Invoice) => void;
+  /** When set, shows this saved invoice read-only (to review it or download its PDF again). */
+  existing?: { invoice: Invoice; items: InvoiceItem[] };
+  /** First line of a new invoice, e.g. a service chosen with "Usar en Factura". */
+  initialItem?: InvoiceItem;
 }
 
 const emptyItem = (): InvoiceItem => ({
@@ -35,22 +39,28 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
   profile,
   initialClientId,
   onSaved,
+  existing,
+  initialItem,
 }) => {
-  const [selectedClient, setSelectedClient] = useState(initialClientId ?? clients[0]?.id ?? '');
-  const [emissionDate, setEmissionDate] = useState(() => addDaysISO(0));
-  const [dueDate, setDueDate] = useState(() => addDaysISO(30));
+  const [selectedClient, setSelectedClient] = useState(
+    existing?.invoice.clientId || initialClientId || clients[0]?.id || ''
+  );
+  const [emissionDate, setEmissionDate] = useState(() => existing?.invoice.date ?? addDaysISO(0));
+  const [dueDate, setDueDate] = useState(() => existing?.invoice.dueDate ?? addDaysISO(30));
   const [paymentMethod, setPaymentMethod] = useState('Transferencia bancaria');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
 
-  const [items, setItems] = useState<InvoiceItem[]>(() => [emptyItem()]);
+  const [items, setItems] = useState<InvoiceItem[]>(() =>
+    existing && existing.items.length > 0 ? existing.items : [initialItem ?? emptyItem()]
+  );
 
   const [notes, setNotes] = useState(
     'Favor consignar a la cuenta de ahorros informada en el comprobante. Certificado tributario de retenciones a aplicar sobre el valor sin IVA antes de finalizar el periodo bimestral.'
   );
 
   const clientInfo = clients.find((c) => c.id === selectedClient);
-  const invoiceNumber = nextDocumentNumber('FAC', invoices.map((i) => i.number));
+  const invoiceNumber = existing?.invoice.number ?? nextDocumentNumber('FAC', invoices.map((i) => i.number));
   const bankLine = [profile.bankName, profile.bankAccount].filter(Boolean).join(' — ');
 
   const taxSummary = calculateTaxSummary(items, 0.04);
@@ -121,15 +131,17 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                 Facturas
               </a>
               <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-              <span className="text-text-secondary font-medium">Nueva Factura</span>
+              <span className="text-text-secondary font-medium">{existing ? invoiceNumber : 'Nueva Factura'}</span>
             </nav>
             <div className="flex items-center gap-3">
               <h1 className="font-headline-md text-headline-md text-text-primary">
-                Generar Factura de Venta
+                {existing ? `Factura ${invoiceNumber}` : 'Generar Factura de Venta'}
               </h1>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-status-enviada-bg text-status-enviada-text">
-                Borrador Activo
-              </span>
+              {existing && (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-[10000px] font-badge-label text-badge-label bg-status-enviada-bg text-status-enviada-text">
+                  {existing.invoice.status}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -138,8 +150,8 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
       {/* Main Split Layout Container */}
       <div className="px-space-xl py-6 bg-surface-container-low">
         <div className="max-w-[1360px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* LEFT COLUMN: Form Generator */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
+          {/* LEFT COLUMN: Form Generator (read-only when viewing a saved invoice) */}
+          <fieldset disabled={!!existing} className="lg:col-span-7 flex flex-col gap-6 min-w-0 border-0 p-0 m-0 disabled:opacity-80">
             {/* Section 1: Client Selection & Metadata */}
             <div className="bg-canvas-white rounded-[20px] p-space-xl border border-border-subtle flex flex-col gap-5">
               <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
@@ -337,7 +349,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                           className="w-full h-8 px-2.5 bg-surface-container border border-border-strong rounded-[3px] font-body-sm text-body-sm text-text-secondary focus:outline-none"
                           readOnly
                           type="text"
-                          value="19%"
+                          value={`${Math.round(item.ivaRate * 100)}%`}
                         />
                       </div>
                     </div>
@@ -386,7 +398,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                 <span>{notes.length} caracteres</span>
               </div>
             </div>
-          </div>
+          </fieldset>
 
           {/* RIGHT COLUMN: Real-Time Live Preview */}
           <div className="lg:col-span-5 flex flex-col gap-3 sticky top-20">
@@ -521,7 +533,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                     </span>
                   </div>
                   <div className="flex justify-between items-center font-body-sm text-body-sm text-text-secondary">
-                    <span>IVA Generado (19%)</span>
+                    <span>IVA generado</span>
                     <span className="font-medium text-text-primary">
                       +{formatCOP(taxSummary.ivaAmount, true)}
                     </span>
@@ -605,6 +617,26 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
             </div>
           </div>
 
+          {existing ? (
+            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+              <button
+                className="h-[44px] px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container font-button-label text-button-label text-text-primary border border-border-strong transition-all flex items-center justify-center gap-2 cursor-pointer"
+                type="button"
+                onClick={() => onNavigate('documentos')}
+              >
+                <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                <span>Volver a Documentos</span>
+              </button>
+              <button
+                className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+                type="button"
+                onClick={() => printDocument(invoiceNumber)}
+              >
+                <span className="material-symbols-outlined text-[22px]">picture_as_pdf</span>
+                <span className="text-[16px] font-semibold">Descargar PDF</span>
+              </button>
+            </div>
+          ) : (
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             <button
               className="h-[44px] px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container font-button-label text-button-label text-text-primary border border-border-strong transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
@@ -626,6 +658,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
               <span className="text-[16px] font-semibold">{saving ? 'Guardando...' : 'Emitir factura'}</span>
             </button>
           </div>
+          )}
         </div>
       </div>
     </div>

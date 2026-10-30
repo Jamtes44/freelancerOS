@@ -8,10 +8,11 @@ interface PerfilClienteScreenProps {
   client?: Client;
   invoices: Invoice[];
   cuentasCobro: CuentaCobro[];
-  contract: Contract;
+  contracts: Contract[];
   onClientUpdated: (client: Client) => void;
   onClientDeleted: (clientId: string) => void;
   onOpenDocuments: (clientId: string) => void;
+  onOpenDocument: (kind: 'invoice' | 'cuenta' | 'contrato', id: string) => void;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -43,10 +44,11 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
   client,
   invoices,
   cuentasCobro,
-  contract,
+  contracts,
   onClientUpdated,
   onClientDeleted,
   onOpenDocuments,
+  onOpenDocument,
 }) => {
   const [docSearch, setDocSearch] = useState('');
   const [editing, setEditing] = useState(false);
@@ -69,7 +71,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
 
   const clientInvoices = invoices.filter((i) => i.clientId === client.id);
   const clientCuentas = cuentasCobro.filter((c) => c.clientId === client.id);
-  const clientContracts = contract.clientId === client.id ? [contract] : [];
+  const clientContracts = contracts.filter((c) => c.clientId === client.id);
 
   const documents = [
     ...clientInvoices.map((i) => ({
@@ -97,7 +99,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
       type: 'CTR' as const,
       number: c.number,
       concept: c.object,
-      emissionDate: '—',
+      emissionDate: c.date || '—',
       dueDate: c.duration,
       amount: c.totalValue,
       status: c.status as string,
@@ -303,7 +305,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
             Servicios
           </button>
           {[
-            { label: 'Contratos', count: clientContracts.length, onClick: () => onNavigate('contratos') },
+            { label: 'Contratos', count: clientContracts.length, onClick: () => onOpenDocuments(client.id) },
             { label: 'Facturas', count: clientInvoices.length, onClick: () => onOpenDocuments(client.id) },
             { label: 'Cuentas de cobro', count: clientCuentas.length, onClick: () => onOpenDocuments(client.id) },
           ].map((tab) => (
@@ -513,8 +515,8 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
                       <button
                         className="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex cursor-pointer"
                         type="button"
-                        title={doc.type === 'CTR' ? 'Abrir contrato' : 'Ver en Documentos'}
-                        onClick={() => (doc.type === 'CTR' ? onNavigate('contratos') : onOpenDocuments(client.id))}
+                        title="Ver documento y descargar PDF"
+                        onClick={() => onOpenDocument(doc.type === 'FE' ? 'invoice' : doc.type === 'CC' ? 'cuenta' : 'contrato', doc.id)}
                       >
                         <span className="material-symbols-outlined text-[18px]">visibility</span>
                       </button>

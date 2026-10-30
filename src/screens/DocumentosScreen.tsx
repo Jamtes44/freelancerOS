@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
-import { ScreenId, Invoice, CuentaCobro, Client } from '../types';
+import { ScreenId, Invoice, CuentaCobro, Client, Contract } from '../types';
 import { formatCOP, formatFecha, OPEN_STATUSES } from '../utils/calculations';
 import { updateDocumentStatus } from '../services/supabaseService';
 
-type Kind = 'invoice' | 'cuenta';
+type Kind = 'invoice' | 'cuenta' | 'contrato';
 
 interface DocumentosScreenProps {
   onNavigate: (screen: ScreenId) => void;
   onOpenClient: (clientId: string) => void;
   invoices: Invoice[];
   cuentasCobro: CuentaCobro[];
+  contracts: Contract[];
   clients: Client[];
   clientFilter?: string;
   onClearClientFilter: () => void;
   onStatusChanged: (kind: Kind, id: string, status: string) => void;
+  onOpenDocument: (kind: Kind, id: string) => void;
 }
 
 const STATUSES: Record<Kind, string[]> = {
   invoice: ['Borrador', 'Enviada', 'Pendiente', 'Vencida', 'Pagada'],
   cuenta: ['Borrador', 'Pendiente', 'Vencida', 'Pagada'],
+  contrato: ['Borrador', 'En ejecución', 'Firmado'],
 };
 
 const STATUS_STYLE: Record<string, string> = {
@@ -27,6 +30,8 @@ const STATUS_STYLE: Record<string, string> = {
   Pendiente: 'bg-[#fff0b3] text-[#c75300] border-[#ffe380]',
   Vencida: 'bg-[#ffebe6] text-[#ae2e24] border-[#ffbdad]',
   Borrador: 'bg-[#f4f5f7] text-[#63666b] border-[#dddee1]',
+  'En ejecución': 'bg-status-enviada-bg text-status-enviada-text border-[#b3d4ff]',
+  Firmado: 'bg-[#e3fcef] text-[#22a06b] border-[#abf5d1]',
 };
 
 type StatusFilter = 'all' | 'open' | 'Vencida' | 'Pagada' | 'Borrador';
@@ -41,10 +46,12 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
   onOpenClient,
   invoices,
   cuentasCobro,
+  contracts,
   clients,
   clientFilter,
   onClearClientFilter,
   onStatusChanged,
+  onOpenDocument,
 }) => {
   const [kindFilter, setKindFilter] = useState<'all' | Kind>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
@@ -56,6 +63,19 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
   const docs = [
     ...invoices.map((d) => ({ ...d, kind: 'invoice' as Kind, concept: 'Factura electrónica' })),
     ...cuentasCobro.map((d) => ({ ...d, kind: 'cuenta' as Kind })),
+    ...contracts.map((c) => ({
+      id: c.id,
+      kind: 'contrato' as Kind,
+      number: c.number,
+      clientId: c.clientId,
+      clientName: c.clientName,
+      nit: c.nit,
+      concept: c.object,
+      date: c.date ?? '',
+      dueDate: c.duration, // free text such as "6 meses"; formatFecha leaves it as is
+      amount: c.totalValue,
+      status: c.status as string,
+    })),
   ]
     .filter((d) => !clientFilter || d.clientId === clientFilter)
     .filter((d) => kindFilter === 'all' || d.kind === kindFilter)
@@ -68,7 +88,8 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
     })
     .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
 
-  const total = docs.reduce((acc, d) => acc + d.amount, 0);
+  // Contract values are agreements, not billing: keep them out of the totals.
+  const total = docs.filter((d) => d.kind !== 'contrato').reduce((acc, d) => acc + d.amount, 0);
   const pending = docs.filter((d) => OPEN_STATUSES.includes(d.status)).reduce((acc, d) => acc + d.amount, 0);
   const filterClientName = clients.find((c) => c.id === clientFilter)?.name;
 
@@ -134,6 +155,7 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
                 <button type="button" className={pill(kindFilter === 'all')} onClick={() => setKindFilter('all')}>Todos</button>
                 <button type="button" className={pill(kindFilter === 'invoice')} onClick={() => setKindFilter('invoice')}>Facturas</button>
                 <button type="button" className={pill(kindFilter === 'cuenta')} onClick={() => setKindFilter('cuenta')}>Cuentas de cobro</button>
+                <button type="button" className={pill(kindFilter === 'contrato')} onClick={() => setKindFilter('contrato')}>Contratos</button>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Estado">
@@ -194,10 +216,17 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
                     <td className="py-3 px-space-md">
                       <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-text-subtlest text-[18px]">
-                          {d.kind === 'invoice' ? 'receipt_long' : 'payments'}
+                          {d.kind === 'invoice' ? 'receipt_long' : d.kind === 'cuenta' ? 'payments' : 'description'}
                         </span>
                         <div className="flex flex-col min-w-0">
-                          <span className="font-semibold whitespace-nowrap">{d.number}</span>
+                          <button
+                            type="button"
+                            className="font-semibold whitespace-nowrap text-left text-primary-container hover:underline cursor-pointer"
+                            title="Ver documento y descargar PDF"
+                            onClick={() => onOpenDocument(d.kind, d.id)}
+                          >
+                            {d.number}
+                          </button>
                           <span className="font-caption text-caption text-text-subtlest truncate max-w-[220px]">{d.concept}</span>
                         </div>
                       </div>
@@ -244,7 +273,7 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
 
           <div className="px-space-md py-space-sm border-t border-border-subtle flex flex-col sm:flex-row justify-between gap-1 font-body-sm text-body-sm text-text-subtlest">
             <span>
-              {docs.length} {docs.length === 1 ? 'documento' : 'documentos'} · {formatCOP(total, true)}
+              {docs.length} {docs.length === 1 ? 'documento' : 'documentos'} · Facturado {formatCOP(total, true)}
             </span>
             <span>
               Por cobrar: <span className="font-semibold text-text-primary">{formatCOP(pending, true)}</span>

@@ -6,7 +6,11 @@ import { updateClient, deleteClient } from '../services/supabaseService';
  * Asks for confirmation and deletes the client. Returns false if the user cancelled.
  * Documents survive (the database sets their client_id to null).
  */
-export async function confirmAndDeleteClient(client: Client, documentCount?: number): Promise<boolean> {
+export async function confirmAndDeleteClient(
+  client: Client,
+  documentCount?: number,
+  onDeleting?: () => void
+): Promise<boolean> {
   const warning =
     documentCount === undefined
       ? '\n\nSi tiene documentos, se conservan pero quedarán sin cliente asociado.'
@@ -14,6 +18,7 @@ export async function confirmAndDeleteClient(client: Client, documentCount?: num
       ? `\n\nSus ${documentCount} documentos se conservan, pero quedarán sin cliente asociado.`
       : '';
   if (!window.confirm(`¿Eliminar a ${client.name}? Esta acción no se puede deshacer.${warning}`)) return false;
+  onDeleting?.();
   await deleteClient(client.id);
   return true;
 }

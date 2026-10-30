@@ -101,6 +101,8 @@ export interface Contract {
   paymentSchedule: string;
   clauses: ContractClause[];
   status: 'Borrador' | 'En ejecución' | 'Firmado';
+  /** Creation date as YYYY-MM-DD (from created_at); empty for the template. */
+  date?: string;
 }
 
 export interface FreelancerProfile {

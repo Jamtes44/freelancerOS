@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
 import { ScreenId, Contract, Client, FreelancerProfile } from '../types';
-import { formatCOP } from '../utils/calculations';
+import { formatCOP, nextDocumentNumber, addDaysISO } from '../utils/calculations';
 import { printDocument } from '../utils/print';
+import { createContract } from '../services/supabaseService';
 
 interface GeneradorContratoScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
-  contract: Contract;
+  /** Starting text and clauses for a new contract. */
+  template: Contract;
+  contracts: Contract[];
   clients: Client[];
   profile: FreelancerProfile;
   initialClientId?: string;
+  onSaved: (contract: Contract) => void;
+  /** When set, shows this saved contract read-only (to review it or download its PDF again). */
+  existing?: Contract;
 }
 
 export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = ({
   onNavigate,
-  contract,
+  template,
+  contracts,
   clients,
   profile,
   initialClientId,
+  onSaved,
+  existing,
 }) => {
+  const contract = existing ?? template;
+  const contractNumber = existing?.number ?? nextDocumentNumber('CTR', contracts.map((c) => c.number));
   const [selectedClient, setSelectedClient] = useState(
-    initialClientId ?? (clients.some((c) => c.id === contract.clientId) ? contract.clientId : clients[0]?.id ?? '')
+    existing?.clientId || initialClientId || clients[0]?.id || ''
   );
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [contractObject, setContractObject] = useState(contract.object);
   const [scope, setScope] = useState(contract.scope);
   const [duration, setDuration] = useState(contract.duration);
@@ -45,6 +58,38 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
   const clientNit = client?.nit ?? '—';
   const contractorName = profile.legalName || profile.name || 'COMPLETA TU PERFIL EN CONFIGURACIÓN';
 
+  const handleSave = async () => {
+    const totalValue = parseInt(contractValue.replace(/\D/g, ''), 10) || 0;
+    if (!client) return setSaveError('Selecciona un cliente.');
+    if (!contractObject.trim()) return setSaveError('Escribe el objeto del contrato.');
+    if (totalValue <= 0) return setSaveError('Escribe el valor total del contrato.');
+    setSaving(true);
+    setSaveError('');
+    try {
+      const saved = await createContract({
+        id: crypto.randomUUID(),
+        number: contractNumber,
+        clientId: client.id,
+        clientName: client.legalName || client.name,
+        nit: client.nit,
+        object: contractObject.trim(),
+        scope: scope.trim(),
+        duration: duration.trim(),
+        totalValue,
+        paymentSchedule: paymentSchedule.trim(),
+        status: 'Borrador',
+        clauses,
+        date: addDaysISO(0),
+      });
+      onSaved(saved);
+    } catch (e) {
+      // Form stays as typed so nothing is lost.
+      setSaveError(`No se pudo guardar: ${(e as any)?.message ?? e}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full">
       <div className="px-space-xl py-space-lg max-w-[1440px] w-full mx-auto">
@@ -63,36 +108,27 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 Contratos
               </a>
               <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-              <span className="text-text-secondary font-medium">Nuevo contrato</span>
+              <span className="text-text-secondary font-medium">{existing ? contractNumber : 'Nuevo contrato'}</span>
             </div>
             <h1 className="font-currency-display text-currency-display text-text-primary font-medium tracking-tight">
-              Generador de Contrato de Prestación de Servicios
+              {existing ? `Contrato ${contractNumber}` : 'Generador de Contrato de Prestación de Servicios'}
             </h1>
           </div>
 
           {/* Top Action Toolbar */}
           <div className="flex items-center gap-space-sm self-start md:self-auto">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-low text-text-secondary rounded-[10000px] font-badge-label text-badge-label">
-              <span className="w-2 h-2 rounded-full bg-status-pendiente"></span>
-              Borrador Dinámico v1.2
-            </span>
-            <button
-              className="h-10 px-4 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center gap-2 hover:bg-surface-container-low transition-colors shadow-sm cursor-pointer border border-border-subtle"
-              type="button"
-              onClick={() => onNavigate('dashboard')}
-            >
-              <span className="material-symbols-outlined text-[18px] text-text-secondary">
-                history
+            {existing && (
+              <span className="inline-flex items-center px-3 py-1 bg-surface-container-low text-text-secondary rounded-[10000px] font-badge-label text-badge-label">
+                {existing.status}
               </span>
-              <span>Plantillas guardadas</span>
-            </button>
+            )}
           </div>
         </div>
 
         {/* Workspace Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
-          {/* LEFT COLUMN: Contract Parameters & Clauses */}
-          <div className="lg:col-span-6 flex flex-col gap-space-md">
+          {/* LEFT COLUMN: Contract Parameters & Clauses (read-only when viewing a saved contract) */}
+          <fieldset disabled={!!existing} className="lg:col-span-6 flex flex-col gap-space-md min-w-0 border-0 p-0 m-0 disabled:opacity-80">
             <div className="bg-canvas-white rounded-[20px] p-space-xl shadow-sm border border-border-subtle flex flex-col gap-space-lg">
               <div className="flex items-center justify-between pb-space-sm border-b border-border-subtle">
                 <div className="flex items-center gap-2">
@@ -284,7 +320,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 </div>
               </div>
             </div>
-          </div>
+          </fieldset>
 
           {/* RIGHT COLUMN: Realtime Editorial Contract Preview */}
           <div className="lg:col-span-6 flex flex-col gap-space-md sticky top-20">
@@ -302,7 +338,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 </h3>
                 <div className="mt-2 text-caption font-caption text-text-secondary bg-surface-container-low px-3 py-1 rounded-[10000px] border border-border-subtle">
                   Radicado digital:{' '}
-                  <span className="font-semibold text-text-primary">{contract.number}</span>
+                  <span className="font-semibold text-text-primary">{contractNumber}</span>
                 </div>
               </div>
 
@@ -403,29 +439,41 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
               <button
                 className="w-full sm:w-auto h-[44px] px-6 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-sm border border-border-strong cursor-pointer"
                 type="button"
-                onClick={() => printDocument(`Contrato ${contract.number}`)}
+                onClick={() => printDocument(`Contrato ${contractNumber}`)}
               >
                 <span className="material-symbols-outlined text-[20px] text-text-secondary">
                   picture_as_pdf
                 </span>
-                <span>Descargar borrador en PDF</span>
+                <span>{existing ? 'Descargar PDF' : 'Descargar borrador en PDF'}</span>
               </button>
 
-              {/* Unique Primary Blue Pill Action (Height 58px) */}
-              <button
-                className="w-full sm:w-auto h-[58px] px-8 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label flex items-center justify-center gap-3 hover:bg-primary-hover active:bg-primary transition-all shadow-md cursor-pointer"
-                id="btn-emitir-contrato"
-                type="button"
-                onClick={() => {
-                  alert('Esta función todavía no está disponible.');
-                }}
-              >
-                <span className="material-symbols-outlined text-[22px]">draw</span>
-                <span className="text-[16px] font-semibold tracking-wide">
-                  Emitir Contrato para Firma Digital
-                </span>
-              </button>
+              {existing ? (
+                <button
+                  className="w-full sm:w-auto h-[44px] px-6 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors border border-border-strong cursor-pointer"
+                  type="button"
+                  onClick={() => onNavigate('documentos')}
+                >
+                  <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                  Volver a Documentos
+                </button>
+              ) : (
+                <button
+                  className="w-full sm:w-auto h-[58px] px-8 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label flex items-center justify-center gap-3 hover:bg-primary-hover active:bg-primary transition-all shadow-md cursor-pointer disabled:opacity-60"
+                  id="btn-emitir-contrato"
+                  type="button"
+                  disabled={saving}
+                  onClick={handleSave}
+                >
+                  <span className="material-symbols-outlined text-[22px]">save</span>
+                  <span className="text-[16px] font-semibold tracking-wide">{saving ? 'Guardando...' : 'Guardar contrato'}</span>
+                </button>
+              )}
             </div>
+            {saveError && (
+              <p role="alert" className="font-body-sm text-body-sm text-status-vencida px-2">
+                {saveError}
+              </p>
+            )}
           </div>
         </div>
       </div>
