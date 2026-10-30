@@ -22,7 +22,7 @@ import {
   getContract,
   getFreelancerProfile,
 } from './services/supabaseService';
-import { withDocumentTotals } from './utils/calculations';
+import { withDocumentTotals, withOverdueStatus } from './utils/calculations';
 
 const EMPTY_PROFILE: FreelancerProfile = {
   name: '',
@@ -97,8 +97,8 @@ export default function App() {
         ]);
         if (!mounted) return;
         setClients(c);
-        setInvoices(inv);
-        setCuentasCobro(cc);
+        setInvoices(inv.map((d) => withOverdueStatus(d)));
+        setCuentasCobro(cc.map((d) => withOverdueStatus(d)));
         setServices(serv);
         if (ctr) setContract(ctr);
         setProfile(prof ?? EMPTY_PROFILE);

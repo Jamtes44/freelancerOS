@@ -198,6 +198,19 @@ export function formatFecha(iso: string | null | undefined): string {
 export const OPEN_STATUSES = ['Enviada', 'Pendiente', 'Vencida'];
 
 /**
+ * An unpaid document whose due date has passed is shown as "Vencida" even if the stored status
+ * was never updated. Display only: the database keeps the stored status.
+ */
+export function withOverdueStatus<T extends { status: string; dueDate: string }>(doc: T, today: Date = new Date()): T {
+  const due = parseFecha(doc.dueDate);
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  if ((doc.status === 'Enviada' || doc.status === 'Pendiente') && due && due < startOfToday) {
+    return { ...doc, status: 'Vencida' };
+  }
+  return doc;
+}
+
+/**
  * Fills each client's pendingBalance and totalBilled from its invoices and cuentas de cobro,
  * so the numbers can never drift from the documents. Drafts count for neither.
  */

@@ -9,7 +9,19 @@ import {
   withDocumentTotals,
   parseFecha,
   formatFecha,
+  withOverdueStatus,
 } from './calculations';
+
+test('withOverdueStatus marks unpaid documents past their due date as Vencida', () => {
+  const today = new Date(2026, 9, 29, 15, 0); // 29 Oct 2026, afternoon
+  const doc = (status: string, dueDate: string) => withOverdueStatus({ status, dueDate }, today).status;
+  assert.equal(doc('Pendiente', '2025-05-26'), 'Vencida');
+  assert.equal(doc('Enviada', '2026-10-28'), 'Vencida');
+  assert.equal(doc('Pendiente', '2026-10-29'), 'Pendiente'); // due today is not overdue yet
+  assert.equal(doc('Pagada', '2020-01-01'), 'Pagada');
+  assert.equal(doc('Borrador', '2020-01-01'), 'Borrador');
+  assert.equal(doc('Pendiente', ''), 'Pendiente');
+});
 
 test('formatFecha shows ISO dates in Spanish and leaves other text alone', () => {
   assert.equal(formatFecha('2024-10-22'), '22 oct 2024');

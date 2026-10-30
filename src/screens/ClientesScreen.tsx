@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScreenId, Client } from '../types';
 import { formatCOP } from '../utils/calculations';
 import { createClient } from '../services/supabaseService';
@@ -14,6 +14,8 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
   const [filter, setFilter] = useState<'all' | 'active' | 'withBalance' | 'inactive'>('all');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  // A new filter or search shows a different list, so start it from the first page.
+  useEffect(() => setPage(1), [filter, search]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newClientName, setNewClientName] = useState('');
   const [newClientNit, setNewClientNit] = useState('');
