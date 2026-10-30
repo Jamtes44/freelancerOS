@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScreenId, Invoice, CuentaCobro, Client } from '../types';
-import { formatCOP } from '../utils/calculations';
+import { formatCOP, OPEN_STATUSES, parseFecha, formatFecha } from '../utils/calculations';
 
 interface DashboardScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -18,16 +18,8 @@ const STATUS_STYLES: Record<string, { className: string; outline: string }> = {
   Borrador: { className: 'bg-[#f4f5f7] text-[#63666b]', outline: '#dddee1' },
 };
 
-// Dates are stored as text, either ISO ("2025-06-05") or "21 Nov 2024".
-// shortcut: relies on the browser parsing "21 Nov 2024"; switch the columns to `date` to drop this.
-const parseDate = (s: string): Date | null => {
-  if (!s) return null;
-  const d = /^\d{4}-\d{2}-\d{2}$/.test(s) ? new Date(`${s}T00:00:00`) : new Date(s);
-  return isNaN(d.getTime()) ? null : d;
-};
-
 const daysUntil = (s: string): number | null => {
-  const d = parseDate(s);
+  const d = parseFecha(s);
   if (!d) return null;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -36,7 +28,7 @@ const daysUntil = (s: string): number | null => {
 
 const dueLabel = (dueDate: string) => {
   const days = daysUntil(dueDate);
-  if (days === null) return { text: `Vence ${dueDate}`, className: 'bg-surface-container-high text-text-secondary', outline: undefined };
+  if (days === null) return { text: `Vence ${formatFecha(dueDate)}`, className: 'bg-surface-container-high text-text-secondary', outline: undefined };
   if (days < 0) return { text: `Vencida hace ${-days} días`, className: 'bg-[#ffebe6] text-[#ae2e24]', outline: '#ffbdad' };
   if (days === 0) return { text: 'Vence hoy', className: 'bg-[#ffebe6] text-[#ae2e24]', outline: '#ffbdad' };
   if (days <= 7) return { text: `Vence en ${days} días`, className: 'bg-[#fff0b3] text-[#c75300]', outline: '#ffe380' };
@@ -94,11 +86,11 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
 
   const paidInvoices = invoices.filter((i) => i.status === 'Pagada');
   const paidCuentas = cuentasCobro.filter((c) => c.status === 'Pagada');
-  const openInvoices = invoices.filter((i) => ['Enviada', 'Pendiente', 'Vencida'].includes(i.status));
+  const openInvoices = invoices.filter((i) => OPEN_STATUSES.includes(i.status));
   const overdueInvoices = invoices.filter((i) => i.status === 'Vencida');
   const openCuentas = cuentasCobro
     .filter((c) => c.status === 'Pendiente' || c.status === 'Vencida')
-    .sort((a, b) => (parseDate(a.dueDate)?.getTime() ?? Infinity) - (parseDate(b.dueDate)?.getTime() ?? Infinity));
+    .sort((a, b) => (parseFecha(a.dueDate)?.getTime() ?? Infinity) - (parseFecha(b.dueDate)?.getTime() ?? Infinity));
   const activeClients = clients.filter((c) => c.status === 'Activo').length;
   const recentInvoices = invoices.slice(0, 5);
   const today = new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -280,7 +272,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                             <span className="font-caption text-caption text-text-subtlest">NIT: {inv.nit}</span>
                           </div>
                         </td>
-                        <td className="py-3.5 px-space-md text-text-secondary whitespace-nowrap">{inv.date}</td>
+                        <td className="py-3.5 px-space-md text-text-secondary whitespace-nowrap">{formatFecha(inv.date)}</td>
                         <td className="py-3.5 px-space-md text-right font-semibold text-text-primary whitespace-nowrap">
                           {formatCOP(inv.amount)}
                         </td>

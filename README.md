@@ -1,20 +1,22 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# FreelanceOS
 
-# Run and deploy your AI Studio app
+Gestión de clientes, facturas, cuentas de cobro y contratos para freelancers en Colombia (COP). React + Vite, con Supabase como base de datos.
 
-This contains everything you need to run your app locally.
+## Correr en local
 
-View your app in AI Studio: https://ai.studio/apps/f243a75d-4a71-4799-a5bf-b309937e8f0b
+**Requisitos:** Node.js
 
-## Run Locally
+1. Instala dependencias: `npm install`
+2. Copia `.env.example` a `.env.local` y pon la URL y la anon key de tu proyecto de Supabase. Sin estas variables la app usa datos de prueba y no pide login.
+3. Arranca la app: `npm run dev` (abre http://localhost:3000)
 
-**Prerequisites:**  Node.js
+## Configurar Supabase
 
+1. En el SQL Editor ejecuta `supabase/schema.sql` y, si quieres datos de ejemplo, `supabase/seed.sql`. Si tu base se creó antes de que las fechas fueran tipo `date`, ejecuta una sola vez `supabase/migrate_dates.sql`.
+2. En Authentication > Sign In / Providers desactiva **"Allow new users to sign up"**. Las tablas solo dejan leer y escribir a usuarios con sesión, así que si el registro queda abierto cualquiera podría crear una cuenta y ver tus datos.
+3. En Authentication > Users crea tu usuario con **Auto Confirm User** marcado.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Comprobaciones
+
+- Tipos: `npm run lint`
+- Tests: `npm test`

@@ -22,6 +22,7 @@ import {
   getContract,
   getFreelancerProfile,
 } from './services/supabaseService';
+import { withDocumentTotals } from './utils/calculations';
 
 const EMPTY_PROFILE: FreelancerProfile = {
   name: '',
@@ -84,7 +85,6 @@ export default function App() {
     if (isSupabaseConfigured && !userId) return;
     let mounted = true;
     (async () => {
-      console.log('[APP] Iniciando carga de datos...');
       setLoadError('');
       try {
         const [c, inv, cc, serv, ctr, prof] = await Promise.all([
@@ -95,7 +95,6 @@ export default function App() {
           getContract(),
           getFreelancerProfile(),
         ]);
-        console.log('[APP] Datos cargados:', { clients: c?.length, invoices: inv?.length, cuentas: cc?.length, services: serv?.length });
         if (!mounted) return;
         setClients(c);
         setInvoices(inv);
@@ -115,12 +114,10 @@ export default function App() {
   }, [userId]);
 
   useEffect(() => {
-    console.log('[APP] currentScreen ->', currentScreen);
     document.title = SCREEN_TITLES[currentScreen] || 'FreelanceOS';
   }, [currentScreen]);
 
   const handleNavigate = (screen: ScreenId) => {
-    console.log('[APP] Navegando a:', screen);
     setCurrentScreen(screen);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -130,6 +127,8 @@ export default function App() {
     setSelectedClientId(clientId);
     handleNavigate('perfil-cliente');
   };
+
+  const clientsWithTotals = withDocumentTotals(clients, [...invoices, ...cuentasCobro]);
 
   if (!authReady) return null;
   if (isSupabaseConfigured && !session) return <LoginScreen />;
@@ -174,14 +173,14 @@ export default function App() {
               onOpenClient={openClient}
               invoices={invoices}
               cuentasCobro={cuentasCobro}
-              clients={clients}
+              clients={clientsWithTotals}
             />
           )}
 
           {dataLoaded && currentScreen === 'clientes' && (
             <ClientesScreen
               onNavigate={handleNavigate}
-              clients={clients}
+              clients={clientsWithTotals}
               onClientCreated={(c) => setClients((prev) => [...prev, c])}
               onOpenClient={openClient}
             />
@@ -191,7 +190,7 @@ export default function App() {
             <GeneradorContratoScreen
               onNavigate={handleNavigate}
               contract={contract}
-              clients={clients}
+              clients={clientsWithTotals}
               profile={profile}
               initialClientId={selectedClientId}
             />
@@ -200,7 +199,7 @@ export default function App() {
           {dataLoaded && currentScreen === 'facturas' && (
             <GeneradorFacturaScreen
               onNavigate={handleNavigate}
-              clients={clients}
+              clients={clientsWithTotals}
               invoices={invoices}
               profile={profile}
               initialClientId={selectedClientId}
@@ -210,7 +209,7 @@ export default function App() {
           {dataLoaded && currentScreen === 'perfil-cliente' && (
             <PerfilClienteScreen
               onNavigate={handleNavigate}
-              client={clients.find((c) => c.id === selectedClientId)}
+              client={clientsWithTotals.find((c) => c.id === selectedClientId)}
               invoices={invoices}
               cuentasCobro={cuentasCobro}
               contract={contract}
@@ -224,7 +223,7 @@ export default function App() {
           {dataLoaded && currentScreen === 'cuentas-cobro' && (
             <GeneradorCuentaCobroScreen
               onNavigate={handleNavigate}
-              clients={clients}
+              clients={clientsWithTotals}
               cuentasCobro={cuentasCobro}
               profile={profile}
               initialClientId={selectedClientId}

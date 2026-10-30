@@ -85,6 +85,11 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
     return matchesFilter && matchesSearch;
   });
 
+  const PAGE_SIZE = 5;
+  const pageCount = Math.max(1, Math.ceil(filteredClients.length / PAGE_SIZE));
+  // Clamp so a filter or search that shrinks the list never leaves you on an empty page.
+  const currentPage = Math.min(page, pageCount);
+
   const totalClients = clients.length;
   const activeClients = clients.filter((c) => c.status === 'Activo').length;
   const withBalance = clients.filter((c) => c.pendingBalance > 0).length;
@@ -132,8 +137,8 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
               <span className="font-headline-sm text-headline-sm text-text-primary font-semibold">
                 {totalClients}
               </span>
-              <span className="font-caption text-caption text-status-pagada flex items-center gap-0.5">
-                <span className="material-symbols-outlined text-[14px]">trending_up</span> +{Math.min(totalClients, 3)} este mes
+              <span className="font-caption text-caption text-text-secondary">
+                {inactiveClients} inactivos
               </span>
             </div>
           </div>
@@ -163,7 +168,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
           </div>
           <div className="bg-[#1c2b42] p-space-md rounded-[20px] border border-[#1c2b42] flex flex-col gap-1 text-surface-container-lowest">
             <span className="font-caption text-caption text-border-strong uppercase tracking-wider">
-              Facturado 2024
+              Facturado total
             </span>
             <div className="flex items-baseline justify-between mt-1">
               <span className="font-headline-sm text-headline-sm text-surface-container-lowest font-semibold tabular-nums">
@@ -294,7 +299,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
-                {filteredClients.slice(0, 5).map((client) => {
+                {filteredClients.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((client) => {
                   return (
                     <tr
                       key={client.id}
@@ -431,38 +436,48 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
           {/* Atlassian Pagination Footer */}
           <div className="px-space-md py-space-sm bg-surface-container-lowest border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left">
             <div className="font-body-sm text-body-sm text-text-subtlest">
-              Mostrando <span className="font-medium text-text-primary">1-5</span> de{' '}
-              <span className="font-medium text-text-primary">18</span> clientes
+              Mostrando{' '}
+              <span className="font-medium text-text-primary">
+                {filteredClients.length === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1}-
+                {Math.min(currentPage * PAGE_SIZE, filteredClients.length)}
+              </span>{' '}
+              de <span className="font-medium text-text-primary">{filteredClients.length}</span> clientes
             </div>
             <div className="flex items-center gap-1 select-none">
               <button
                 className={`w-8 h-8 rounded-[3px] flex items-center justify-center text-text-subtlest ${
-                  page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'
+                  currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'
                 }`}
-                disabled={page === 1}
+                disabled={currentPage === 1}
                 type="button"
-                onClick={() => setPage(Math.max(1, page - 1))}
+                aria-label="Página anterior"
+                onClick={() => setPage(currentPage - 1)}
               >
                 <span className="material-symbols-outlined text-[18px]">chevron_left</span>
               </button>
-              {[1, 2, 3, 4].map((p) => (
+              {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
                   className={`w-8 h-8 rounded-[3px] font-body-sm text-body-sm font-semibold flex items-center justify-center transition-colors cursor-pointer ${
-                    page === p
+                    currentPage === p
                       ? 'bg-status-enviada-bg text-status-enviada-text'
                       : 'hover:bg-surface-container-low text-text-secondary'
                   }`}
                   type="button"
+                  aria-current={currentPage === p ? 'page' : undefined}
                   onClick={() => setPage(p)}
                 >
                   {p}
                 </button>
               ))}
               <button
-                className="w-8 h-8 rounded-[3px] hover:bg-surface-container-low text-text-secondary flex items-center justify-center transition-colors cursor-pointer"
+                className={`w-8 h-8 rounded-[3px] flex items-center justify-center text-text-secondary transition-colors ${
+                  currentPage === pageCount ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low cursor-pointer'
+                }`}
+                disabled={currentPage === pageCount}
                 type="button"
-                onClick={() => setPage(Math.min(4, page + 1))}
+                aria-label="Página siguiente"
+                onClick={() => setPage(currentPage + 1)}
               >
                 <span className="material-symbols-outlined text-[18px]">chevron_right</span>
               </button>

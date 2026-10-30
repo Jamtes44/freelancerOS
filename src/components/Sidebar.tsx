@@ -130,7 +130,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   href={`#${item.path}`}
                   aria-current={isActive ? 'page' : undefined}
                   onClick={(e) => {
-                    console.log('[SIDEBAR] Click:', item.id);
                     e.preventDefault();
                     onNavigate(item.id);
                     onCloseMobile?.();

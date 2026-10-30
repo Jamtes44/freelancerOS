@@ -26,11 +26,11 @@ on conflict (id) do nothing;
 -- invoices
 insert into public.invoices (id,number,client_id,client_name,nit,date,due_date,amount,status)
 values
-('fac-042','FAC-2025-042','cli-0090','Rappi S.A.S.','900.843.898-1','22 Oct 2024','21 Nov 2024',4500000,'Pagada'),
-('fac-041','FAC-2025-041','cli-0089','Nu Colombia Compañía de Financiamiento','901.442.238-3','18 Oct 2024','17 Nov 2024',3200000,'Enviada'),
-('fac-040','FAC-2025-040',null,'Mercadolibre Colombia Ltda.','830.067.412-2','10 Oct 2024','09 Nov 2024',2000000,'Pendiente'),
-('fac-039','FAC-2025-039','cli-0092','Bold Pagos Colombia','901.277.632-4','28 Sep 2024','28 Oct 2024',1850000,'Vencida'),
-('fac-038','FAC-2025-038',null,'Platzi Inc. Sucursal Colombia','900.751.291-0','25 Sep 2024','25 Oct 2024',3300000,'Borrador')
+('fac-042','FAC-2025-042','cli-0090','Rappi S.A.S.','900.843.898-1','2024-10-22','2024-11-21',4500000,'Pagada'),
+('fac-041','FAC-2025-041','cli-0089','Nu Colombia Compañía de Financiamiento','901.442.238-3','2024-10-18','2024-11-17',3200000,'Enviada'),
+('fac-040','FAC-2025-040',null,'Mercadolibre Colombia Ltda.','830.067.412-2','2024-10-10','2024-11-09',2000000,'Pendiente'),
+('fac-039','FAC-2025-039','cli-0092','Bold Pagos Colombia','901.277.632-4','2024-09-28','2024-10-28',1850000,'Vencida'),
+('fac-038','FAC-2025-038',null,'Platzi Inc. Sucursal Colombia','900.751.291-0','2024-09-25','2024-10-25',3300000,'Borrador')
 on conflict (id) do nothing;
 
 -- cuentas_cobro

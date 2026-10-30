@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ScreenId, Client, Invoice, CuentaCobro, Contract } from '../types';
-import { formatCOP } from '../utils/calculations';
+import { formatCOP, OPEN_STATUSES, formatFecha } from '../utils/calculations';
 
 interface PerfilClienteScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -25,8 +25,6 @@ const CLIENT_STATUS_COLORS: Record<Client['status'], { badge: string; dot: strin
   Pendiente: { badge: 'bg-[#fff0b3] text-[#c75300] border-[#ffe380]', dot: 'bg-[#c75300]' },
   Inactivo: { badge: 'bg-[#f4f5f7] text-[#63666b] border-[#dddee1]', dot: 'bg-[#63666b]' },
 };
-
-const OPEN_STATUSES = ['Enviada', 'Pendiente', 'Vencida'];
 
 const Field: React.FC<{ label: string; value?: string; hint?: string; wide?: boolean }> = ({ label, value, hint, wide }) => (
   <div className={`flex flex-col ${wide ? 'md:col-span-2' : ''}`}>
@@ -448,8 +446,8 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
                       </div>
                     </td>
                     <td className="py-4 px-4 text-text-secondary max-w-xs truncate">{doc.concept}</td>
-                    <td className="py-4 px-4 text-text-secondary whitespace-nowrap">{doc.emissionDate}</td>
-                    <td className="py-4 px-4 text-text-secondary whitespace-nowrap">{doc.dueDate}</td>
+                    <td className="py-4 px-4 text-text-secondary whitespace-nowrap">{formatFecha(doc.emissionDate)}</td>
+                    <td className="py-4 px-4 text-text-secondary whitespace-nowrap">{formatFecha(doc.dueDate)}</td>
                     <td className="py-4 px-4 text-right font-semibold text-text-primary whitespace-nowrap">
                       {formatCOP(doc.amount)}
                     </td>
