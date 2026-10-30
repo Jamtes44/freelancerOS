@@ -147,3 +147,18 @@
     font-feature-settings: 'tnum' 1;
   }
 }
+
+/* "Descargar PDF" prints only a copy of the document preview (#print-root, see utils/print.ts). */
+#print-root { display: none; }
+@media print {
+  @page { size: A4; margin: 12mm; }
+  body > *:not(#print-root) { display: none !important; }
+  #print-root { display: block; }
+  #print-root > * {
+    min-height: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

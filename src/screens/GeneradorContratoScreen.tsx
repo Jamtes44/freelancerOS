@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScreenId, Contract, Client, FreelancerProfile } from '../types';
 import { formatCOP } from '../utils/calculations';
+import { printDocument } from '../utils/print';
 
 interface GeneradorContratoScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -288,7 +289,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
           {/* RIGHT COLUMN: Realtime Editorial Contract Preview */}
           <div className="lg:col-span-6 flex flex-col gap-space-md sticky top-20">
             {/* Document Sheet Card */}
-            <div className="bg-canvas-white rounded-[20px] shadow-sm border border-border-subtle p-8 md:p-12 text-text-primary flex flex-col justify-between relative overflow-hidden">
+            <div className="print-area bg-canvas-white rounded-[20px] shadow-sm border border-border-subtle p-8 md:p-12 text-text-primary flex flex-col justify-between relative overflow-hidden">
               <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-status-enviada-bg opacity-30 pointer-events-none"></div>
 
               {/* Document Header */}
@@ -402,9 +403,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
               <button
                 className="w-full sm:w-auto h-[44px] px-6 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-sm border border-border-strong cursor-pointer"
                 type="button"
-                onClick={() => {
-                  alert('Esta función todavía no está disponible.');
-                }}
+                onClick={() => printDocument(`Contrato ${contract.number}`)}
               >
                 <span className="material-symbols-outlined text-[20px] text-text-secondary">
                   picture_as_pdf

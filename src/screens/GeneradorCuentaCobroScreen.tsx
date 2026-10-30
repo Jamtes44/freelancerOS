@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ScreenId, Client, CuentaCobro, FreelancerProfile } from '../types';
 import { formatCOP, numeroALetrasCOP, nextDocumentNumber, addDaysISO } from '../utils/calculations';
 import { createCuentaCobro } from '../services/supabaseService';
+import { printDocument } from '../utils/print';
 
 interface GeneradorCuentaCobroScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -434,17 +435,15 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
               <button
                 className="font-caption text-caption font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
                 type="button"
-                onClick={() => {
-                  alert('Esta función todavía no está disponible.');
-                }}
+                onClick={() => printDocument(consecutivo.trim() || 'Cuenta de cobro')}
               >
-                <span className="material-symbols-outlined text-[16px]">zoom_in</span> Aumentar
+                <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span> Descargar PDF
               </button>
             </div>
 
             {/* Hoja Física */}
             <div
-              className="bg-canvas-white border border-border-subtle rounded-[20px] p-8 transition-all flex flex-col justify-between text-text-primary relative shadow-sm"
+              className="print-area bg-canvas-white border border-border-subtle rounded-[20px] p-8 transition-all flex flex-col justify-between text-text-primary relative shadow-sm"
               style={{ minHeight: '720px' }}
             >
               <div className="absolute right-8 top-8 opacity-5 pointer-events-none select-none">

@@ -8,6 +8,7 @@ import {
   itemSubtotal,
 } from '../utils/calculations';
 import { createInvoice } from '../services/supabaseService';
+import { printDocument } from '../utils/print';
 
 interface GeneradorFacturaScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -399,13 +400,17 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                   Vista Previa de Impresión Oficial
                 </span>
               </div>
-              <span className="font-caption text-caption text-text-subtlest">
-                A4 • Formato DIAN Colombia
-              </span>
+              <button
+                className="font-caption text-caption font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
+                type="button"
+                onClick={() => printDocument(invoiceNumber)}
+              >
+                <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span> Descargar PDF
+              </button>
             </div>
 
             {/* The White Sheet Container */}
-            <div className="bg-canvas-white rounded-[10px] p-7 shadow-sm border border-border-subtle flex flex-col justify-between">
+            <div className="print-area bg-canvas-white rounded-[10px] p-7 shadow-sm border border-border-subtle flex flex-col justify-between">
               {/* Sheet Header */}
               <div className="flex flex-col gap-6">
                 <div className="flex justify-between items-start">
