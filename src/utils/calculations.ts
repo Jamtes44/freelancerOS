@@ -166,3 +166,16 @@ export function calculateTaxSummary(
     total,
   };
 }
+
+/**
+ * Next consecutive document number, e.g. "FAC-2026-043".
+ * The counter keeps growing across years (DIAN ranges are consecutive), only the year label changes.
+ */
+export function nextDocumentNumber(prefix: string, existing: string[], year: number = new Date().getFullYear()): string {
+  const pattern = new RegExp(`^${prefix}-\\d{4}-(\\d+)$`);
+  const max = existing.reduce((acc, n) => {
+    const m = pattern.exec(n);
+    return m ? Math.max(acc, parseInt(m[1], 10)) : acc;
+  }, 0);
+  return `${prefix}-${year}-${String(max + 1).padStart(3, '0')}`;
+}

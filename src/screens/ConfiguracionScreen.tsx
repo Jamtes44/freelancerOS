@@ -1,13 +1,35 @@
 import React, { useState } from 'react';
-import { ScreenId } from '../types';
-import { INITIAL_FREELANCER_PROFILE } from '../data/mockData';
+import { ScreenId, FreelancerProfile } from '../types';
+import { saveFreelancerProfile } from '../services/supabaseService';
 
 interface ConfiguracionScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
+  profile: FreelancerProfile;
+  onProfileSaved: (profile: FreelancerProfile) => void;
 }
 
-export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavigate }) => {
-  const [profile, setProfile] = useState(INITIAL_FREELANCER_PROFILE);
+export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
+  onNavigate,
+  profile: savedProfile,
+  onProfileSaved,
+}) => {
+  const [profile, setProfile] = useState(savedProfile);
+  const [saveState, setSaveState] = useState<{ status: 'idle' | 'saving' | 'saved' | 'error'; message?: string }>({
+    status: 'idle',
+  });
+  const isDirty = JSON.stringify(profile) !== JSON.stringify(savedProfile);
+
+  const handleSave = async () => {
+    setSaveState({ status: 'saving' });
+    try {
+      await saveFreelancerProfile(profile);
+      onProfileSaved(profile);
+      setSaveState({ status: 'saved' });
+    } catch (e) {
+      // Edits stay in the form so nothing typed is lost.
+      setSaveState({ status: 'error', message: (e as any)?.message ?? String(e) });
+    }
+  };
   const [activeTab, setActiveTab] = useState<'emisor' | 'banco' | 'numeracion' | 'plantillas' | 'seguridad'>('emisor');
   const [transfiyaActive, setTransfiyaActive] = useState(true);
 
@@ -20,9 +42,6 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
             <div className="inline-flex items-center gap-2">
               <span className="inline-flex items-center px-2 py-0.5 rounded-[10000px] font-badge-label text-caption uppercase tracking-wider bg-surface-container-high text-text-secondary border border-border-subtle">
                 Sistema &amp; Parámetros DIAN
-              </span>
-              <span className="font-caption text-caption text-text-subtlest">
-                • Actualizado hace 2 días
               </span>
             </div>
             <h1 className="font-headline-md text-headline-md text-text-primary font-semibold tracking-tight">
@@ -261,13 +280,13 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
                     </div>
                     <div>
                       <div className="font-body-sm text-body-sm font-semibold text-text-primary flex items-center gap-2">
-                        Bancolombia S.A.
+                        {profile.bankName || 'Sin banco registrado'}
                         <span className="px-2 py-0.5 rounded-[10000px] text-[10px] font-badge-label uppercase tracking-wide bg-status-enviada-bg text-status-enviada-text">
                           Principal
                         </span>
                       </div>
                       <span className="font-caption text-caption text-text-secondary">
-                        Cuenta de Ahorros • Carlos Mendoza
+                        {[profile.bankAccount, profile.legalName || profile.name].filter(Boolean).join(' • ')}
                       </span>
                     </div>
                   </div>
@@ -590,21 +609,33 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
         <div className="flex items-center gap-space-md">
           <div className="flex items-center gap-2 text-text-subtlest font-caption text-caption">
             <span className="w-2 h-2 rounded-full bg-status-pagada"></span>
-            <span>Todos los cambios tributarios y bancarios se sincronizan con cifrado AES-256.</span>
+            <span>Los datos del emisor se usan en tus facturas, cuentas de cobro y contratos.</span>
           </div>
         </div>
         <div className="flex items-center gap-space-md">
-          <span className="hidden sm:inline-block font-body-sm text-body-sm text-text-subtlest">
-            Cambios pendientes de validar
+          <span
+            role="status"
+            className={`hidden sm:inline-block font-body-sm text-body-sm ${
+              saveState.status === 'error' ? 'text-status-vencida' : 'text-text-subtlest'
+            }`}
+          >
+            {saveState.status === 'saving'
+              ? 'Guardando...'
+              : saveState.status === 'error'
+              ? `No se pudo guardar: ${saveState.message}`
+              : isDirty
+              ? 'Tienes cambios sin guardar'
+              : saveState.status === 'saved'
+              ? 'Cambios guardados'
+              : ''}
           </span>
 
           {/* Target for: //button[contains(., 'Guardar cambios')] */}
           <button
-            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-canvas-white font-button-label text-body-md font-medium transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-canvas-white font-button-label text-body-md font-medium transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-default"
             type="button"
-            onClick={() => {
-              alert('Esta función todavía no está disponible.');
-            }}
+            disabled={!isDirty || saveState.status === 'saving'}
+            onClick={handleSave}
           >
             <span className="material-symbols-outlined text-[20px]">check</span>
             <span>Guardar cambios</span>

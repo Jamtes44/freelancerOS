@@ -1,4 +1,4 @@
-import { Client, Invoice, CuentaCobro, ServiceItem, Contract } from '../types';
+import { Client, Invoice, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from '../types';
 
 export const INITIAL_CLIENTS: Client[] = [
   {
@@ -347,7 +347,7 @@ export const INITIAL_CONTRACT: Contract = {
   ],
 };
 
-export const INITIAL_FREELANCER_PROFILE = {
+export const INITIAL_FREELANCER_PROFILE: FreelancerProfile = {
   name: 'Carlos Mendoza',
   legalName: 'Carlos Alberto Mendoza Silva',
   docTypeAndNumber: 'C.C. 1.032.456.789 de Bogotá',

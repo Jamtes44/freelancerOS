@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScreenId, Client, Invoice, CuentaCobro, ServiceItem, Contract } from './types';
+import { ScreenId, Client, Invoice, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from './types';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardScreen } from './screens/DashboardScreen';
@@ -20,7 +20,25 @@ import {
   getCuentasCobro,
   getServices,
   getContract,
+  getFreelancerProfile,
 } from './services/supabaseService';
+
+const EMPTY_PROFILE: FreelancerProfile = {
+  name: '',
+  legalName: '',
+  docTypeAndNumber: '',
+  nit: '',
+  regime: '',
+  ciiu: '',
+  address: '',
+  city: '',
+  phone: '',
+  email: '',
+  bankName: '',
+  bankAccount: '',
+  maskedAccount: '',
+  transfiyaPhone: '',
+};
 
 const SCREEN_TITLES: Record<ScreenId, string> = {
   'dashboard': 'Dashboard - FreelanceOS',
@@ -43,6 +61,10 @@ export default function App() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   // Contract generator starts from the template until a contract is stored.
   const [contract, setContract] = useState<Contract>(INITIAL_CONTRACT);
+  const [profile, setProfile] = useState<FreelancerProfile>(EMPTY_PROFILE);
+  const [selectedClientId, setSelectedClientId] = useState<string | undefined>();
+  // Screens mount only after the first load, so forms never start from empty data.
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(!isSupabaseConfigured);
@@ -65,12 +87,13 @@ export default function App() {
       console.log('[APP] Iniciando carga de datos...');
       setLoadError('');
       try {
-        const [c, inv, cc, serv, ctr] = await Promise.all([
+        const [c, inv, cc, serv, ctr, prof] = await Promise.all([
           getClients(),
           getInvoices(),
           getCuentasCobro(),
           getServices(),
           getContract(),
+          getFreelancerProfile(),
         ]);
         console.log('[APP] Datos cargados:', { clients: c?.length, invoices: inv?.length, cuentas: cc?.length, services: serv?.length });
         if (!mounted) return;
@@ -79,6 +102,8 @@ export default function App() {
         setCuentasCobro(cc);
         setServices(serv);
         if (ctr) setContract(ctr);
+        setProfile(prof ?? EMPTY_PROFILE);
+        setDataLoaded(true);
       } catch (e) {
         console.error('[APP] Error cargando datos:', e);
         if (mounted) setLoadError(e instanceof Error ? e.message : String((e as any)?.message ?? e));
@@ -101,6 +126,11 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openClient = (clientId: string) => {
+    setSelectedClientId(clientId);
+    handleNavigate('perfil-cliente');
+  };
+
   if (!authReady) return null;
   if (isSupabaseConfigured && !session) return <LoginScreen />;
 
@@ -112,6 +142,8 @@ export default function App() {
         onNavigate={handleNavigate}
         isMobileOpen={isMobileMenuOpen}
         onCloseMobile={() => setIsMobileMenuOpen(false)}
+        userName={profile.name}
+        userEmail={profile.email || session?.user.email || ''}
       />
 
       {/* Main Container with responsive offset for Sidebar */}
@@ -132,44 +164,75 @@ export default function App() {
               No se pudieron cargar los datos desde Supabase: {loadError}. Lo que ves puede estar incompleto.
             </div>
           )}
-          {currentScreen === 'dashboard' && (
+          {!dataLoaded && !loadError && (
+            <p className="p-space-xl text-body-md text-text-subtlest">Cargando datos...</p>
+          )}
+
+          {dataLoaded && currentScreen === 'dashboard' && (
             <DashboardScreen
               onNavigate={handleNavigate}
+              onOpenClient={openClient}
               invoices={invoices}
               cuentasCobro={cuentasCobro}
+              clients={clients}
             />
           )}
 
-          {currentScreen === 'clientes' && (
+          {dataLoaded && currentScreen === 'clientes' && (
             <ClientesScreen
               onNavigate={handleNavigate}
               clients={clients}
               onClientCreated={(c) => setClients((prev) => [...prev, c])}
+              onOpenClient={openClient}
             />
           )}
 
-          {currentScreen === 'contratos' && (
-            <GeneradorContratoScreen onNavigate={handleNavigate} contract={contract} />
+          {dataLoaded && currentScreen === 'contratos' && (
+            <GeneradorContratoScreen
+              onNavigate={handleNavigate}
+              contract={contract}
+              clients={clients}
+              profile={profile}
+              initialClientId={selectedClientId}
+            />
           )}
 
-          {currentScreen === 'facturas' && (
-            <GeneradorFacturaScreen onNavigate={handleNavigate} />
+          {dataLoaded && currentScreen === 'facturas' && (
+            <GeneradorFacturaScreen
+              onNavigate={handleNavigate}
+              clients={clients}
+              invoices={invoices}
+              profile={profile}
+              initialClientId={selectedClientId}
+            />
           )}
 
-          {currentScreen === 'perfil-cliente' && (
-            <PerfilClienteScreen onNavigate={handleNavigate} client={clients[0]} />
+          {dataLoaded && currentScreen === 'perfil-cliente' && (
+            <PerfilClienteScreen
+              onNavigate={handleNavigate}
+              client={clients.find((c) => c.id === selectedClientId)}
+              invoices={invoices}
+              cuentasCobro={cuentasCobro}
+              contract={contract}
+            />
           )}
 
-          {currentScreen === 'servicios' && (
+          {dataLoaded && currentScreen === 'servicios' && (
             <CatalogoServiciosScreen onNavigate={handleNavigate} services={services} />
           )}
 
-          {currentScreen === 'cuentas-cobro' && (
-            <GeneradorCuentaCobroScreen onNavigate={handleNavigate} />
+          {dataLoaded && currentScreen === 'cuentas-cobro' && (
+            <GeneradorCuentaCobroScreen
+              onNavigate={handleNavigate}
+              clients={clients}
+              cuentasCobro={cuentasCobro}
+              profile={profile}
+              initialClientId={selectedClientId}
+            />
           )}
 
-          {currentScreen === 'configuracion' && (
-            <ConfiguracionScreen onNavigate={handleNavigate} />
+          {dataLoaded && currentScreen === 'configuracion' && (
+            <ConfiguracionScreen onNavigate={handleNavigate} profile={profile} onProfileSaved={setProfile} />
           )}
         </main>
       </div>

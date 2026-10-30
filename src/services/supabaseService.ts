@@ -7,7 +7,7 @@ import {
   INITIAL_CONTRACT,
   INITIAL_FREELANCER_PROFILE,
 } from '../data/mockData';
-import { Client, Invoice, CuentaCobro, ServiceItem, Contract } from '../types';
+import { Client, Invoice, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from '../types';
 
 // Mock data is only used when Supabase is not configured. Real errors are thrown
 // so the UI can show them instead of silently displaying fake data.
@@ -44,7 +44,12 @@ export async function getClients(): Promise<Client[]> {
 
 export async function getInvoices(): Promise<Invoice[]> {
   if (!isSupabaseConfigured) return INITIAL_INVOICES;
-  const { data, error } = await supabase.from('invoices').select('*').order('id');
+  // Newest first; id breaks ties for rows inserted together (e.g. the seed).
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false });
   if (error) throw error;
   return (data ?? []).map((row: any) => ({
     id: row.id,
@@ -130,27 +135,50 @@ export async function getContract(): Promise<Contract | null> {
 }
 
 /** Returns null when the profile row does not exist yet. */
-export async function getFreelancerProfile() {
+export async function getFreelancerProfile(): Promise<FreelancerProfile | null> {
   if (!isSupabaseConfigured) return INITIAL_FREELANCER_PROFILE;
   const { data, error } = await supabase.from('freelancer_profile').select('*').eq('id', 1).maybeSingle();
   if (error) throw error;
   if (!data) return null;
   return {
-    name: data.name,
-    legalName: data.legal_name,
-    docTypeAndNumber: data.doc_type_and_number,
-    nit: data.nit,
-    regime: data.regime,
-    ciiu: data.ciiu,
-    address: data.address,
-    city: data.city,
-    phone: data.phone,
-    email: data.email,
-    bankName: data.bank_name,
-    bankAccount: data.bank_account,
-    maskedAccount: data.masked_account,
-    transfiyaPhone: data.transfiya_phone,
+    name: data.name ?? '',
+    legalName: data.legal_name ?? '',
+    docTypeAndNumber: data.doc_type_and_number ?? '',
+    nit: data.nit ?? '',
+    regime: data.regime ?? '',
+    ciiu: data.ciiu ?? '',
+    address: data.address ?? '',
+    city: data.city ?? '',
+    phone: data.phone ?? '',
+    email: data.email ?? '',
+    bankName: data.bank_name ?? '',
+    bankAccount: data.bank_account ?? '',
+    maskedAccount: data.masked_account ?? '',
+    transfiyaPhone: data.transfiya_phone ?? '',
   };
+}
+
+/** Single-row table: the profile always lives at id = 1. In mock mode nothing is persisted. */
+export async function saveFreelancerProfile(p: FreelancerProfile): Promise<void> {
+  if (!isSupabaseConfigured) return;
+  const { error } = await supabase.from('freelancer_profile').upsert({
+    id: 1,
+    name: p.name,
+    legal_name: p.legalName,
+    doc_type_and_number: p.docTypeAndNumber,
+    nit: p.nit,
+    regime: p.regime,
+    ciiu: p.ciiu,
+    address: p.address,
+    city: p.city,
+    phone: p.phone,
+    email: p.email,
+    bank_name: p.bankName,
+    bank_account: p.bankAccount,
+    masked_account: p.maskedAccount,
+    transfiya_phone: p.transfiyaPhone,
+  });
+  if (error) throw error;
 }
 
 /** In mock mode the client is returned as-is (kept only in memory). */

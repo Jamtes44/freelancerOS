@@ -6,6 +6,8 @@ interface SidebarProps {
   onNavigate: (screen: ScreenId) => void;
   isMobileOpen?: boolean;
   onCloseMobile?: () => void;
+  userName: string;
+  userEmail: string;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -13,6 +15,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
   isMobileOpen = false,
   onCloseMobile,
+  userName,
+  userEmail,
 }) => {
   const navItems = [
     {
@@ -162,10 +166,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div className="flex flex-col min-w-0 flex-1">
             <div className="font-body-sm text-body-sm font-semibold text-text-primary truncate">
-              Carlos Mendoza
+              {userName || 'Completa tu perfil'}
             </div>
             <div className="font-caption text-caption text-text-subtlest truncate">
-              carlos@mendoza.co
+              {userEmail}
             </div>
           </div>
         </div>

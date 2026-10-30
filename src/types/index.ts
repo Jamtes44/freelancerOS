@@ -101,3 +101,20 @@ export interface Contract {
   clauses: ContractClause[];
   status: 'Borrador' | 'En ejecución' | 'Firmado';
 }
+
+export interface FreelancerProfile {
+  name: string;
+  legalName: string;
+  docTypeAndNumber: string;
+  nit: string;
+  regime: string;
+  ciiu: string;
+  address: string;
+  city: string;
+  phone: string;
+  email: string;
+  bankName: string;
+  bankAccount: string;
+  maskedAccount: string;
+  transfiyaPhone: string;
+}

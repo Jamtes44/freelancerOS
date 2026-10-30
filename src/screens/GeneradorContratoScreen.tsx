@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
-import { ScreenId, Contract } from '../types';
+import { ScreenId, Contract, Client, FreelancerProfile } from '../types';
+import { formatCOP } from '../utils/calculations';
 
 interface GeneradorContratoScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
   contract: Contract;
+  clients: Client[];
+  profile: FreelancerProfile;
+  initialClientId?: string;
 }
 
 export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = ({
   onNavigate,
   contract,
+  clients,
+  profile,
+  initialClientId,
 }) => {
-  const [selectedClient, setSelectedClient] = useState('rappi');
+  const [selectedClient, setSelectedClient] = useState(
+    initialClientId ?? (clients.some((c) => c.id === contract.clientId) ? contract.clientId : clients[0]?.id ?? '')
+  );
   const [contractObject, setContractObject] = useState(contract.object);
   const [scope, setScope] = useState(contract.scope);
   const [duration, setDuration] = useState(contract.duration);
-  const [contractValue, setContractValue] = useState('$18.000.000 COP');
+  const [contractValue, setContractValue] = useState(formatCOP(contract.totalValue, true));
   const [paymentSchedule, setPaymentSchedule] = useState(contract.paymentSchedule);
   const [clauses, setClauses] = useState(contract.clauses);
-  const [showToast, setShowToast] = useState(false);
 
   const toggleClause = (id: string) => {
     setClauses((prev) =>
@@ -31,23 +39,10 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
     );
   };
 
-  const clientData = {
-    rappi: {
-      name: 'RAPPI S.A.S.',
-      nit: '900.874.123-4',
-      radicado: 'FOS-2025-089-RAP',
-    },
-    bancolombia: {
-      name: 'BANCOLOMBIA S.A.',
-      nit: '890.903.938-8',
-      radicado: 'FOS-2025-090-BAN',
-    },
-    mercado: {
-      name: 'MERCADOLIBRE COLOMBIA LTDA.',
-      nit: '830.067.542-1',
-      radicado: 'FOS-2025-091-MELI',
-    },
-  }[selectedClient as 'rappi' | 'bancolombia' | 'mercado'];
+  const client = clients.find((c) => c.id === selectedClient);
+  const clientName = (client?.legalName || client?.name || 'CLIENTE SIN SELECCIONAR').toUpperCase();
+  const clientNit = client?.nit ?? '—';
+  const contractorName = profile.legalName || profile.name || 'COMPLETA TU PERFIL EN CONFIGURACIÓN';
 
   return (
     <div className="flex flex-col w-full">
@@ -129,9 +124,12 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                       value={selectedClient}
                       onChange={(e) => setSelectedClient(e.target.value)}
                     >
-                      <option value="rappi">Rappi SAS — NIT 900.874.123-4 (Bogotá D.C.)</option>
-                      <option value="bancolombia">Bancolombia S.A. — NIT 890.903.938-8</option>
-                      <option value="mercado">MercadoLibre Colombia LTDA — NIT 830.067.542-1</option>
+                      {clients.length === 0 && <option value="">Primero registra un cliente</option>}
+                      {clients.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name} — NIT {c.nit}
+                        </option>
+                      ))}
                     </select>
                     <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-text-subtlest text-[20px]">
                       expand_more
@@ -303,7 +301,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 </h3>
                 <div className="mt-2 text-caption font-caption text-text-secondary bg-surface-container-low px-3 py-1 rounded-[10000px] border border-border-subtle">
                   Radicado digital:{' '}
-                  <span className="font-semibold text-text-primary">{clientData.radicado}</span>
+                  <span className="font-semibold text-text-primary">{contract.number}</span>
                 </div>
               </div>
 
@@ -311,15 +309,15 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
               <div className="flex flex-col gap-6 font-body-sm text-body-sm text-text-secondary leading-relaxed pt-6">
                 <p className="text-justify text-text-primary">
                   Entre los suscritos a saber: de una parte,{' '}
-                  <strong className="text-text-primary font-semibold">CARLOS MENDOZA</strong>, mayor
-                  de edad, identificado con Cédula de Ciudadanía No.{' '}
-                  <strong className="text-text-primary font-semibold">1.032.456.789</strong> de Bogotá
-                  D.C., quien para efectos del presente contrato se denominará{' '}
+                  <strong className="text-text-primary font-semibold uppercase">{contractorName}</strong>, mayor
+                  de edad, identificado con{' '}
+                  <strong className="text-text-primary font-semibold">{profile.docTypeAndNumber || '—'}</strong>,
+                  quien para efectos del presente contrato se denominará{' '}
                   <strong className="text-text-primary font-semibold">EL CONTRATISTA</strong>; y de la
                   otra parte,{' '}
-                  <strong className="text-text-primary font-semibold">{clientData.name}</strong>,
+                  <strong className="text-text-primary font-semibold">{clientName}</strong>,
                   sociedad legalmente constituida con NIT{' '}
-                  <strong className="text-text-primary font-semibold">{clientData.nit}</strong>,
+                  <strong className="text-text-primary font-semibold">{clientNit}</strong>,
                   representada legalmente por quien suscribe este instrumento, en adelante denominado{' '}
                   <strong className="text-text-primary font-semibold">EL CONTRATANTE</strong>, se ha
                   convenido celebrar el presente contrato de prestación de servicios, el cual se
@@ -367,24 +365,13 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                   {/* Contractor Signature */}
                   <div className="flex flex-col items-center text-center p-4 bg-surface-container-low rounded-xl border border-border-subtle">
                     <div className="w-full flex flex-col items-center justify-center h-20">
-                      <span className="font-headline-sm italic text-primary font-serif select-none">
-                        Carlos Mendoza C.
-                      </span>
-                      <div className="w-full h-[1px] bg-border-strong mt-2"></div>
+                      <div className="w-full h-[1px] bg-border-strong mt-auto"></div>
                     </div>
                     <span className="font-semibold text-text-primary text-body-sm mt-2">
                       EL CONTRATISTA
                     </span>
-                    <span className="text-caption font-caption text-text-subtlest">
-                      Carlos Mendoza
-                    </span>
-                    <span className="text-caption font-caption text-text-subtlest">
-                      C.C. 1.032.456.789 de Bogotá
-                    </span>
-                    <div className="mt-2 flex items-center gap-1 text-[10px] text-status-pagada font-medium">
-                      <span className="material-symbols-outlined text-[14px]">verified</span>
-                      <span>Certificado digital activo</span>
-                    </div>
+                    <span className="text-caption font-caption text-text-subtlest">{profile.name}</span>
+                    <span className="text-caption font-caption text-text-subtlest">{profile.docTypeAndNumber}</span>
                   </div>
 
                   {/* Contracting Party Signature */}
@@ -398,16 +385,8 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                     <span className="font-semibold text-text-primary text-body-sm mt-2">
                       EL CONTRATANTE
                     </span>
-                    <span className="text-caption font-caption text-text-subtlest">
-                      {clientData.name}
-                    </span>
-                    <span className="text-caption font-caption text-text-subtlest">
-                      NIT {clientData.nit}
-                    </span>
-                    <div className="mt-2 flex items-center gap-1 text-[10px] text-text-subtlest font-medium">
-                      <span className="material-symbols-outlined text-[14px]">schedule</span>
-                      <span>Invitación por emitir</span>
-                    </div>
+                    <span className="text-caption font-caption text-text-subtlest">{clientName}</span>
+                    <span className="text-caption font-caption text-text-subtlest">NIT {clientNit}</span>
                   </div>
                 </div>
               </div>
@@ -415,12 +394,6 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
               {/* Paper Footer */}
               <div className="pt-6 mt-6 flex items-center justify-between text-caption font-caption text-text-subtlest border-t border-border-subtle">
                 <span>Página 1 de 1 • FreelanceOS Legal Document Hub</span>
-                <span className="flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px] text-primary">
-                    security
-                  </span>
-                  Cifrado SHA-256
-                </span>
               </div>
             </div>
 
@@ -445,8 +418,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 id="btn-emitir-contrato"
                 type="button"
                 onClick={() => {
-                  setShowToast(true);
-                  setTimeout(() => setShowToast(false), 4000);
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 <span className="material-symbols-outlined text-[22px]">draw</span>
@@ -459,22 +431,6 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
         </div>
       </div>
 
-      {/* Notification Toast */}
-      {showToast && (
-        <div className="fixed bottom-6 right-6 z-50 transition-all duration-300">
-          <div className="bg-inverse-surface text-inverse-on-surface px-5 py-3 rounded-xl shadow-xl flex items-center gap-3">
-            <span className="material-symbols-outlined text-status-pagada text-[22px]">
-              check_circle
-            </span>
-            <div className="flex flex-col">
-              <span className="text-body-sm font-semibold">Contrato emitido con éxito</span>
-              <span className="text-caption text-surface-container-highest">
-                Notificación enviada a {clientData.name} para firma biométrica.
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

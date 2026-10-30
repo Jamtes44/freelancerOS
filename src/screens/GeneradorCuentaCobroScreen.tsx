@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
-import { ScreenId } from '../types';
-import { formatCOP, numeroALetrasCOP } from '../utils/calculations';
+import { ScreenId, Client, CuentaCobro, FreelancerProfile } from '../types';
+import { formatCOP, numeroALetrasCOP, nextDocumentNumber } from '../utils/calculations';
 
 interface GeneradorCuentaCobroScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
+  clients: Client[];
+  cuentasCobro: CuentaCobro[];
+  profile: FreelancerProfile;
+  initialClientId?: string;
 }
 
 export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProps> = ({
   onNavigate,
+  clients,
+  cuentasCobro,
+  profile,
+  initialClientId,
 }) => {
-  const [selectedClient, setSelectedClient] = useState('Bancolombia S.A.');
-  const [consecutivo, setConsecutivo] = useState('CC-2025-018');
+  const [selectedClient, setSelectedClient] = useState(initialClientId ?? clients[0]?.id ?? '');
+  const [consecutivo, setConsecutivo] = useState(() =>
+    nextDocumentNumber('CC', cuentasCobro.map((c) => c.number))
+  );
   const [contratoRef, setContratoRef] = useState('FOS-2025-089');
   const [emissionDate, setEmissionDate] = useState('2025-05-28');
   const [dueDate, setDueDate] = useState('2025-06-05');
@@ -20,20 +30,16 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
   );
   const [isNoIva, setIsNoIva] = useState(true);
   const [isPilaChecked, setIsPilaChecked] = useState(true);
-  const [bancoInfo, setBancoInfo] = useState(
-    'Bancolombia — Cuenta de Ahorros No. 245-098765-12 a nombre de Carlos Mendoza (C.C. 1.032.456.789)'
+  const [bancoInfo, setBancoInfo] = useState(() =>
+    [profile.bankName, profile.bankAccount, profile.legalName || profile.name ? `a nombre de ${profile.legalName || profile.name}` : '']
+      .filter(Boolean)
+      .join(' — ')
   );
 
   const numericMonto = parseInt(monto.replace(/\D/g, ''), 10) || 0;
   const montoLetras = numeroALetrasCOP(numericMonto);
 
-  const clientNitMap: Record<string, string> = {
-    'Bancolombia S.A.': '890.903.938-8',
-    'Rappi Colombia S.A.S.': '900.843.820-1',
-    'Habi Tech S.A.S.': '901.328.712-4',
-  };
-
-  const clientNit = clientNitMap[selectedClient] || '890.903.938-8';
+  const client = clients.find((c) => c.id === selectedClient);
 
   const formatFechaLegible = (dateStr: string) => {
     if (!dateStr) return '';
@@ -131,13 +137,12 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                       value={selectedClient}
                       onChange={(e) => setSelectedClient(e.target.value)}
                     >
-                      <option value="Bancolombia S.A.">
-                        Bancolombia S.A. — NIT: 890.903.938-8
-                      </option>
-                      <option value="Rappi Colombia S.A.S.">
-                        Rappi Colombia S.A.S. — NIT: 900.843.820-1
-                      </option>
-                      <option value="Habi Tech S.A.S.">Habi Tech S.A.S. — NIT: 901.328.712-4</option>
+                      {clients.length === 0 && <option value="">Primero registra un cliente</option>}
+                      {clients.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name} — NIT: {c.nit}
+                        </option>
+                      ))}
                     </select>
                     <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-subtlest pointer-events-none text-[20px]">
                       expand_more
@@ -447,21 +452,19 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                       Pagador / Deudor:
                     </span>
                     <p className="text-body-md font-body-md font-semibold text-text-primary">
-                      {selectedClient} — NIT: {clientNit}
+                      {client ? `${client.legalName || client.name} — NIT: ${client.nit}` : 'Sin cliente seleccionado'}
                     </p>
                   </div>
                   <div className="bg-surface-container-low p-3.5 rounded-[3px] border border-border-subtle">
                     <span className="font-caption text-caption text-primary uppercase tracking-wide block font-bold mb-1">
                       Debe A:
                     </span>
-                    <p className="font-body-md text-body-md font-bold text-text-primary">
-                      CARLOS ALBERTO MENDOZA SILVA
+                    <p className="font-body-md text-body-md font-bold text-text-primary uppercase">
+                      {profile.legalName || profile.name || 'Completa tu perfil en Configuración'}
                     </p>
-                    <p className="font-body-sm text-body-sm text-text-secondary">
-                      C.C. 1.032.456.789 de Bogotá D.C.
-                    </p>
+                    <p className="font-body-sm text-body-sm text-text-secondary">{profile.docTypeAndNumber}</p>
                     <p className="font-caption text-caption text-text-subtlest">
-                      Tel: +57 (310) 845-9201 • carlos@mendoza.co
+                      {[profile.phone && `Tel: ${profile.phone}`, profile.email].filter(Boolean).join(' • ')}
                     </p>
                   </div>
                   <div>
@@ -538,16 +541,8 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                       <path d="M45 28 L 140 28" opacity="0.6" strokeDasharray="2 3"></path>
                     </svg>
                   </div>
-                  <span className="font-body-sm text-body-sm font-bold text-text-primary">
-                    Carlos Mendoza
-                  </span>
-                  <span className="font-caption text-caption text-text-subtlest">
-                    C.C. 1.032.456.789
-                  </span>
-                  <span className="font-caption text-[10px] text-status-pagada flex items-center gap-1 mt-0.5">
-                    <span className="material-symbols-outlined text-[12px]">fingerprint</span> Firma
-                    Digital Certificada FreelanceOS
-                  </span>
+                  <span className="font-body-sm text-body-sm font-bold text-text-primary">{profile.name}</span>
+                  <span className="font-caption text-caption text-text-subtlest">{profile.docTypeAndNumber}</span>
                 </div>
                 <div className="flex flex-col items-end">
                   <div className="w-16 h-16 border border-border-subtle p-1 bg-surface-container-low rounded-[3px] flex items-center justify-center">

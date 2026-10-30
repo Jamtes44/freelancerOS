@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
-import { ScreenId, InvoiceItem } from '../types';
-import { formatCOP, calculateTaxSummary } from '../utils/calculations';
+import { ScreenId, InvoiceItem, Client, Invoice, FreelancerProfile } from '../types';
+import { formatCOP, calculateTaxSummary, nextDocumentNumber } from '../utils/calculations';
 
 interface GeneradorFacturaScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
+  clients: Client[];
+  invoices: Invoice[];
+  profile: FreelancerProfile;
+  initialClientId?: string;
 }
 
-export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ onNavigate }) => {
-  const [selectedClient, setSelectedClient] = useState('nu');
+export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
+  onNavigate,
+  clients,
+  invoices,
+  profile,
+  initialClientId,
+}) => {
+  const [selectedClient, setSelectedClient] = useState(initialClientId ?? clients[0]?.id ?? '');
   const [emissionDate, setEmissionDate] = useState('2025-05-14');
   const [dueDate, setDueDate] = useState('2025-06-13');
-  const [paymentMethod, setPaymentMethod] = useState('Transferencia Bancolombia Ahorros');
+  const [paymentMethod, setPaymentMethod] = useState('Transferencia bancaria');
 
   const [items, setItems] = useState<InvoiceItem[]>([
     {
@@ -35,32 +45,9 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
     'Favor consignar a la cuenta de ahorros informada en el comprobante. Certificado tributario de retenciones a aplicar sobre el valor sin IVA antes de finalizar el periodo bimestral.'
   );
 
-  const clientInfo = {
-    nu: {
-      name: 'Nu Colombia S.A.',
-      nit: '901.345.892-1',
-      address: 'Cra. 11 #79-52, Of. 801, Bogotá D.C., Colombia',
-      type: 'Persona Jurídica',
-    },
-    rappi: {
-      name: 'Rappi Colombia S.A.S.',
-      nit: '900.843.501-4',
-      address: 'Cl. 93 # 19-55, Bogotá D.C., Colombia',
-      type: 'Persona Jurídica',
-    },
-    bancolombia: {
-      name: 'Grupo Bancolombia',
-      nit: '890.903.938-8',
-      address: 'Cra. 48 # 26-85, Medellín, Colombia',
-      type: 'Gran Contribuyente',
-    },
-    mercadolibre: {
-      name: 'MercadoLibre Colombia LTDA',
-      nit: '830.077.248-1',
-      address: 'Cra 15 # 100-21, Bogotá D.C., Colombia',
-      type: 'Persona Jurídica',
-    },
-  }[selectedClient as 'nu' | 'rappi' | 'bancolombia' | 'mercadolibre'];
+  const clientInfo = clients.find((c) => c.id === selectedClient);
+  const invoiceNumber = nextDocumentNumber('FAC', invoices.map((i) => i.number));
+  const bankLine = [profile.bankName, profile.bankAccount].filter(Boolean).join(' — ');
 
   const taxSummary = calculateTaxSummary(items, 0.04);
 
@@ -150,12 +137,12 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
                     value={selectedClient}
                     onChange={(e) => setSelectedClient(e.target.value)}
                   >
-                    <option value="nu">Nu Colombia S.A. — NIT: 901.345.892-1</option>
-                    <option value="rappi">Rappi Colombia S.A.S. — NIT: 900.843.501-4</option>
-                    <option value="bancolombia">Grupo Bancolombia — NIT: 890.903.938-8</option>
-                    <option value="mercadolibre">
-                      MercadoLibre Colombia LTDA — NIT: 830.077.248-1
-                    </option>
+                    {clients.length === 0 && <option value="">Primero registra un cliente</option>}
+                    {clients.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} — NIT: {c.nit}
+                      </option>
+                    ))}
                   </select>
                   <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-subtlest pointer-events-none text-[20px]">
                     expand_more
@@ -225,11 +212,8 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
                     >
-                      <option value="Transferencia Bancolombia Ahorros">
-                        Transferencia Bancolombia Ahorros
-                      </option>
-                      <option value="Cuenta Corriente Davivienda">
-                        Cuenta Corriente Davivienda
+                      <option value="Transferencia bancaria">
+                        Transferencia {profile.bankName || 'bancaria'}
                       </option>
                       <option value="Transfiya / PSE">Transfiya / PSE</option>
                     </select>
@@ -412,13 +396,13 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
                       </span>
                     </div>
                     <div className="font-caption text-caption text-text-secondary leading-relaxed">
-                      <strong className="text-text-primary">Carlos Mendoza</strong>
+                      <strong className="text-text-primary">{profile.name || 'Completa tu perfil en Configuración'}</strong>
                       <br />
-                      NIT: 1.032.456.789-0
+                      NIT: {profile.nit || '—'}
                       <br />
-                      Régimen Simple de Tributación
+                      {profile.regime}
                       <br />
-                      carlos@mendoza.co • (+57) 314 890 2311
+                      {[profile.email, profile.phone].filter(Boolean).join(' • ')}
                     </div>
                   </div>
 
@@ -428,7 +412,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
                       Factura Electrónica
                     </span>
                     <span className="font-headline-sm text-body-lg font-bold text-primary-container">
-                      FAC-2025-043
+                      {invoiceNumber}
                     </span>
                     <div className="mt-2 text-right font-caption text-caption text-text-secondary">
                       <div>
@@ -451,17 +435,19 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className="font-body-sm text-body-sm font-bold text-text-primary">
-                        {clientInfo.name}
+                        {clientInfo?.legalName || clientInfo?.name || 'Sin cliente seleccionado'}
                       </h4>
                       <p className="font-caption text-caption text-text-secondary leading-snug">
-                        NIT: {clientInfo.nit}
+                        NIT: {clientInfo?.nit ?? '—'}
                         <br />
-                        {clientInfo.address}
+                        {[clientInfo?.address, clientInfo?.city].filter(Boolean).join(', ')}
                       </p>
                     </div>
-                    <span className="px-2 py-0.5 rounded font-caption text-[10px] font-semibold uppercase tracking-wide bg-canvas-white text-text-secondary border border-border-subtle">
-                      {clientInfo.type}
-                    </span>
+                    {clientInfo?.taxRegime && (
+                      <span className="px-2 py-0.5 rounded font-caption text-[10px] font-semibold uppercase tracking-wide bg-canvas-white text-text-secondary border border-border-subtle">
+                        {clientInfo.taxRegime}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -553,7 +539,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
                           Consignación Bancaria
                         </span>
                         <span className="font-body-sm text-body-sm font-semibold text-text-primary">
-                          Bancolombia Ahorros: 245-098765-12
+                          {bankLine || 'Agrega tu cuenta en Configuración'}
                         </span>
                       </div>
                     </div>

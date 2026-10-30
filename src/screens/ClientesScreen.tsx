@@ -7,9 +7,10 @@ interface ClientesScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
   clients: Client[];
   onClientCreated: (client: Client) => void;
+  onOpenClient: (clientId: string) => void;
 }
 
-export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clients, onClientCreated }) => {
+export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clients, onClientCreated, onOpenClient }) => {
   const [filter, setFilter] = useState<'all' | 'active' | 'withBalance' | 'inactive'>('all');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -294,7 +295,6 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
               </thead>
               <tbody className="divide-y divide-border-subtle">
                 {filteredClients.slice(0, 5).map((client) => {
-                  const isNu = client.name.includes('Nu Colombia');
                   return (
                     <tr
                       key={client.id}
@@ -316,7 +316,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                             <span
                               className="font-body-sm text-body-sm font-semibold text-text-primary hover:text-primary-container cursor-pointer truncate"
                               onClick={() => {
-                                if (isNu) onNavigate('perfil-cliente');
+                                onOpenClient(client.id);
                               }}
                             >
                               {client.name}
@@ -388,9 +388,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                             className="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors cursor-pointer"
                             title="Ver perfil"
                             type="button"
-                            onClick={() => {
-                              onNavigate('perfil-cliente');
-                            }}
+                            onClick={() => onOpenClient(client.id)}
                           >
                             <span className="material-symbols-outlined text-[18px]">
                               visibility
