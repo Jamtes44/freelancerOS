@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScreenId, Client, Invoice, CuentaCobro, Contract } from '../types';
 import { formatCOP, OPEN_STATUSES, formatFecha } from '../utils/calculations';
+import { EditClientModal, confirmAndDeleteClient } from '../components/ClientActions';
 
 interface PerfilClienteScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
@@ -8,6 +9,9 @@ interface PerfilClienteScreenProps {
   invoices: Invoice[];
   cuentasCobro: CuentaCobro[];
   contract: Contract;
+  onClientUpdated: (client: Client) => void;
+  onClientDeleted: (clientId: string) => void;
+  onOpenDocuments: (clientId: string) => void;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -40,8 +44,13 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
   invoices,
   cuentasCobro,
   contract,
+  onClientUpdated,
+  onClientDeleted,
+  onOpenDocuments,
 }) => {
   const [docSearch, setDocSearch] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   if (!client) {
     return (
@@ -112,8 +121,27 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
 
   const tabClass = 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low';
 
+  const handleDelete = async () => {
+    setDeleteError('');
+    try {
+      if (await confirmAndDeleteClient(client, documents.length)) onClientDeleted(client.id);
+    } catch (e) {
+      setDeleteError(`No se pudo eliminar: ${(e as any)?.message ?? e}`);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full">
+      {editing && (
+        <EditClientModal
+          client={client}
+          onClose={() => setEditing(false)}
+          onSaved={(c) => {
+            setEditing(false);
+            onClientUpdated(c);
+          }}
+        />
+      )}
       <div className="w-full max-w-[1200px] mx-auto px-space-md md:px-space-xl py-space-xl space-y-space-xl">
         {/* Top Action Breadcrumb Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
@@ -161,8 +189,29 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
               <span className="material-symbols-outlined text-[18px] text-text-secondary">payments</span>
               <span>Nueva cuenta de cobro</span>
             </button>
+            <button
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              type="button"
+              onClick={() => setEditing(true)}
+            >
+              <span className="material-symbols-outlined text-[18px] text-text-secondary">edit</span>
+              <span>Editar</span>
+            </button>
+            <button
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-[#ffbdad] text-[#ae2e24] font-button-label text-button-label hover:bg-[#ffebe6] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              type="button"
+              onClick={handleDelete}
+            >
+              <span className="material-symbols-outlined text-[18px]">delete</span>
+              <span>Eliminar</span>
+            </button>
           </div>
         </div>
+        {deleteError && (
+          <p role="alert" className="text-body-sm text-status-vencida">
+            {deleteError}
+          </p>
+        )}
 
         {/* Header / Client Identity Hero Card */}
         <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col lg:flex-row lg:items-center justify-between gap-space-xl">
@@ -254,15 +303,15 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
             Servicios
           </button>
           {[
-            { label: 'Contratos', count: clientContracts.length, screen: 'contratos' as ScreenId },
-            { label: 'Facturas', count: clientInvoices.length, screen: 'facturas' as ScreenId },
-            { label: 'Cuentas de cobro', count: clientCuentas.length, screen: 'cuentas-cobro' as ScreenId },
+            { label: 'Contratos', count: clientContracts.length, onClick: () => onNavigate('contratos') },
+            { label: 'Facturas', count: clientInvoices.length, onClick: () => onOpenDocuments(client.id) },
+            { label: 'Cuentas de cobro', count: clientCuentas.length, onClick: () => onOpenDocuments(client.id) },
           ].map((tab) => (
             <button
               key={tab.label}
               className={`h-9 px-4 rounded-[10000px] font-badge-label text-badge-label flex items-center gap-1.5 whitespace-nowrap cursor-pointer transition-colors ${tabClass}`}
               type="button"
-              onClick={() => onNavigate(tab.screen)}
+              onClick={tab.onClick}
             >
               <span>{tab.label}</span>
               <span className="px-1.5 py-0.2 rounded-full bg-surface-container text-text-secondary text-[11px]">{tab.count}</span>
@@ -464,12 +513,8 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
                       <button
                         className="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-text-secondary hover:text-text-primary inline-flex cursor-pointer"
                         type="button"
-                        title="Abrir módulo"
-                        onClick={() => {
-                          if (doc.type === 'CC') onNavigate('cuentas-cobro');
-                          else if (doc.type === 'FE') onNavigate('facturas');
-                          else onNavigate('contratos');
-                        }}
+                        title={doc.type === 'CTR' ? 'Abrir contrato' : 'Ver en Documentos'}
+                        onClick={() => (doc.type === 'CTR' ? onNavigate('contratos') : onOpenDocuments(client.id))}
                       >
                         <span className="material-symbols-outlined text-[18px]">visibility</span>
                       </button>

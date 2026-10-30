@@ -1,6 +1,7 @@
 export type ScreenId =
   | 'dashboard'
   | 'clientes'
+  | 'documentos'
   | 'servicios'
   | 'facturas'
   | 'cuentas-cobro'

@@ -5,6 +5,7 @@ import { formatCOP, OPEN_STATUSES, parseFecha, formatFecha } from '../utils/calc
 interface DashboardScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
   onOpenClient: (clientId: string) => void;
+  onOpenDocuments: (clientId?: string) => void;
   invoices: Invoice[];
   cuentasCobro: CuentaCobro[];
   clients: Client[];
@@ -78,6 +79,7 @@ const Cop: React.FC<{ amount: number }> = ({ amount }) => (
 export const DashboardScreen: React.FC<DashboardScreenProps> = ({
   onNavigate,
   onOpenClient,
+  onOpenDocuments,
   invoices,
   cuentasCobro,
   clients,
@@ -156,7 +158,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               <button
                 className="w-full md:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-[10000px] bg-white text-text-primary font-button-label text-button-label hover:bg-[#f4f5f7] transition-colors focus:outline-none cursor-pointer"
                 type="button"
-                onClick={() => onNavigate('cuentas-cobro')}
+                onClick={() => onNavigate('documentos')}
               >
                 <span>Ver pendientes</span>
                 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -219,10 +221,10 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               </div>
               <a
                 className="font-button-label text-button-label text-primary-container hover:text-primary-hover flex items-center gap-1 cursor-pointer"
-                href="#facturas"
+                href="#documentos"
                 onClick={(e) => {
                   e.preventDefault();
-                  onNavigate('facturas');
+                  onNavigate('documentos');
                 }}
               >
                 <span>Ver todas</span>
@@ -349,7 +351,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                         className="h-9 px-4 rounded-[10000px] bg-white text-text-primary font-button-label text-body-sm hover:bg-[#f4f5f7] transition-colors cursor-pointer w-full sm:w-auto"
                         style={{ outline: '1px solid #b7b9be' }}
                         type="button"
-                        onClick={() => onNavigate('cuentas-cobro')}
+                        onClick={() => onOpenDocuments(cc.clientId || undefined)}
                       >
                         Cobrar cuenta
                       </button>

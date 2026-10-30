@@ -236,6 +236,18 @@ export async function createCuentaCobro(cc: CuentaCobro): Promise<CuentaCobro> {
   return cc;
 }
 
+/** Changes the stored status of an invoice or cuenta de cobro. In mock mode nothing is persisted. */
+export async function updateDocumentStatus(
+  kind: 'invoice' | 'cuenta',
+  id: string,
+  status: Invoice['status'] | CuentaCobro['status']
+): Promise<void> {
+  if (!isSupabaseConfigured) return;
+  const table = kind === 'invoice' ? 'invoices' : 'cuentas_cobro';
+  const { error } = await supabase.from(table).update({ status }).eq('id', id);
+  if (error) throw error;
+}
+
 /** In mock mode the client is returned as-is (kept only in memory). */
 export async function createClient(client: Client): Promise<Client> {
   if (!isSupabaseConfigured) return client;
@@ -266,7 +278,8 @@ export async function createClient(client: Client): Promise<Client> {
   return toClient(data);
 }
 
-export async function updateClient(id: string, client: Partial<Client>) {
+/** Returns the saved client; in mock mode (nothing persisted) returns null. */
+export async function updateClient(id: string, client: Partial<Client>): Promise<Client | null> {
   if (!isSupabaseConfigured) return null;
   const payload: any = {
     name: client.name,
@@ -292,7 +305,7 @@ export async function updateClient(id: string, client: Partial<Client>) {
   Object.keys(payload).forEach((k) => payload[k] === undefined && delete payload[k]);
   const { data, error } = await supabase.from('clients').update(payload).eq('id', id).select().single();
   if (error) throw error;
-  return data;
+  return toClient(data);
 }
 
 export async function deleteClient(id: string) {

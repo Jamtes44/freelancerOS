@@ -32,6 +32,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: 'group',
     },
     {
+      id: 'documentos' as ScreenId,
+      path: 'documentos',
+      label: 'Documentos',
+      icon: 'folder_open',
+    },
+    {
       id: 'servicios' as ScreenId,
       path: 'servicios',
       label: 'Servicios',

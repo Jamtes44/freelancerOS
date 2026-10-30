@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { ClientesScreen } from './screens/ClientesScreen';
+import { DocumentosScreen } from './screens/DocumentosScreen';
 import { GeneradorContratoScreen } from './screens/GeneradorContratoScreen';
 import { GeneradorFacturaScreen } from './screens/GeneradorFacturaScreen';
 import { PerfilClienteScreen } from './screens/PerfilClienteScreen';
@@ -44,6 +45,7 @@ const EMPTY_PROFILE: FreelancerProfile = {
 const SCREEN_TITLES: Record<ScreenId, string> = {
   'dashboard': 'Dashboard - FreelanceOS',
   'clientes': 'Clientes - FreelanceOS',
+  'documentos': 'Documentos - FreelanceOS',
   'contratos': 'Generador de Contrato - FreelanceOS',
   'facturas': 'Generador de Factura - FreelanceOS',
   'perfil-cliente': 'Perfil de Cliente - FreelanceOS',
@@ -64,6 +66,7 @@ export default function App() {
   const [contract, setContract] = useState<Contract>(INITIAL_CONTRACT);
   const [profile, setProfile] = useState<FreelancerProfile>(EMPTY_PROFILE);
   const [selectedClientId, setSelectedClientId] = useState<string | undefined>();
+  const [documentsClientFilter, setDocumentsClientFilter] = useState<string | undefined>();
   // Screens mount only after the first load, so forms never start from empty data.
   const [dataLoaded, setDataLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -118,6 +121,7 @@ export default function App() {
   }, [currentScreen]);
 
   const handleNavigate = (screen: ScreenId) => {
+    setDocumentsClientFilter(undefined); // only openDocuments() sets a client filter
     setCurrentScreen(screen);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -126,6 +130,30 @@ export default function App() {
   const openClient = (clientId: string) => {
     setSelectedClientId(clientId);
     handleNavigate('perfil-cliente');
+  };
+
+  const openDocuments = (clientId?: string) => {
+    handleNavigate('documentos');
+    setDocumentsClientFilter(clientId);
+  };
+
+  const handleStatusChanged = (kind: 'invoice' | 'cuenta', id: string, status: string) => {
+    const update = <T extends { id: string; status: string; dueDate: string }>(d: T): T =>
+      d.id === id ? withOverdueStatus({ ...d, status }) : d;
+    if (kind === 'invoice') setInvoices((prev) => prev.map(update));
+    else setCuentasCobro((prev) => prev.map(update));
+  };
+
+  const handleClientUpdated = (c: Client) => setClients((prev) => prev.map((p) => (p.id === c.id ? c : p)));
+
+  const handleClientDeleted = (id: string) => {
+    // The database keeps the documents with client_id = null; mirror that here.
+    const unlink = <T extends { clientId: string }>(d: T): T => (d.clientId === id ? { ...d, clientId: '' } : d);
+    setInvoices((prev) => prev.map(unlink));
+    setCuentasCobro((prev) => prev.map(unlink));
+    setClients((prev) => prev.filter((p) => p.id !== id));
+    if (selectedClientId === id) setSelectedClientId(undefined);
+    handleNavigate('clientes');
   };
 
   const clientsWithTotals = withDocumentTotals(clients, [...invoices, ...cuentasCobro]);
@@ -171,9 +199,23 @@ export default function App() {
             <DashboardScreen
               onNavigate={handleNavigate}
               onOpenClient={openClient}
+              onOpenDocuments={openDocuments}
               invoices={invoices}
               cuentasCobro={cuentasCobro}
               clients={clientsWithTotals}
+            />
+          )}
+
+          {dataLoaded && currentScreen === 'documentos' && (
+            <DocumentosScreen
+              onNavigate={handleNavigate}
+              onOpenClient={openClient}
+              invoices={invoices}
+              cuentasCobro={cuentasCobro}
+              clients={clientsWithTotals}
+              clientFilter={documentsClientFilter}
+              onClearClientFilter={() => setDocumentsClientFilter(undefined)}
+              onStatusChanged={handleStatusChanged}
             />
           )}
 
@@ -183,6 +225,12 @@ export default function App() {
               clients={clientsWithTotals}
               onClientCreated={(c) => setClients((prev) => [...prev, c])}
               onOpenClient={openClient}
+              onCreateInvoice={(id) => {
+                setSelectedClientId(id);
+                handleNavigate('facturas');
+              }}
+              onClientUpdated={handleClientUpdated}
+              onClientDeleted={handleClientDeleted}
             />
           )}
 
@@ -217,6 +265,9 @@ export default function App() {
               invoices={invoices}
               cuentasCobro={cuentasCobro}
               contract={contract}
+              onClientUpdated={handleClientUpdated}
+              onClientDeleted={handleClientDeleted}
+              onOpenDocuments={openDocuments}
             />
           )}
 

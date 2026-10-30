@@ -31,7 +31,6 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
     }
   };
   const [activeTab, setActiveTab] = useState<'emisor' | 'banco' | 'numeracion' | 'plantillas' | 'seguridad'>('emisor');
-  const [transfiyaActive, setTransfiyaActive] = useState(true);
 
   return (
     <div className="flex flex-col w-full pb-32">
@@ -271,93 +270,51 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
                 </div>
               </div>
 
-              {/* Cuenta Principal */}
-              <div className="p-space-md rounded-[12px] bg-surface-container-low border border-border-subtle flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-canvas-white border border-border-subtle flex items-center justify-center font-semibold text-text-primary text-[11px] tracking-tight shadow-sm">
-                      BAN
-                    </div>
-                    <div>
-                      <div className="font-body-sm text-body-sm font-semibold text-text-primary flex items-center gap-2">
-                        {profile.bankName || 'Sin banco registrado'}
-                        <span className="px-2 py-0.5 rounded-[10000px] text-[10px] font-badge-label uppercase tracking-wide bg-status-enviada-bg text-status-enviada-text">
-                          Principal
-                        </span>
-                      </div>
-                      <span className="font-caption text-caption text-text-secondary">
-                        {[profile.bankAccount, profile.legalName || profile.name].filter(Boolean).join(' • ')}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-status-pagada text-[22px]">
-                    verified
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-border-subtle">
-                  <div>
-                    <span className="font-caption text-caption text-text-subtlest uppercase">
-                      Número de Cuenta
-                    </span>
-                    <p className="font-body-md text-body-md font-semibold text-text-primary tracking-wider">
-                      {profile.maskedAccount}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="font-caption text-caption text-text-subtlest uppercase">
-                      Certificado Bancario
-                    </span>
-                    <p className="font-body-sm text-body-sm text-status-enviada-text font-medium flex items-center gap-1 cursor-pointer hover:underline">
-                      <span className="material-symbols-outlined text-[16px]">attach_file</span>
-                      Vigente (Exp. Ene 2025)
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Transfiya / Bre-B */}
-              <div className="p-space-md rounded-[12px] bg-canvas-white border border-border-subtle flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">bolt</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                      <span className="font-body-sm text-body-sm font-semibold text-text-primary">
-                        Llave Transfiya / Bre-B
-                      </span>
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-badge-label uppercase bg-[#fff0b3] text-[#c75300]">
-                        Inmediato
-                      </span>
-                    </div>
-                    <span className="font-caption text-caption text-text-secondary">
-                      Celular registrado: {profile.transfiyaPhone}
-                    </span>
-                  </div>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+              {/* Shown on invoices and cuentas de cobro as the payment destination. */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-badge-label text-caption text-text-secondary uppercase tracking-wider" htmlFor="bank-bankName">
+                    Banco
+                  </label>
                   <input
-                    checked={transfiyaActive}
-                    onChange={(e) => setTransfiyaActive(e.target.checked)}
-                    className="sr-only peer"
-                    type="checkbox"
+                    id="bank-bankName"
+                    className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
+                    type="text"
+                    placeholder="ej. Bancolombia"
+                    value={profile.bankName}
+                    onChange={(e) => setProfile({ ...profile, bankName: e.target.value })}
                   />
-                  <div className="w-9 h-5 bg-border-strong peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-canvas-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-canvas-white after:border-border-strong after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
-                </label>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-badge-label text-caption text-text-secondary uppercase tracking-wider" htmlFor="bank-bankAccount">
+                    Tipo y número de cuenta
+                  </label>
+                  <input
+                    id="bank-bankAccount"
+                    className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
+                    type="text"
+                    placeholder="ej. Cuenta de Ahorros No. 245-098765-12"
+                    value={profile.bankAccount}
+                    onChange={(e) => setProfile({ ...profile, bankAccount: e.target.value })}
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-badge-label text-caption text-text-secondary uppercase tracking-wider" htmlFor="bank-transfiyaPhone">
+                    Llave Transfiya / Bre-B (celular)
+                  </label>
+                  <input
+                    id="bank-transfiyaPhone"
+                    className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
+                    type="tel"
+                    placeholder="ej. +57 312 458 9920"
+                    value={profile.transfiyaPhone}
+                    onChange={(e) => setProfile({ ...profile, transfiyaPhone: e.target.value })}
+                  />
+                </div>
               </div>
-            </div>
-
-            <div className="pt-2 flex justify-start">
-              <button
-                className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-body-sm font-medium hover:bg-surface-container-low transition-colors flex items-center gap-2 cursor-pointer shadow-sm"
-                type="button"
-                onClick={() => {
-                  alert('Esta función todavía no está disponible.');
-                }}
-              >
-                <span className="material-symbols-outlined text-[18px]">add_circle</span>
-                Vincular otra cuenta bancaria
-              </button>
+              <p className="font-caption text-caption text-text-subtlest">
+                Estos datos aparecen como forma de pago en tus facturas y cuentas de cobro. Guárdalos con "Guardar cambios".
+              </p>
             </div>
           </section>
 

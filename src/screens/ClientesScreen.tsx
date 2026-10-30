@@ -1,16 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { ScreenId, Client } from '../types';
-import { formatCOP } from '../utils/calculations';
+import { formatCOP, addDaysISO } from '../utils/calculations';
 import { createClient } from '../services/supabaseService';
+import { EditClientModal, confirmAndDeleteClient } from '../components/ClientActions';
 
 interface ClientesScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
   clients: Client[];
   onClientCreated: (client: Client) => void;
   onOpenClient: (clientId: string) => void;
+  onCreateInvoice: (clientId: string) => void;
+  onClientUpdated: (client: Client) => void;
+  onClientDeleted: (clientId: string) => void;
 }
 
-export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clients, onClientCreated, onOpenClient }) => {
+export const ClientesScreen: React.FC<ClientesScreenProps> = ({
+  onNavigate,
+  clients,
+  onClientCreated,
+  onOpenClient,
+  onCreateInvoice,
+  onClientUpdated,
+  onClientDeleted,
+}) => {
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
+
+  const handleDeleteClient = async (client: Client) => {
+    try {
+      if (await confirmAndDeleteClient(client)) onClientDeleted(client.id);
+    } catch (e) {
+      window.alert(`No se pudo eliminar: ${(e as any)?.message ?? e}`);
+    }
+  };
   const [filter, setFilter] = useState<'all' | 'active' | 'withBalance' | 'inactive'>('all');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -91,6 +112,22 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
   const pageCount = Math.max(1, Math.ceil(filteredClients.length / PAGE_SIZE));
   // Clamp so a filter or search that shrinks the list never leaves you on an empty page.
   const currentPage = Math.min(page, pageCount);
+
+  const [exporting, setExporting] = useState(false);
+
+  // Exports what the list shows (filter + search applied), not only the current page.
+  // exceljs is loaded on click so it stays out of the app's initial bundle.
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { downloadClientsXlsx } = await import('../utils/exportClients');
+      await downloadClientsXlsx(filteredClients, `clientes-${addDaysISO(0)}.xlsx`);
+    } catch (e) {
+      window.alert(`No se pudo exportar: ${(e as any)?.message ?? e}`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const totalClients = clients.length;
   const activeClients = clients.filter((c) => c.status === 'Activo').length;
@@ -248,16 +285,15 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
 
             <div className="flex items-center gap-space-xs">
               <button
-                className="h-10 px-4 rounded-[10000px] bg-surface-container-lowest border border-border-strong hover:bg-surface-container-low hover:border-text-primary text-text-primary font-body-sm text-body-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="h-10 px-4 rounded-[10000px] bg-surface-container-lowest border border-border-strong hover:bg-surface-container-low hover:border-text-primary text-text-primary font-body-sm text-body-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 type="button"
-                onClick={() => {
-                  alert('Esta función todavía no está disponible.');
-                }}
+                onClick={handleExport}
+                disabled={filteredClients.length === 0 || exporting}
               >
                 <span className="material-symbols-outlined text-[16px] text-text-secondary">
                   file_download
                 </span>
-                <span>Exportar CSV</span>
+                <span>{exporting ? 'Exportando...' : 'Exportar Excel'}</span>
               </button>
               <button
                 className="w-10 h-10 rounded-[10000px] bg-surface-container-lowest border border-border-strong hover:bg-surface-container-low hover:border-text-primary text-text-secondary hover:text-text-primary inline-flex items-center justify-center transition-colors cursor-pointer"
@@ -405,26 +441,31 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                           <button
                             className="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors cursor-pointer"
                             title="Crear factura"
+                            aria-label={`Crear factura para ${client.name}`}
                             type="button"
-                            onClick={() => {
-                              onNavigate('facturas');
-                            }}
+                            onClick={() => onCreateInvoice(client.id)}
                           >
                             <span className="material-symbols-outlined text-[18px]">
                               post_add
                             </span>
                           </button>
                           <button
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors cursor-pointer"
-                            title="Más opciones"
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-primary-container hover:bg-surface-container-low transition-colors cursor-pointer"
+                            title="Editar"
+                            aria-label={`Editar ${client.name}`}
                             type="button"
-                            onClick={() => {
-                              onNavigate('contratos');
-                            }}
+                            onClick={() => setEditingClient(client)}
                           >
-                            <span className="material-symbols-outlined text-[18px]">
-                              more_vert
-                            </span>
+                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                          </button>
+                          <button
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-[#ae2e24] hover:bg-[#ffebe6] transition-colors cursor-pointer"
+                            title="Eliminar"
+                            aria-label={`Eliminar ${client.name}`}
+                            type="button"
+                            onClick={() => handleDeleteClient(client)}
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
                           </button>
                         </div>
                       </td>
@@ -505,6 +546,17 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
           </div>
         </div>
       </div>
+
+      {editingClient && (
+        <EditClientModal
+          client={editingClient}
+          onClose={() => setEditingClient(null)}
+          onSaved={(c) => {
+            setEditingClient(null);
+            onClientUpdated(c);
+          }}
+        />
+      )}
 
       {/* Modal for adding client */}
       {showAddModal && (
