@@ -23,7 +23,6 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
   const [bancoInfo, setBancoInfo] = useState(
     'Bancolombia — Cuenta de Ahorros No. 245-098765-12 a nombre de Carlos Mendoza (C.C. 1.032.456.789)'
   );
-  const [isGenerating, setIsGenerating] = useState(false);
 
   const numericMonto = parseInt(monto.replace(/\D/g, ''), 10) || 0;
   const montoLetras = numeroALetrasCOP(numericMonto);
@@ -394,7 +393,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                 className="font-caption text-caption font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
                 type="button"
                 onClick={() => {
-                  alert('Vista previa a tamaño completo 100% DPI');
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 <span className="material-symbols-outlined text-[16px]">zoom_in</span> Aumentar
@@ -594,7 +593,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low transition-colors focus:outline-none cursor-pointer"
             type="button"
             onClick={() => {
-              alert('Cuenta de cobro guardada como borrador.');
+              alert('Esta función todavía no está disponible.');
             }}
           >
             Guardar borrador
@@ -606,18 +605,14 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             id="btn-generar"
             type="button"
             onClick={() => {
-              setIsGenerating(true);
-              setTimeout(() => {
-                setIsGenerating(false);
-                alert('¡Cuenta de Cobro oficial generada y descargada exitosamente!');
-              }, 800);
+              alert('Esta función todavía no está disponible.');
             }}
           >
             <span className="material-symbols-outlined text-[22px]">
-              {isGenerating ? 'progress_activity' : 'download'}
+              download
             </span>
             <span>
-              {isGenerating ? 'Compilando PDF oficial...' : 'Generar y Descargar PDF'}
+              Generar y Descargar PDF
             </span>
           </button>
         </div>

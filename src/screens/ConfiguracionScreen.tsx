@@ -333,7 +333,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
                 className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-body-sm font-medium hover:bg-surface-container-low transition-colors flex items-center gap-2 cursor-pointer shadow-sm"
                 type="button"
                 onClick={() => {
-                  alert('Formulario de vinculación de nueva cuenta bancaria DIAN habilitado.');
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 <span className="material-symbols-outlined text-[18px]">add_circle</span>
@@ -421,7 +421,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
                 className="w-full h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-body-sm font-medium hover:bg-surface-container-low hover:border-text-primary transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 type="button"
                 onClick={() => {
-                  alert('Selector de firma digitalizada habilitado para cargar PNG/SVG.');
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
@@ -453,7 +453,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
               className="h-9 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-caption hover:bg-surface-container-low transition-colors self-start sm:self-auto flex items-center gap-1.5 cursor-pointer shadow-sm"
               type="button"
               onClick={() => {
-                alert('Sincronización con el servidor de la DIAN exitosa. Rangos vigentes confirmados.');
+                alert('Esta función todavía no está disponible.');
               }}
             >
               <span className="material-symbols-outlined text-[16px]">sync</span>
@@ -603,7 +603,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({ onNavi
             className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-canvas-white font-button-label text-body-md font-medium transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
             type="button"
             onClick={() => {
-              onNavigate('dashboard');
+              alert('Esta función todavía no está disponible.');
             }}
           >
             <span className="material-symbols-outlined text-[20px]">check</span>

@@ -295,7 +295,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
                     title="Duplicar servicio"
                     type="button"
                     onClick={() => {
-                      alert(`Servicio "${service.title}" duplicado en el tarifario.`);
+                      alert('Esta función todavía no está disponible.');
                     }}
                   >
                     <span className="material-symbols-outlined text-[20px]">content_copy</span>
@@ -407,7 +407,8 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <button
                 className="h-10 px-6 rounded-[10000px] bg-primary-container text-white font-button-label"
                 onClick={() => {
-                  setShowAddModal(false);
+                  // Not wired to Supabase yet: say so instead of silently dropping the data.
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 Guardar en Tarifario

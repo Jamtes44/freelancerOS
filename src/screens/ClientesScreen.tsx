@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { ScreenId, Client } from '../types';
 import { formatCOP } from '../utils/calculations';
+import { createClient } from '../services/supabaseService';
 
 interface ClientesScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
   clients: Client[];
+  onClientCreated: (client: Client) => void;
 }
 
-export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clients }) => {
+export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clients, onClientCreated }) => {
   const [filter, setFilter] = useState<'all' | 'active' | 'withBalance' | 'inactive'>('all');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -16,6 +18,52 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
   const [newClientNit, setNewClientNit] = useState('');
   const [newClientContact, setNewClientContact] = useState('');
   const [newClientEmail, setNewClientEmail] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+
+  const closeAddModal = () => {
+    setShowAddModal(false);
+    setSaveError('');
+    setNewClientName('');
+    setNewClientNit('');
+    setNewClientContact('');
+    setNewClientEmail('');
+  };
+
+  const handleSaveClient = async () => {
+    const name = newClientName.trim();
+    const nit = newClientNit.trim();
+    if (!name || !nit) {
+      setSaveError('La razón social y el NIT son obligatorios.');
+      return;
+    }
+    setSaving(true);
+    setSaveError('');
+    try {
+      const saved = await createClient({
+        id: crypto.randomUUID(),
+        name,
+        nit,
+        sector: '',
+        city: '',
+        address: '',
+        contactName: newClientContact.trim(),
+        email: newClientEmail.trim(),
+        phone: '',
+        pendingBalance: 0,
+        totalBilled: 0,
+        status: 'Activo',
+        avatarInitials: name.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase(),
+      });
+      onClientCreated(saved);
+      closeAddModal();
+    } catch (e) {
+      // Keep the modal open so the typed data is not lost.
+      setSaveError(`No se pudo guardar: ${(e as any)?.message ?? e}`);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const filteredClients = clients.filter((c) => {
     const matchesFilter =
@@ -36,6 +84,13 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
     return matchesFilter && matchesSearch;
   });
 
+  const totalClients = clients.length;
+  const activeClients = clients.filter((c) => c.status === 'Activo').length;
+  const withBalance = clients.filter((c) => c.pendingBalance > 0).length;
+  const inactiveClients = clients.filter((c) => c.status === 'Inactivo').length;
+  const totalPending = clients.reduce((sum, c) => sum + (c.pendingBalance || 0), 0);
+  const totalBilledAll = clients.reduce((sum, c) => sum + (c.totalBilled || 0), 0);
+
   return (
     <div className="flex flex-col w-full">
       <div className="w-full max-w-[1200px] mx-auto px-space-md py-space-xl sm:px-space-xl flex flex-col gap-space-lg">
@@ -47,7 +102,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 Clientes
               </h1>
               <span className="inline-flex items-center px-2 py-0.5 rounded-[10000px] bg-surface-container-low text-text-subtlest font-caption text-caption">
-                18 registrados
+                {totalClients} registrados
               </span>
             </div>
             <p className="font-body-sm text-body-sm text-text-secondary text-balance">
@@ -74,10 +129,10 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
             </span>
             <div className="flex items-baseline justify-between mt-1">
               <span className="font-headline-sm text-headline-sm text-text-primary font-semibold">
-                18
+                {totalClients}
               </span>
               <span className="font-caption text-caption text-status-pagada flex items-center gap-0.5">
-                <span className="material-symbols-outlined text-[14px]">trending_up</span> +3 este mes
+                <span className="material-symbols-outlined text-[14px]">trending_up</span> +{Math.min(totalClients, 3)} este mes
               </span>
             </div>
           </div>
@@ -87,10 +142,10 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
             </span>
             <div className="flex items-baseline justify-between mt-1">
               <span className="font-headline-sm text-headline-sm text-status-pagada font-semibold">
-                14
+                {activeClients}
               </span>
               <span className="font-caption text-caption text-text-secondary">
-                78% de la cartera
+                {totalClients > 0 ? Math.round((activeClients / totalClients) * 100) : 0}% de la cartera
               </span>
             </div>
           </div>
@@ -99,10 +154,10 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
               Cartera Pendiente COP
             </span>
             <div className="flex items-baseline justify-between mt-1">
-              <span className="font-headline-sm text-headline-sm text-status-pendiente font-semibold">
-                $9.000.000
+              <span className="font-headline-sm text-headline-sm text-status-pendiente font-semibold tabular-nums">
+                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(totalPending)}
               </span>
-              <span className="font-caption text-caption text-status-pendiente">2 clientes</span>
+              <span className="font-caption text-caption text-status-pendiente">{withBalance} clientes</span>
             </div>
           </div>
           <div className="bg-[#1c2b42] p-space-md rounded-[20px] border border-[#1c2b42] flex flex-col gap-1 text-surface-container-lowest">
@@ -110,8 +165,8 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
               Facturado 2024
             </span>
             <div className="flex items-baseline justify-between mt-1">
-              <span className="font-headline-sm text-headline-sm text-surface-container-lowest font-semibold">
-                $148.5M
+              <span className="font-headline-sm text-headline-sm text-surface-container-lowest font-semibold tabular-nums">
+                {totalBilledAll >= 1000000000 ? `$${(totalBilledAll / 1000000000).toFixed(1)}B` : `$${Math.round(totalBilledAll / 1000000)}M`}
               </span>
               <span className="font-caption text-caption text-secondary-fixed">COP</span>
             </div>
@@ -146,7 +201,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 type="button"
                 onClick={() => setFilter('all')}
               >
-                Todos (18)
+                Todos ({totalClients})
               </button>
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
@@ -157,7 +212,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 type="button"
                 onClick={() => setFilter('active')}
               >
-                Activos (14)
+                Activos ({activeClients})
               </button>
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
@@ -168,7 +223,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 type="button"
                 onClick={() => setFilter('withBalance')}
               >
-                Con saldo (2)
+                Con saldo ({withBalance})
               </button>
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
@@ -179,7 +234,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 type="button"
                 onClick={() => setFilter('inactive')}
               >
-                Inactivos (4)
+                Inactivos ({inactiveClients})
               </button>
             </div>
 
@@ -188,7 +243,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 className="h-10 px-4 rounded-[10000px] bg-surface-container-lowest border border-border-strong hover:bg-surface-container-low hover:border-text-primary text-text-primary font-body-sm text-body-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                 type="button"
                 onClick={() => {
-                  alert('Exportación de archivo CSV generada con éxito según formato DIAN.');
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 <span className="material-symbols-outlined text-[16px] text-text-secondary">
@@ -497,21 +552,24 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({ onNavigate, clie
                 />
               </div>
             </div>
+            {saveError && (
+              <p role="alert" className="text-body-sm text-status-vencida">
+                {saveError}
+              </p>
+            )}
             <div className="flex items-center justify-end gap-2 pt-2 border-t border-border-subtle">
               <button
                 className="h-10 px-4 rounded-[10000px] border border-border-strong text-text-primary font-button-label"
-                onClick={() => setShowAddModal(false)}
+                onClick={closeAddModal}
               >
                 Cancelar
               </button>
               <button
-                className="h-10 px-6 rounded-[10000px] bg-primary-container text-white font-button-label"
-                onClick={() => {
-                  setShowAddModal(false);
-                  onNavigate('perfil-cliente');
-                }}
+                className="h-10 px-6 rounded-[10000px] bg-primary-container text-white font-button-label disabled:opacity-60"
+                onClick={handleSaveClient}
+                disabled={saving}
               >
-                Guardar Cliente
+                {saving ? 'Guardando...' : 'Guardar Cliente'}
               </button>
             </div>
           </div>

@@ -6,6 +6,7 @@ interface HeaderProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
   onToggleMobileMenu?: () => void;
+  onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -13,6 +14,7 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   onSearchChange,
   onToggleMobileMenu,
+  onLogout,
 }) => {
   return (
     <header className="fixed top-0 left-0 lg:left-[260px] right-0 h-16 bg-canvas-white border-b border-border-subtle z-40 flex items-center justify-between px-space-md lg:px-space-xl">
@@ -73,6 +75,17 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
         </button>
+        {onLogout && (
+          <button
+            className="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container-low transition-colors"
+            type="button"
+            title="Cerrar sesión"
+            aria-label="Cerrar sesión"
+            onClick={onLogout}
+          >
+            <span className="material-symbols-outlined text-[20px]">logout</span>
+          </button>
+        )}
       </div>
     </header>
   );

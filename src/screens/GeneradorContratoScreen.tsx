@@ -430,7 +430,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 className="w-full sm:w-auto h-[44px] px-6 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-sm border border-border-strong cursor-pointer"
                 type="button"
                 onClick={() => {
-                  alert('Borrador de contrato descargado en formato PDF legal.');
+                  alert('Esta función todavía no está disponible.');
                 }}
               >
                 <span className="material-symbols-outlined text-[20px] text-text-secondary">

@@ -594,7 +594,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
               className="h-[44px] px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container font-button-label text-button-label text-text-primary border border-border-strong transition-all flex items-center justify-center gap-2 cursor-pointer"
               type="button"
               onClick={() => {
-                alert('Borrador guardado localmente en tu cuenta FreelanceOS.');
+                alert('Esta función todavía no está disponible.');
               }}
             >
               <span className="material-symbols-outlined text-[18px]">save</span>
@@ -606,7 +606,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({ 
               className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer"
               type="button"
               onClick={() => {
-                onNavigate('dashboard');
+                alert('Esta función todavía no está disponible.');
               }}
             >
               <span className="material-symbols-outlined text-[22px]">download_for_offline</span>

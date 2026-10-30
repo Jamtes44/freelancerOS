@@ -171,27 +171,39 @@ alter table public.invoice_items enable row level security;
 alter table public.cuentas_cobro enable row level security;
 alter table public.freelancer_profile enable row level security;
 
--- Permissive policies for anon (adjust later if adding auth)
+-- Only signed-in users can read or write. Single-user app: disable sign-ups in
+-- Supabase (Authentication > Sign In / Providers > "Allow new users to sign up" off)
+-- and create your user by hand, otherwise anyone could register and get access.
+-- shortcut: no owner_id per row, all signed-in users share the data; add owner_id = auth.uid() for multi-user.
+
 drop policy if exists "allow_all_clients" on public.clients;
-create policy "allow_all_clients" on public.clients for all using (true) with check (true);
+drop policy if exists "authenticated_all_clients" on public.clients;
+create policy "authenticated_all_clients" on public.clients for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_services" on public.services;
-create policy "allow_all_services" on public.services for all using (true) with check (true);
+drop policy if exists "authenticated_all_services" on public.services;
+create policy "authenticated_all_services" on public.services for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_contracts" on public.contracts;
-create policy "allow_all_contracts" on public.contracts for all using (true) with check (true);
+drop policy if exists "authenticated_all_contracts" on public.contracts;
+create policy "authenticated_all_contracts" on public.contracts for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_contract_clauses" on public.contract_clauses;
-create policy "allow_all_contract_clauses" on public.contract_clauses for all using (true) with check (true);
+drop policy if exists "authenticated_all_contract_clauses" on public.contract_clauses;
+create policy "authenticated_all_contract_clauses" on public.contract_clauses for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_invoices" on public.invoices;
-create policy "allow_all_invoices" on public.invoices for all using (true) with check (true);
+drop policy if exists "authenticated_all_invoices" on public.invoices;
+create policy "authenticated_all_invoices" on public.invoices for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_invoice_items" on public.invoice_items;
-create policy "allow_all_invoice_items" on public.invoice_items for all using (true) with check (true);
+drop policy if exists "authenticated_all_invoice_items" on public.invoice_items;
+create policy "authenticated_all_invoice_items" on public.invoice_items for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_cuentas_cobro" on public.cuentas_cobro;
-create policy "allow_all_cuentas_cobro" on public.cuentas_cobro for all using (true) with check (true);
+drop policy if exists "authenticated_all_cuentas_cobro" on public.cuentas_cobro;
+create policy "authenticated_all_cuentas_cobro" on public.cuentas_cobro for all to authenticated using (true) with check (true);
 
 drop policy if exists "allow_all_freelancer_profile" on public.freelancer_profile;
-create policy "allow_all_freelancer_profile" on public.freelancer_profile for all using (true) with check (true);
+drop policy if exists "authenticated_all_freelancer_profile" on public.freelancer_profile;
+create policy "authenticated_all_freelancer_profile" on public.freelancer_profile for all to authenticated using (true) with check (true);
