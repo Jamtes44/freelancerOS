@@ -1,23 +1,57 @@
 import React, { useState } from 'react';
 import { ScreenId, FreelancerProfile } from '../types';
 import { saveFreelancerProfile } from '../services/supabaseService';
+import { nextDocumentNumber } from '../utils/calculations';
 
 interface ConfiguracionScreenProps {
   onNavigate: (screen: ScreenId, params?: Record<string, unknown>) => void;
   profile: FreelancerProfile;
   onProfileSaved: (profile: FreelancerProfile) => void;
+  documentNumbers: { invoices: string[]; cuentas: string[]; contracts: string[] };
 }
 
 export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
   onNavigate,
   profile: savedProfile,
   onProfileSaved,
+  documentNumbers,
 }) => {
   const [profile, setProfile] = useState(savedProfile);
   const [saveState, setSaveState] = useState<{ status: 'idle' | 'saving' | 'saved' | 'error'; message?: string }>({
     status: 'idle',
   });
   const isDirty = JSON.stringify(profile) !== JSON.stringify(savedProfile);
+  const [signatureError, setSignatureError] = useState('');
+
+  // Stored inline as a data URL in freelancer_profile; the size cap keeps the row small.
+  const handleSignatureFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // lets the same file be chosen again after "Quitar"
+    if (!file) return;
+    if (!['image/png', 'image/jpeg'].includes(file.type)) return setSignatureError('Usa una imagen PNG o JPG.');
+    if (file.size > 300 * 1024) return setSignatureError('La imagen pesa más de 300 KB. Recórtala o redúcela.');
+    setSignatureError('');
+    const reader = new FileReader();
+    reader.onload = () => setProfile((p) => ({ ...p, signature: String(reader.result) }));
+    reader.onerror = () => setSignatureError('No se pudo leer la imagen.');
+    reader.readAsDataURL(file);
+  };
+
+  const lastNumber = (prefix: string, numbers: string[]) =>
+    numbers
+      .map((n) => ({ n, seq: parseInt(new RegExp(`^${prefix}-\\d{4}-(\\d+)$`).exec(n)?.[1] ?? '', 10) }))
+      .filter((x) => !isNaN(x.seq))
+      .sort((a, b) => b.seq - a.seq)[0]?.n;
+  const numbering = [
+    { prefix: 'FAC', label: 'Facturas', numbers: documentNumbers.invoices },
+    { prefix: 'CC', label: 'Cuentas de cobro', numbers: documentNumbers.cuentas },
+    { prefix: 'CTR', label: 'Contratos', numbers: documentNumbers.contracts },
+  ].map((n) => ({
+    ...n,
+    count: n.numbers.length,
+    last: lastNumber(n.prefix, n.numbers),
+    next: nextDocumentNumber(n.prefix, n.numbers),
+  }));
 
   const handleSave = async () => {
     setSaveState({ status: 'saving' });
@@ -30,7 +64,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
       setSaveState({ status: 'error', message: (e as any)?.message ?? String(e) });
     }
   };
-  const [activeTab, setActiveTab] = useState<'emisor' | 'banco' | 'numeracion' | 'plantillas' | 'seguridad'>('emisor');
+  const [activeTab, setActiveTab] = useState('config-emisor');
 
   return (
     <div className="flex flex-col w-full pb-32">
@@ -38,88 +72,43 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md pb-space-sm border-b border-border-subtle">
           <div className="flex flex-col gap-space-xs max-w-2xl">
-            <div className="inline-flex items-center gap-2">
-              <span className="inline-flex items-center px-2 py-0.5 rounded-[10000px] font-badge-label text-caption uppercase tracking-wider bg-surface-container-high text-text-secondary border border-border-subtle">
-                Sistema &amp; Parámetros DIAN
-              </span>
-            </div>
             <h1 className="font-headline-md text-headline-md text-text-primary font-semibold tracking-tight">
               Configuración General y Perfil Profesional
             </h1>
             <p className="font-body-md text-body-md text-text-secondary">
-              Administra tus datos fiscales de emisor, cuentas bancarias, numeración DIAN y
-              plantillas legales.
+              Tus datos de emisor, cuenta bancaria, firma y la numeración de tus documentos.
             </p>
           </div>
-          <div className="flex items-center gap-space-sm shrink-0">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[10000px] bg-status-pagada/10 text-status-pagada font-badge-label text-caption border border-[#abf5d1]">
-              <span className="w-2 h-2 rounded-full bg-status-pagada"></span>
-              Certificado Digital Activo
-            </span>
-          </div>
         </div>
 
-        {/* Navigation Tabs (Pill style) */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 select-none">
-          <button
-            className={`px-5 py-2 rounded-[10000px] font-button-label text-body-sm font-medium shrink-0 transition-colors shadow-sm cursor-pointer ${
-              activeTab === 'emisor'
-                ? 'bg-text-primary text-canvas-white'
-                : 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low border border-border-subtle'
-            }`}
-            type="button"
-            onClick={() => setActiveTab('emisor')}
-          >
-            Datos del Emisor
-          </button>
-          <button
-            className={`px-5 py-2 rounded-[10000px] font-button-label text-body-sm font-medium shrink-0 transition-colors cursor-pointer ${
-              activeTab === 'banco'
-                ? 'bg-text-primary text-canvas-white'
-                : 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low border border-border-subtle'
-            }`}
-            type="button"
-            onClick={() => setActiveTab('banco')}
-          >
-            Cuentas Bancarias
-          </button>
-          <button
-            className={`px-5 py-2 rounded-[10000px] font-button-label text-body-sm font-medium shrink-0 transition-colors cursor-pointer ${
-              activeTab === 'numeracion'
-                ? 'bg-text-primary text-canvas-white'
-                : 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low border border-border-subtle'
-            }`}
-            type="button"
-            onClick={() => setActiveTab('numeracion')}
-          >
-            Numeración y Consecutivos
-          </button>
-          <button
-            className={`px-5 py-2 rounded-[10000px] font-button-label text-body-sm font-medium shrink-0 transition-colors cursor-pointer ${
-              activeTab === 'plantillas'
-                ? 'bg-text-primary text-canvas-white'
-                : 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low border border-border-subtle'
-            }`}
-            type="button"
-            onClick={() => onNavigate('contratos')}
-          >
-            Plantillas y Cláusulas
-          </button>
-          <button
-            className={`px-5 py-2 rounded-[10000px] font-button-label text-body-sm font-medium shrink-0 transition-colors cursor-pointer ${
-              activeTab === 'seguridad'
-                ? 'bg-text-primary text-canvas-white'
-                : 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low border border-border-subtle'
-            }`}
-            type="button"
-            onClick={() => setActiveTab('seguridad')}
-          >
-            Seguridad
-          </button>
-        </div>
+        {/* Shortcuts to each section of this page */}
+        <nav aria-label="Secciones" className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 select-none">
+          {[
+            ['config-emisor', 'Datos del emisor'],
+            ['config-banco', 'Cuenta bancaria'],
+            ['config-firma', 'Firma'],
+            ['config-consecutivos', 'Consecutivos'],
+          ].map(([id, label]) => (
+            <button
+              key={id}
+              className={`px-5 py-2 rounded-[10000px] font-button-label text-body-sm font-medium shrink-0 transition-colors cursor-pointer ${
+                activeTab === id
+                  ? 'bg-text-primary text-canvas-white'
+                  : 'bg-canvas-white text-text-secondary hover:text-text-primary hover:bg-surface-container-low border border-border-subtle'
+              }`}
+              type="button"
+              onClick={() => {
+                setActiveTab(id);
+                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
 
         {/* Card 1: Identificación del Freelancer / Emisor */}
-        <section className="bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col gap-space-lg shadow-none">
+        <section id="config-emisor" className="scroll-mt-24 bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col gap-space-lg">
           <div className="flex items-start justify-between gap-space-md pb-space-sm border-b border-border-subtle">
             <div className="flex items-center gap-space-sm">
               <div className="w-10 h-10 rounded-full bg-status-enviada-bg flex items-center justify-center text-status-enviada-text shrink-0">
@@ -252,7 +241,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
         {/* Split Grid: Datos Bancarios & Certificado de Firma */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
           {/* Card 2: Datos Bancarios (7 Cols) */}
-          <section className="lg:col-span-7 bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col justify-between gap-space-lg shadow-none">
+          <section id="config-banco" className="scroll-mt-24 lg:col-span-7 bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col justify-between gap-space-lg">
             <div className="flex flex-col gap-space-md">
               <div className="flex items-center justify-between pb-space-sm border-b border-border-subtle">
                 <div className="flex items-center gap-space-sm">
@@ -319,7 +308,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
           </section>
 
           {/* Card 3: Certificado de Firma y Logotipo (5 Cols) */}
-          <section className="lg:col-span-5 bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col justify-between gap-space-lg shadow-none">
+          <section id="config-firma" className="scroll-mt-24 lg:col-span-5 bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col justify-between gap-space-lg">
             <div className="flex flex-col gap-space-md">
               <div className="flex items-center gap-space-sm pb-space-sm border-b border-border-subtle">
                 <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-text-primary shrink-0">
@@ -327,236 +316,81 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
                 </div>
                 <div>
                   <h2 className="font-headline-sm text-headline-sm text-text-primary font-semibold">
-                    Firma y Logotipo
+                    Firma
                   </h2>
                   <p className="font-body-sm text-body-sm text-text-secondary">
-                    Elementos visuales impresos en PDFs.
+                    Se guarda con "Guardar cambios".
                   </p>
                 </div>
               </div>
 
-              {/* Preview de Firma */}
               <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-badge-label text-caption text-text-secondary uppercase tracking-wider">
-                    Firma Digitalizada
-                  </span>
-                  <span className="font-caption text-caption text-status-pagada font-medium">
-                    Validada SHA-256
-                  </span>
+                <span className="font-badge-label text-caption text-text-secondary uppercase tracking-wider">
+                  Firma digitalizada
+                </span>
+                <div className="h-28 w-full rounded-[20px] bg-surface-container-low border border-dashed border-border-strong flex items-center justify-center p-3">
+                  {profile.signature ? (
+                    <img src={profile.signature} alt="Tu firma" className="max-h-full max-w-full object-contain" />
+                  ) : (
+                    <span className="font-body-sm text-body-sm text-text-subtlest">Aún no has subido tu firma</span>
+                  )}
                 </div>
-                <div className="h-28 w-full rounded-[10px] bg-surface-container-low border border-dashed border-border-strong flex flex-col items-center justify-center p-3 relative group overflow-hidden">
-                  <svg
-                    className="w-48 h-16 text-text-primary/80"
-                    fill="none"
-                    viewBox="0 0 200 60"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15 38C25 35 45 22 55 20C65 18 68 32 60 40C52 48 35 45 42 30C49 15 70 12 85 24C100 36 110 38 120 28C130 18 135 15 145 25C155 35 160 38 185 22"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2.2"
-                    ></path>
-                    <path
-                      d="M48 48C70 47 115 45 165 42"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeWidth="1.8"
-                    ></path>
-                  </svg>
-                  <div className="absolute inset-0 bg-text-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="font-caption text-caption text-text-primary font-medium bg-canvas-white px-2 py-1 rounded shadow-sm">
-                      Vista previa oficial
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Preview de Logotipo */}
-              <div className="flex items-center gap-space-md p-3 rounded-[10px] bg-surface-container-low border border-border-subtle">
-                <div className="w-14 h-14 rounded-lg bg-canvas-white border border-border-subtle flex items-center justify-center p-2 shrink-0">
-                  <div className="w-10 h-10 rounded bg-primary-container text-white flex items-center justify-center font-bold text-lg">
-                    F
-                  </div>
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="font-body-sm text-body-sm font-semibold text-text-primary truncate">
-                    mendoza-brand-dark.svg
-                  </span>
-                  <span className="font-caption text-caption text-text-subtlest">
-                    Vectorial • Fondo transparente
-                  </span>
-                </div>
+                <p className="font-caption text-caption text-text-subtlest">
+                  Se imprime en tus cuentas de cobro y contratos. PNG o JPG de hasta 300 KB, idealmente con fondo transparente.
+                </p>
+                {signatureError && (
+                  <p role="alert" className="font-caption text-caption text-status-vencida">
+                    {signatureError}
+                  </p>
+                )}
               </div>
             </div>
 
-            <div className="pt-2">
-              <button
-                className="w-full h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-body-sm font-medium hover:bg-surface-container-low hover:border-text-primary transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                type="button"
-                onClick={() => {
-                  alert('Esta función todavía no está disponible.');
-                }}
-              >
+            <div className="pt-2 flex flex-col sm:flex-row gap-2">
+              <label className="flex-1 h-11 px-5 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-body-sm font-medium hover:bg-surface-container-low hover:border-text-primary transition-colors flex items-center justify-center gap-2 cursor-pointer focus-within:ring-2 focus-within:ring-primary-container">
                 <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
-                Reemplazar firma o logotipo
-              </button>
+                {profile.signature ? 'Reemplazar firma' : 'Subir firma'}
+                <input type="file" accept="image/png,image/jpeg" className="sr-only" onChange={handleSignatureFile} />
+              </label>
+              {profile.signature && (
+                <button
+                  className="h-11 px-5 rounded-[10000px] bg-canvas-white border border-[#ffbdad] text-[#ae2e24] font-button-label text-body-sm font-medium hover:bg-[#ffebe6] transition-colors cursor-pointer"
+                  type="button"
+                  onClick={() => setProfile({ ...profile, signature: '' })}
+                >
+                  Quitar
+                </button>
+              )}
             </div>
           </section>
         </div>
 
-        {/* Card 4: Consecutivos Vigentes DIAN y Operativos */}
-        <section className="bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col gap-space-lg shadow-none">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-sm border-b border-border-subtle">
-            <div className="flex items-center gap-space-sm">
-              <div className="w-10 h-10 rounded-full bg-status-enviada-bg flex items-center justify-center text-status-enviada-text shrink-0">
-                <span className="material-symbols-outlined text-[22px]">
-                  format_list_numbered
-                </span>
-              </div>
-              <div>
-                <h2 className="font-headline-sm text-headline-sm text-text-primary font-semibold">
-                  Consecutivos y Resoluciones Vigentes
-                </h2>
-                <p className="font-body-sm text-body-sm text-text-secondary">
-                  Control de prefijos, vigencias DIAN y numeración de documentos legales.
-                </p>
-              </div>
+        {/* Card 4: numbering taken from the documents you have saved */}
+        <section id="config-consecutivos" className="scroll-mt-24 bg-canvas-white rounded-[20px] border border-border-subtle p-8 flex flex-col gap-space-lg">
+          <div className="flex items-center gap-space-sm pb-space-sm border-b border-border-subtle">
+            <div className="w-10 h-10 rounded-full bg-status-enviada-bg flex items-center justify-center text-status-enviada-text shrink-0">
+              <span className="material-symbols-outlined text-[22px]">format_list_numbered</span>
             </div>
-            <button
-              className="h-9 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-caption hover:bg-surface-container-low transition-colors self-start sm:self-auto flex items-center gap-1.5 cursor-pointer shadow-sm"
-              type="button"
-              onClick={() => {
-                alert('Esta función todavía no está disponible.');
-              }}
-            >
-              <span className="material-symbols-outlined text-[16px]">sync</span>
-              Sincronizar con DIAN
-            </button>
+            <div>
+              <h2 className="font-headline-sm text-headline-sm text-text-primary font-semibold">Consecutivos</h2>
+              <p className="font-body-sm text-body-sm text-text-secondary">
+                Numeración automática de tus documentos. El año cambia solo y el número sigue del último emitido.
+              </p>
+            </div>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-            {/* Factura Electrónica */}
-            <div className="p-space-md rounded-[12px] border border-border-subtle bg-canvas-white hover:bg-[#f7f8f9] transition-colors flex flex-col justify-between gap-space-md">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-badge-label text-caption text-text-secondary uppercase tracking-wider">
-                    Facturación DIAN
+            {numbering.map((n) => (
+              <div key={n.prefix} className="p-space-md rounded-[20px] border border-border-subtle bg-canvas-white flex flex-col gap-2">
+                <span className="font-badge-label text-caption text-text-secondary uppercase tracking-wider">{n.label}</span>
+                <span className="font-body-md text-body-md font-semibold text-text-primary">Siguiente: {n.next}</span>
+                <div className="flex items-center justify-between pt-2 border-t border-border-subtle font-caption text-caption text-text-subtlest">
+                  <span>Último: {n.last ?? '—'}</span>
+                  <span>
+                    {n.count} {n.count === 1 ? 'emitido' : 'emitidos'}
                   </span>
-                  <span className="px-2 py-0.5 rounded-[10000px] font-badge-label text-[10px] uppercase bg-[#e3fcef] text-[#22a06b] border border-[#abf5d1]">
-                    Activa
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-body-md text-body-md font-semibold text-text-primary">
-                    Prefijo FAC-2025
-                  </span>
-                  <span className="font-caption text-caption text-text-subtlest">
-                    Res. DIAN No. 18764000291
-                  </span>
-                </div>
-                <div className="pt-1">
-                  <div className="flex justify-between font-caption text-caption text-text-secondary mb-1">
-                    <span>Rango: FAC-2025-001 al 100</span>
-                    <span className="font-semibold text-text-primary">64% usado</span>
-                  </div>
-                  <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-primary-container h-full rounded-full" style={{ width: '64%' }}></div>
-                  </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between pt-2 border-t border-border-subtle font-caption text-caption text-text-subtlest">
-                <span>Vence: 18 Dic 2025</span>
-                <span
-                  className="text-status-enviada-text font-medium cursor-pointer hover:underline"
-                  onClick={() => onNavigate('facturas')}
-                >
-                  Detalles
-                </span>
-              </div>
-            </div>
-
-            {/* Cuentas de Cobro */}
-            <div className="p-space-md rounded-[12px] border border-border-subtle bg-canvas-white hover:bg-[#f7f8f9] transition-colors flex flex-col justify-between gap-space-md">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-badge-label text-caption text-text-secondary uppercase tracking-wider">
-                    Cuentas de Cobro
-                  </span>
-                  <span className="px-2 py-0.5 rounded-[10000px] font-badge-label text-[10px] uppercase bg-surface-container-low text-text-secondary border border-border-subtle">
-                    Interno
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-body-md text-body-md font-semibold text-text-primary">
-                    Prefijo CC
-                  </span>
-                  <span className="font-caption text-caption text-text-subtlest">
-                    Control administrativo libre
-                  </span>
-                </div>
-                <div className="pt-1">
-                  <div className="flex justify-between font-caption text-caption text-text-secondary mb-1">
-                    <span>Rango: CC-001 a CC-200</span>
-                    <span className="font-semibold text-text-primary">31% usado</span>
-                  </div>
-                  <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-status-pagada h-full rounded-full" style={{ width: '31%' }}></div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between pt-2 border-t border-border-subtle font-caption text-caption text-text-subtlest">
-                <span>Último: CC-062</span>
-                <span
-                  className="text-status-enviada-text font-medium cursor-pointer hover:underline"
-                  onClick={() => onNavigate('cuentas-cobro')}
-                >
-                  Editar rango
-                </span>
-              </div>
-            </div>
-
-            {/* Contratos de Prestación de Servicios */}
-            <div className="p-space-md rounded-[12px] border border-border-subtle bg-canvas-white hover:bg-[#f7f8f9] transition-colors flex flex-col justify-between gap-space-md">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-badge-label text-caption text-text-secondary uppercase tracking-wider">
-                    Contratos de Servicios
-                  </span>
-                  <span className="px-2 py-0.5 rounded-[10000px] font-badge-label text-[10px] uppercase bg-surface-container-low text-text-secondary border border-border-subtle">
-                    Legal
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-body-md text-body-md font-semibold text-text-primary">
-                    Prefijo FOS
-                  </span>
-                  <span className="font-caption text-caption text-text-subtlest">
-                    Minutas contractuales COP
-                  </span>
-                </div>
-                <div className="pt-1">
-                  <div className="flex justify-between font-caption text-caption text-text-secondary mb-1">
-                    <span>Rango: FOS-001 a FOS-100</span>
-                    <span className="font-semibold text-text-primary">18% usado</span>
-                  </div>
-                  <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-secondary h-full rounded-full" style={{ width: '18%' }}></div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between pt-2 border-t border-border-subtle font-caption text-caption text-text-subtlest">
-                <span>Último: FOS-018</span>
-                <span
-                  className="text-status-enviada-text font-medium cursor-pointer hover:underline"
-                  onClick={() => onNavigate('contratos')}
-                >
-                  Configurar
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
       </div>
@@ -589,7 +423,7 @@ export const ConfiguracionScreen: React.FC<ConfiguracionScreenProps> = ({
 
           {/* Target for: //button[contains(., 'Guardar cambios')] */}
           <button
-            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-canvas-white font-button-label text-body-md font-medium transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-default"
+            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-canvas-white font-button-label text-body-md font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-default"
             type="button"
             disabled={!isDirty || saveState.status === 'saving'}
             onClick={handleSave}

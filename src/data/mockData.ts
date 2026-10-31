@@ -362,4 +362,5 @@ export const INITIAL_FREELANCER_PROFILE: FreelancerProfile = {
   bankAccount: 'Cuenta de Ahorros No. 245-098765-12',
   maskedAccount: '***-765128-12',
   transfiyaPhone: '+57 312 458 9920',
+  signature: '',
 };

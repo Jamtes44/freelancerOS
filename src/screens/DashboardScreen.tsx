@@ -123,7 +123,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
           {/* ÚNICO Botón Primario de Píldora Azul en la Pantalla */}
           <div className="shrink-0 w-full md:w-auto">
             <button
-              className="w-full md:w-auto inline-flex items-center justify-center gap-space-sm h-11 px-6 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label hover:bg-primary-hover active:bg-[#09326c] transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container/20 cursor-pointer shadow-sm"
+              className="w-full md:w-auto inline-flex items-center justify-center gap-space-sm h-11 px-6 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label hover:bg-primary-hover active:bg-[#09326c] transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container/20 cursor-pointer"
               type="button"
               onClick={() => onNavigate('facturas')}
             >
@@ -325,7 +325,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                 return (
                   <div
                     key={cc.id}
-                    className="p-space-md rounded-[12px] bg-surface-container-lowest flex flex-col gap-space-sm"
+                    className="p-space-md rounded-[20px] bg-surface-container-lowest flex flex-col gap-space-sm"
                     style={{ outline: '1px solid #dddee1' }}
                   >
                     <div className="flex items-start justify-between gap-2 flex-wrap">
@@ -361,7 +361,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
               })}
             </div>
 
-            <div className="mt-space-xs p-space-md rounded-[12px] bg-surface-container-low flex items-center justify-between">
+            <div className="mt-space-xs p-space-md rounded-[20px] bg-surface-container-low flex items-center justify-between">
               <div className="flex items-center gap-space-sm">
                 <span className="material-symbols-outlined text-text-secondary text-[20px]">verified_user</span>
                 <span className="font-body-sm text-body-sm text-text-secondary">Cumplimiento según Ley 2277 / DIAN</span>

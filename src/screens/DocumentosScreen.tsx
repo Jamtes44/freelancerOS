@@ -13,6 +13,8 @@ interface DocumentosScreenProps {
   contracts: Contract[];
   clients: Client[];
   clientFilter?: string;
+  /** Status filter to start with, e.g. 'Vencida' when opened from the notifications bell. */
+  initialStatusFilter?: StatusFilter;
   onClearClientFilter: () => void;
   onStatusChanged: (kind: Kind, id: string, status: string) => void;
   onOpenDocument: (kind: Kind, id: string) => void;
@@ -34,7 +36,7 @@ const STATUS_STYLE: Record<string, string> = {
   Firmado: 'bg-[#e3fcef] text-[#22a06b] border-[#abf5d1]',
 };
 
-type StatusFilter = 'all' | 'open' | 'Vencida' | 'Pagada' | 'Borrador';
+export type StatusFilter = 'all' | 'open' | 'Vencida' | 'Pagada' | 'Borrador';
 
 const pill = (active: boolean) =>
   `px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
@@ -49,12 +51,13 @@ export const DocumentosScreen: React.FC<DocumentosScreenProps> = ({
   contracts,
   clients,
   clientFilter,
+  initialStatusFilter,
   onClearClientFilter,
   onStatusChanged,
   onOpenDocument,
 }) => {
   const [kindFilter, setKindFilter] = useState<'all' | Kind>('all');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(initialStatusFilter ?? 'all');
   const [search, setSearch] = useState('');
   const [savingId, setSavingId] = useState('');
   const [error, setError] = useState('');

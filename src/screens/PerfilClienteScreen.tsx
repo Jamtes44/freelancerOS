@@ -168,7 +168,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
 
           <div className="flex flex-wrap items-center gap-space-sm">
             <button
-              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer"
               type="button"
               onClick={() => onNavigate('contratos')}
             >
@@ -176,7 +176,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
               <span>Nuevo contrato</span>
             </button>
             <button
-              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer"
               type="button"
               onClick={() => onNavigate('facturas')}
             >
@@ -184,7 +184,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
               <span>Nueva factura</span>
             </button>
             <button
-              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer"
               type="button"
               onClick={() => onNavigate('cuentas-cobro')}
             >
@@ -192,7 +192,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
               <span>Nueva cuenta de cobro</span>
             </button>
             <button
-              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-border-strong text-text-primary font-button-label text-button-label hover:bg-surface-container-low hover:border-text-primary transition-all flex items-center gap-1.5 cursor-pointer"
               type="button"
               onClick={() => setEditing(true)}
             >
@@ -200,7 +200,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
               <span>Editar</span>
             </button>
             <button
-              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-[#ffbdad] text-[#ae2e24] font-button-label text-button-label hover:bg-[#ffebe6] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="h-10 px-4 rounded-[10000px] bg-canvas-white border border-[#ffbdad] text-[#ae2e24] font-button-label text-button-label hover:bg-[#ffebe6] transition-all flex items-center gap-1.5 cursor-pointer"
               type="button"
               onClick={handleDelete}
             >
@@ -219,7 +219,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
         <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col lg:flex-row lg:items-center justify-between gap-space-xl">
           <div className="flex flex-col sm:flex-row sm:items-center gap-space-lg">
             <div
-              className="w-20 h-20 rounded-[16px] flex items-center justify-center font-headline-md text-headline-md font-bold shadow-sm shrink-0"
+              className="w-20 h-20 rounded-full flex items-center justify-center font-headline-md text-headline-md font-bold shrink-0"
               style={{ backgroundColor: client.avatarBg || '#e8e8ea', color: client.avatarColor || '#101214' }}
             >
               {client.avatarInitials}
@@ -323,7 +323,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
 
         {/* Financial Performance Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-          <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between shadow-none">
+          <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="font-caption text-caption uppercase tracking-wider font-semibold text-text-subtlest">Cobrado</span>
               <span className="w-8 h-8 rounded-full bg-status-enviada-bg text-status-enviada-text flex items-center justify-center">
@@ -340,7 +340,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
             </div>
           </div>
 
-          <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between shadow-none">
+          <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="font-caption text-caption uppercase tracking-wider font-semibold text-text-subtlest">
                 Saldo Pendiente
@@ -365,7 +365,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
             </div>
           </div>
 
-          <div className="bg-[#1c2b42] border border-[#1c2b42] rounded-[20px] p-6 md:p-space-xl text-canvas-white flex flex-col justify-between shadow-none">
+          <div className="bg-[#1c2b42] border border-[#1c2b42] rounded-[20px] p-6 md:p-space-xl text-canvas-white flex flex-col justify-between">
             <div className="flex items-center justify-between text-[#b7b9be]">
               <span className="font-caption text-caption uppercase tracking-wider font-semibold text-canvas-white">
                 Documentos emitidos
@@ -387,7 +387,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
 
         {/* Fiscal Data & Contact */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
-          <div className="lg:col-span-2 bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl shadow-none">
+          <div className="lg:col-span-2 bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl">
             <div className="flex items-center gap-2 pb-4 border-b border-border-subtle">
               <span className="material-symbols-outlined text-text-secondary text-[22px]">domain</span>
               <h2 className="font-headline-sm text-headline-sm text-text-primary font-semibold">Datos Fiscales y Comerciales</h2>
@@ -401,13 +401,13 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
             </div>
           </div>
 
-          <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col shadow-none">
+          <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl flex flex-col">
             <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
               <h3 className="font-headline-sm text-body-lg font-semibold text-text-primary">Contacto Principal</h3>
               <span className="material-symbols-outlined text-text-subtlest text-[20px]">contacts</span>
             </div>
             {client.contactName ? (
-              <div className="mt-space-md flex items-start gap-space-sm p-3 rounded-[12px] bg-surface-container-low border border-border-subtle">
+              <div className="mt-space-md flex items-start gap-space-sm p-3 rounded-[20px] bg-surface-container-low border border-border-subtle">
                 <div className="w-9 h-9 rounded-full bg-secondary text-canvas-white font-semibold flex items-center justify-center text-[12px] shrink-0">
                   {client.contactName
                     .split(/\s+/)
@@ -438,7 +438,7 @@ export const PerfilClienteScreen: React.FC<PerfilClienteScreenProps> = ({
         </div>
 
         {/* Linked Documents Table */}
-        <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl shadow-none">
+        <div className="bg-canvas-white border border-border-subtle rounded-[20px] p-6 md:p-space-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-lg border-b border-border-subtle">
             <div className="flex items-center gap-space-sm">
               <span className="material-symbols-outlined text-text-secondary text-[22px]">history_edu</span>

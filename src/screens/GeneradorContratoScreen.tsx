@@ -129,7 +129,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
           {/* LEFT COLUMN: Contract Parameters & Clauses (read-only when viewing a saved contract) */}
           <fieldset disabled={!!existing} className="lg:col-span-6 flex flex-col gap-space-md min-w-0 border-0 p-0 m-0 disabled:opacity-80">
-            <div className="bg-canvas-white rounded-[20px] p-space-xl shadow-sm border border-border-subtle flex flex-col gap-space-lg">
+            <div className="bg-canvas-white rounded-[20px] p-space-xl border border-border-subtle flex flex-col gap-space-lg">
               <div className="flex items-center justify-between pb-space-sm border-b border-border-subtle">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary-container text-[22px]">
@@ -156,7 +156,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                   </label>
                   <div className="relative">
                     <select
-                      className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-primary-container cursor-pointer shadow-sm pr-10"
+                      className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-primary-container cursor-pointer pr-10"
                       id="client-select"
                       value={selectedClient}
                       onChange={(e) => setSelectedClient(e.target.value)}
@@ -183,7 +183,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                     Objeto del Contrato
                   </label>
                   <textarea
-                    className="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container shadow-sm resize-none"
+                    className="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container resize-none"
                     id="contract-object"
                     rows={2}
                     value={contractObject}
@@ -200,7 +200,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                     Alcance y Entregables Clave
                   </label>
                   <textarea
-                    className="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container shadow-sm resize-none"
+                    className="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container resize-none"
                     id="contract-scope"
                     rows={2}
                     value={scope}
@@ -219,7 +219,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                     </label>
                     <div className="relative">
                       <input
-                        className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container shadow-sm"
+                        className="w-full h-10 px-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container"
                         id="contract-duration"
                         type="text"
                         value={duration}
@@ -239,7 +239,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                     </label>
                     <div className="relative">
                       <input
-                        className="w-full h-10 px-3 font-semibold bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container shadow-sm"
+                        className="w-full h-10 px-3 font-semibold bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container"
                         id="contract-value"
                         type="text"
                         value={contractValue}
@@ -261,7 +261,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                     Forma de Pago y Desembolsos
                   </label>
                   <textarea
-                    className="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container shadow-sm resize-none"
+                    className="w-full p-3 bg-canvas-white border border-border-strong rounded-[3px] font-body-md text-body-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-container resize-none"
                     id="payment-schedule"
                     rows={2}
                     value={paymentSchedule}
@@ -284,7 +284,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                   {clauses.map((clause) => (
                     <div
                       key={clause.id}
-                      className="group bg-surface-container-low rounded-xl p-space-md transition-all shadow-sm border border-border-subtle"
+                      className="group bg-surface-container-low rounded-[20px] p-space-md transition-all border border-border-subtle"
                     >
                       <button
                         className="w-full flex items-center justify-between cursor-pointer list-none font-body-sm font-semibold text-text-primary select-none text-left"
@@ -308,7 +308,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                       {clause.isOpen && (
                         <div className="pt-3">
                           <textarea
-                            className="w-full p-2.5 bg-canvas-white border border-border-strong rounded-[3px] font-body-sm text-body-sm text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary-container shadow-sm resize-none"
+                            className="w-full p-2.5 bg-canvas-white border border-border-strong rounded-[3px] font-body-sm text-body-sm text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary-container resize-none"
                             rows={3}
                             value={clause.content}
                             onChange={(e) => updateClauseContent(clause.id, e.target.value)}
@@ -325,7 +325,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
           {/* RIGHT COLUMN: Realtime Editorial Contract Preview */}
           <div className="lg:col-span-6 flex flex-col gap-space-md sticky top-20">
             {/* Document Sheet Card */}
-            <div className="print-area bg-canvas-white rounded-[20px] shadow-sm border border-border-subtle p-8 md:p-12 text-text-primary flex flex-col justify-between relative overflow-hidden">
+            <div className="print-area bg-canvas-white rounded-[20px] border border-border-subtle p-8 md:p-12 text-text-primary flex flex-col justify-between relative overflow-hidden">
               <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-status-enviada-bg opacity-30 pointer-events-none"></div>
 
               {/* Document Header */}
@@ -400,9 +400,10 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 {/* Digital Signature Boxes */}
                 <div className="pt-8 mt-4 grid grid-cols-1 sm:grid-cols-2 gap-8 border-t border-border-subtle">
                   {/* Contractor Signature */}
-                  <div className="flex flex-col items-center text-center p-4 bg-surface-container-low rounded-xl border border-border-subtle">
-                    <div className="w-full flex flex-col items-center justify-center h-20">
-                      <div className="w-full h-[1px] bg-border-strong mt-auto"></div>
+                  <div className="flex flex-col items-center text-center p-4 bg-surface-container-low rounded-[20px] border border-border-subtle">
+                    <div className="w-full flex flex-col items-center justify-end h-20">
+                      {profile.signature && <img src={profile.signature} alt="Firma del contratista" className="max-h-16 max-w-full object-contain" />}
+                      <div className="w-full h-[1px] bg-border-strong"></div>
                     </div>
                     <span className="font-semibold text-text-primary text-body-sm mt-2">
                       EL CONTRATISTA
@@ -412,7 +413,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                   </div>
 
                   {/* Contracting Party Signature */}
-                  <div className="flex flex-col items-center text-center p-4 bg-surface-container-low rounded-xl border border-border-subtle">
+                  <div className="flex flex-col items-center text-center p-4 bg-surface-container-low rounded-[20px] border border-border-subtle">
                     <div className="w-full flex flex-col items-center justify-center h-20">
                       <div className="h-10 flex items-center text-text-subtlest text-caption font-caption">
                         Pendiente de firma digital
@@ -435,9 +436,9 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
             </div>
 
             {/* Action Control Panel */}
-            <div className="bg-canvas-white rounded-[20px] p-6 shadow-sm border border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-md">
+            <div className="bg-canvas-white rounded-[20px] p-6 border border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-md">
               <button
-                className="w-full sm:w-auto h-[44px] px-6 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-sm border border-border-strong cursor-pointer"
+                className="w-full sm:w-auto h-[44px] px-6 rounded-[10000px] bg-canvas-white text-text-primary font-button-label text-button-label flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors border border-border-strong cursor-pointer"
                 type="button"
                 onClick={() => printDocument(`Contrato ${contractNumber}`)}
               >
@@ -458,7 +459,7 @@ export const GeneradorContratoScreen: React.FC<GeneradorContratoScreenProps> = (
                 </button>
               ) : (
                 <button
-                  className="w-full sm:w-auto h-[58px] px-8 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label flex items-center justify-center gap-3 hover:bg-primary-hover active:bg-primary transition-all shadow-md cursor-pointer disabled:opacity-60"
+                  className="w-full sm:w-auto h-[58px] px-8 rounded-[10000px] bg-primary-container text-on-primary font-button-label text-button-label flex items-center justify-center gap-3 hover:bg-primary-hover active:bg-primary transition-all cursor-pointer disabled:opacity-60"
                   id="btn-emitir-contrato"
                   type="button"
                   disabled={saving}

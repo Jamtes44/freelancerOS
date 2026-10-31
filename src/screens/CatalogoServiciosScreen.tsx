@@ -237,7 +237,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
 
           <div className="flex items-center shrink-0 w-full md:w-auto">
             <button
-              className="inline-flex items-center justify-center gap-space-xs h-[44px] px-6 rounded-full bg-primary-container text-on-primary hover:bg-primary-hover active:bg-[#09326c] transition-colors font-button-label text-button-label cursor-pointer shadow-sm w-full md:w-auto"
+              className="inline-flex items-center justify-center gap-space-xs h-[44px] px-6 rounded-full bg-primary-container text-on-primary hover:bg-primary-hover active:bg-[#09326c] transition-colors font-button-label text-button-label cursor-pointer w-full md:w-auto"
               type="button"
               onClick={() => setModal({ initial: emptyService(), isNew: true })}
             >
@@ -248,7 +248,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
         </div>
 
         {/* Filter & Search Bar Toolbar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md p-space-sm bg-surface-container-low rounded-xl border border-border-subtle">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md p-space-sm bg-surface-container-low rounded-[20px] border border-border-subtle">
           <div className="relative w-full lg:w-96">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-subtlest text-[20px]">search</span>
             <input
@@ -283,7 +283,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2 items-stretch w-full lg:w-auto min-w-0">
             {metrics.map((m) => (
-              <div key={m.label} className="flex flex-col px-3 py-2 rounded-lg bg-canvas-white/5 border border-white/10 justify-between min-w-0">
+              <div key={m.label} className="flex flex-col px-3 py-2 rounded-[20px] bg-canvas-white/5 border border-white/10 justify-between min-w-0">
                 <span className="font-caption text-caption text-secondary-fixed-dim truncate">{m.label}</span>
                 <span className="tabular-nums whitespace-nowrap font-semibold text-canvas-white text-body-md mt-0.5">{m.value}</span>
                 <span className="font-caption text-caption text-secondary-fixed-dim truncate mt-0.5">{m.hint}</span>
@@ -308,7 +308,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
               <article
                 key={service.id}
                 aria-busy={deleting}
-                className={`service-card-item rounded-[20px] bg-canvas-white p-space-xl flex flex-col justify-between border border-border-subtle hover:border-primary-container transition-all group shadow-none ${
+                className={`service-card-item rounded-[20px] bg-canvas-white p-space-xl flex flex-col justify-between border border-border-subtle hover:border-primary-container transition-all group ${
                   deleting ? 'opacity-50 pointer-events-none' : ''
                 }`}
               >
@@ -364,7 +364,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
 
                   <div className="mt-space-md flex flex-wrap gap-1.5">
                     {service.tags.map((tag) => (
-                      <span key={tag} className="font-caption text-caption px-2 py-0.5 rounded bg-surface-container text-text-secondary border border-border-subtle">
+                      <span key={tag} className="font-caption text-caption px-2 py-0.5 rounded-full bg-surface-container text-text-secondary border border-border-subtle">
                         {tag}
                       </span>
                     ))}
@@ -411,7 +411,7 @@ export const CatalogoServiciosScreen: React.FC<CatalogoServiciosScreenProps> = (
 
         {/* Bottom Informational Banner: Retention and Tax Calculation */}
         <section className="rounded-[20px] bg-status-enviada-bg p-space-lg md:p-space-xl flex flex-col md:flex-row items-start md:items-center gap-space-lg border border-[#b3d4ff]">
-          <div className="w-12 h-12 rounded-full bg-canvas-white flex items-center justify-center shrink-0 text-primary-container shadow-sm border border-[#b3d4ff]">
+          <div className="w-12 h-12 rounded-full bg-canvas-white flex items-center justify-center shrink-0 text-primary-container border border-[#b3d4ff]">
             <span className="material-symbols-outlined text-[28px]">calculate</span>
           </div>
           <div className="flex-1 flex flex-col gap-1">

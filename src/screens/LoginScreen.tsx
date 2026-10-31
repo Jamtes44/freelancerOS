@@ -29,7 +29,7 @@ export const LoginScreen: React.FC = () => {
     <div className="min-h-screen bg-surface-container-lowest flex items-center justify-center p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-canvas-white rounded-[20px] border border-border-subtle p-6 max-w-sm w-full shadow-2xl flex flex-col gap-4"
+        className="bg-canvas-white rounded-[20px] border border-border-subtle p-6 max-w-sm w-full flex flex-col gap-4"
       >
         <h1 className="font-headline-sm text-headline-sm text-text-primary font-semibold">
           Iniciar sesión en FreelanceOS

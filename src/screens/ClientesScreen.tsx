@@ -161,7 +161,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
 
           {/* ÚNICO Botón Primario de la Pantalla */}
           <button
-            className="h-10 px-6 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-surface-container-lowest font-button-label text-button-label inline-flex items-center justify-center gap-1.5 transition-colors w-full sm:w-auto self-stretch sm:self-auto shrink-0 shadow-sm cursor-pointer"
+            className="h-10 px-6 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-surface-container-lowest font-button-label text-button-label inline-flex items-center justify-center gap-1.5 transition-colors w-full sm:w-auto self-stretch sm:self-auto shrink-0 cursor-pointer"
             type="button"
             onClick={() => setShowAddModal(true)}
           >
@@ -244,7 +244,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   filter === 'all'
-                    ? 'bg-surface-container-lowest text-text-primary shadow-sm'
+                    ? 'bg-surface-container-lowest text-text-primary'
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
                 type="button"
@@ -255,7 +255,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   filter === 'active'
-                    ? 'bg-surface-container-lowest text-text-primary shadow-sm'
+                    ? 'bg-surface-container-lowest text-text-primary'
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
                 type="button"
@@ -266,7 +266,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   filter === 'withBalance'
-                    ? 'bg-surface-container-lowest text-text-primary shadow-sm'
+                    ? 'bg-surface-container-lowest text-text-primary'
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
                 type="button"
@@ -277,7 +277,7 @@ export const ClientesScreen: React.FC<ClientesScreenProps> = ({
               <button
                 className={`px-3 py-1.5 rounded-[10000px] font-body-sm text-body-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   filter === 'inactive'
-                    ? 'bg-surface-container-lowest text-text-primary shadow-sm'
+                    ? 'bg-surface-container-lowest text-text-primary'
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
                 type="button"

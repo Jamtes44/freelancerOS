@@ -64,6 +64,8 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
   const bankLine = [profile.bankName, profile.bankAccount].filter(Boolean).join(' — ');
 
   const taxSummary = calculateTaxSummary(items, 0.04);
+  // Invoices saved before line items were stored (e.g. the seed) only have their total.
+  const missingItems = !!existing && existing.items.length === 0;
 
   const handleDeleteItem = (id: string) => {
     if (items.length > 1) {
@@ -146,6 +148,15 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
           </div>
         </div>
       </div>
+
+      {missingItems && (
+        <div className="px-space-xl pt-4">
+          <p role="note" className="max-w-[1360px] mx-auto p-space-md rounded-[20px] bg-[#fff0b3] border border-[#ffe380] font-body-sm text-body-sm text-text-primary">
+            Esta factura no tiene conceptos guardados porque se creó antes de que la app los guardara. Su total
+            registrado es <strong>{formatCOP(existing!.invoice.amount, true)}</strong>; el PDF saldrá sin detalle.
+          </p>
+        </div>
+      )}
 
       {/* Main Split Layout Container */}
       <div className="px-space-xl py-6 bg-surface-container-low">
@@ -285,7 +296,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-surface-container-low rounded-[12px] p-4 border border-border-subtle flex flex-col gap-3 group"
+                  className="bg-surface-container-low rounded-[20px] p-4 border border-border-subtle flex flex-col gap-3 group"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
@@ -367,7 +378,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
 
               <div>
                 <button
-                  className="h-11 px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container transition-colors flex items-center justify-center gap-2 font-button-label text-button-label text-text-primary border border-border-strong cursor-pointer shadow-sm"
+                  className="h-11 px-5 rounded-[10000px] bg-canvas-white hover:bg-surface-container transition-colors flex items-center justify-center gap-2 font-button-label text-button-label text-text-primary border border-border-strong cursor-pointer"
                   type="button"
                   onClick={() => setItems((prev) => [...prev, emptyItem()])}
                 >
@@ -422,13 +433,13 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
             </div>
 
             {/* The White Sheet Container */}
-            <div className="print-area bg-canvas-white rounded-[10px] p-7 shadow-sm border border-border-subtle flex flex-col justify-between">
+            <div className="print-area bg-canvas-white rounded-[20px] p-7 border border-border-subtle flex flex-col justify-between">
               {/* Sheet Header */}
               <div className="flex flex-col gap-6">
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-7 h-7 rounded-[4px] bg-primary-container flex items-center justify-center text-canvas-white font-bold text-[14px]">
+                      <div className="w-7 h-7 rounded-[3px] bg-primary-container flex items-center justify-center text-canvas-white font-bold text-[14px]">
                         F
                       </div>
                       <span className="font-headline-sm text-body-md font-bold text-text-primary tracking-tight">
@@ -468,7 +479,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                 <div className="h-px bg-surface-container-high w-full"></div>
 
                 {/* Customer & Bill To */}
-                <div className="bg-surface-container-low p-3.5 rounded-[8px] border border-border-subtle flex flex-col gap-1">
+                <div className="bg-surface-container-low p-3.5 rounded-[3px] border border-border-subtle flex flex-col gap-1">
                   <span className="font-caption text-caption text-text-subtlest uppercase tracking-wider font-semibold">
                     Facturado A:
                   </span>
@@ -484,7 +495,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                       </p>
                     </div>
                     {clientInfo?.taxRegime && (
-                      <span className="px-2 py-0.5 rounded font-caption text-[10px] font-semibold uppercase tracking-wide bg-canvas-white text-text-secondary border border-border-subtle">
+                      <span className="px-2 py-0.5 rounded-full font-caption text-[10px] font-semibold uppercase tracking-wide bg-canvas-white text-text-secondary border border-border-subtle">
                         {clientInfo.taxRegime}
                       </span>
                     )}
@@ -504,7 +515,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className="grid grid-cols-12 py-2 px-2 items-center hover:bg-surface-container-low rounded transition-colors"
+                      className="grid grid-cols-12 py-2 px-2 items-center hover:bg-surface-container-low rounded-[3px] transition-colors"
                     >
                       <div className="col-span-6">
                         <p className="font-body-sm text-body-sm font-semibold text-text-primary truncate">
@@ -525,7 +536,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                 </div>
 
                 {/* Settlement & Tax Box */}
-                <div className="bg-surface-container-low p-4 rounded-[8px] border border-border-subtle flex flex-col gap-2 mt-2">
+                <div className="bg-surface-container-low p-4 rounded-[3px] border border-border-subtle flex flex-col gap-2 mt-2">
                   <div className="flex justify-between items-center font-body-sm text-body-sm text-text-secondary">
                     <span>Subtotal Bruto</span>
                     <span className="font-medium text-text-primary">
@@ -567,7 +578,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
 
                 {/* Banking Coordinates Footer */}
                 <div className="pt-2">
-                  <div className="p-3 bg-surface-container-lowest border border-border-subtle rounded-[6px] flex items-center justify-between">
+                  <div className="p-3 bg-surface-container-lowest border border-border-subtle rounded-[3px] flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-status-enviada-bg flex items-center justify-center text-status-enviada-text">
                         <span className="material-symbols-outlined text-[18px]">
@@ -607,7 +618,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
             <div className="flex flex-col">
               <span className="font-caption text-caption text-text-subtlest">{invoiceNumber}</span>
               <span className="font-body-md text-body-md font-bold text-text-primary">
-                {formatCOP(taxSummary.total, true)} a cobrar
+                {formatCOP(missingItems ? existing!.invoice.amount : taxSummary.total, true)} a cobrar
               </span>
               {saveError && (
                 <span role="alert" className="font-body-sm text-body-sm text-status-vencida">
@@ -628,7 +639,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
                 <span>Volver a Documentos</span>
               </button>
               <button
-                className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+                className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white transition-all flex items-center justify-center gap-2.5 cursor-pointer"
                 type="button"
                 onClick={() => printDocument(invoiceNumber)}
               >
@@ -649,7 +660,7 @@ export const GeneradorFacturaScreen: React.FC<GeneradorFacturaScreenProps> = ({
             </button>
 
             <button
-              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
+              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-primary font-button-label text-button-label text-canvas-white transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
               type="button"
               disabled={saving}
               onClick={() => handleSave('Enviada')}

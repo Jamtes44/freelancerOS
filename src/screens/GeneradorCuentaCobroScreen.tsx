@@ -146,7 +146,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
           {/* COLUMNA IZQUIERDA: FORMULARIO TÉCNICO (7 Cols), read-only when viewing a saved document */}
           <fieldset disabled={!!existing} className="lg:col-span-7 flex flex-col gap-space-lg min-w-0 border-0 p-0 m-0 disabled:opacity-80">
             {/* Tarjeta 1: Parámetros del Documento y Cliente */}
-            <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
+            <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl">
               <div className="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
                 <div className="flex items-center gap-space-sm">
                   <span className="w-7 h-7 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-badge-label text-badge-label font-bold">
@@ -254,7 +254,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             </div>
 
             {/* Tarjeta 2: Concepto, Honorarios y Valor en Letras */}
-            <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
+            <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl">
               <div className="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
                 <div className="flex items-center gap-space-sm">
                   <span className="w-7 h-7 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-badge-label text-badge-label font-bold">
@@ -324,7 +324,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                 </div>
 
                 {/* Panel Informativo Retenciones */}
-                <div className="bg-surface-container-low p-space-md rounded-[4px] border border-border-subtle flex items-start gap-space-sm mt-space-xs">
+                <div className="bg-surface-container-low p-space-md rounded-[3px] border border-border-subtle flex items-start gap-space-sm mt-space-xs">
                   <span className="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">
                     info
                   </span>
@@ -343,7 +343,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
             </div>
 
             {/* Tarjeta 3: Marco Tributario y Canales de Pago */}
-            <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl shadow-none">
+            <div className="bg-canvas-white rounded-[20px] border border-border-subtle p-space-xl">
               <div className="flex items-center justify-between pb-space-md mb-space-md border-b border-border-subtle">
                 <div className="flex items-center gap-space-sm">
                   <span className="w-7 h-7 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-badge-label text-badge-label font-bold">
@@ -360,7 +360,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
 
               <div className="flex flex-col gap-space-md">
                 {/* Selector de Declaración IVA */}
-                <div className="border border-border-subtle rounded-[4px] p-space-md bg-canvas-white">
+                <div className="border border-border-subtle rounded-[3px] p-space-md bg-canvas-white">
                   <div className="flex items-start gap-space-sm">
                     <input
                       checked={isNoIva}
@@ -387,7 +387,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
                 </div>
 
                 {/* Selector de Aportes Seguridad Social */}
-                <div className="border border-border-subtle rounded-[4px] p-space-md bg-canvas-white">
+                <div className="border border-border-subtle rounded-[3px] p-space-md bg-canvas-white">
                   <div className="flex items-start gap-space-sm">
                     <input
                       checked={isPilaChecked}
@@ -449,7 +449,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
 
             {/* Hoja Física */}
             <div
-              className="print-area bg-canvas-white border border-border-subtle rounded-[20px] p-8 transition-all flex flex-col justify-between text-text-primary relative shadow-sm"
+              className="print-area bg-canvas-white border border-border-subtle rounded-[20px] p-8 transition-all flex flex-col justify-between text-text-primary relative"
               style={{ minHeight: '720px' }}
             >
               <div className="absolute right-8 top-8 opacity-5 pointer-events-none select-none">
@@ -569,32 +569,12 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
               {/* Espacio Firma Digital */}
               <div className="mt-8 pt-6 border-t border-dashed border-border-strong flex items-end justify-between">
                 <div className="flex flex-col">
-                  <div className="h-10 mb-1 flex items-center">
-                    <svg
-                      className="w-36 h-8 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.8"
-                      viewBox="0 0 160 40"
-                    >
-                      <path d="M10 28 C 30 10, 45 35, 60 15 C 75 -2, 70 38, 90 22 C 105 10, 115 30, 130 18 C 140 10, 150 25, 155 20"></path>
-                      <path d="M45 28 L 140 28" opacity="0.6" strokeDasharray="2 3"></path>
-                    </svg>
+                  {/* Uploaded signature from Configuración; otherwise a blank line to sign by hand. */}
+                  <div className="h-12 w-48 mb-1 flex items-end border-b border-border-strong">
+                    {profile.signature && <img src={profile.signature} alt="Firma" className="max-h-12 max-w-full object-contain" />}
                   </div>
                   <span className="font-body-sm text-body-sm font-bold text-text-primary">{profile.name}</span>
                   <span className="font-caption text-caption text-text-subtlest">{profile.docTypeAndNumber}</span>
-                </div>
-                <div className="flex flex-col items-end">
-                  <div className="w-16 h-16 border border-border-subtle p-1 bg-surface-container-low rounded-[3px] flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[42px] text-text-primary">
-                      qr_code_2
-                    </span>
-                  </div>
-                  <span className="font-caption text-[9px] text-text-subtlest mt-1">
-                    Verificación DIAN / FOS
-                  </span>
                 </div>
               </div>
             </div>
@@ -640,7 +620,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
               Volver a Documentos
             </button>
             <button
-              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 cursor-pointer shadow-md"
+              className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 cursor-pointer"
               type="button"
               onClick={() => printDocument(existing.number)}
             >
@@ -660,7 +640,7 @@ export const GeneradorCuentaCobroScreen: React.FC<GeneradorCuentaCobroScreenProp
           </button>
 
           <button
-            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 cursor-pointer shadow-md disabled:opacity-60"
+            className="h-[58px] px-8 rounded-[10000px] bg-primary-container hover:bg-primary-hover active:bg-[#09326c] text-on-primary font-button-label text-button-label font-semibold transition-all flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             id="btn-generar"
             type="button"
             disabled={saving}

@@ -94,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onCloseMobile?.();
               }}
             >
-              <div className="w-8 h-8 rounded-lg bg-primary-container text-canvas-white flex items-center justify-center font-bold text-[18px]">
+              <div className="w-8 h-8 rounded-full bg-primary-container text-canvas-white flex items-center justify-center font-bold text-[18px]">
                 <span className="material-symbols-outlined text-[20px]">
                   account_balance_wallet
                 </span>

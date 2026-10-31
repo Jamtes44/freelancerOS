@@ -208,6 +208,7 @@ export async function getFreelancerProfile(): Promise<FreelancerProfile | null> 
     bankAccount: data.bank_account ?? '',
     maskedAccount: data.masked_account ?? '',
     transfiyaPhone: data.transfiya_phone ?? '',
+    signature: data.signature ?? '',
   };
 }
 
@@ -230,7 +231,11 @@ export async function saveFreelancerProfile(p: FreelancerProfile): Promise<void>
     bank_account: p.bankAccount,
     masked_account: p.maskedAccount,
     transfiya_phone: p.transfiyaPhone,
+    signature: p.signature,
   });
+  if (error?.message.includes('signature')) {
+    throw new Error('falta la columna de la firma. Ejecuta supabase/migrate_signature.sql en Supabase');
+  }
   if (error) throw error;
 }
 

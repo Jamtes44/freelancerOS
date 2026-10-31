@@ -194,6 +194,16 @@ export function formatFecha(iso: string | null | undefined): string {
   return `${String(d.getDate()).padStart(2, '0')} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+/** True if every word of the query appears in some field, ignoring case and accents ("bogota" finds "Bogotá"). */
+export function matchesQuery(fields: Array<string | null | undefined>, query: string): boolean {
+  const words = normalize(query).split(/\s+/).filter(Boolean);
+  if (words.length === 0) return false;
+  const text = normalize(fields.filter(Boolean).join(' '));
+  return words.every((w) => text.includes(w));
+}
+
 /** Local date `days` after `from` as "YYYY-MM-DD" (toISOString would shift to UTC). */
 export function addDaysISO(days: number, from: Date = new Date()): string {
   const d = new Date(from.getFullYear(), from.getMonth(), from.getDate() + days);

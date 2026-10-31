@@ -120,4 +120,6 @@ export interface FreelancerProfile {
   bankAccount: string;
   maskedAccount: string;
   transfiyaPhone: string;
+  /** Signature image as a data URL (PNG/JPG); empty when none. */
+  signature: string;
 }

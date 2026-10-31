@@ -134,6 +134,7 @@ create table if not exists public.freelancer_profile (
   bank_account text,
   masked_account text,
   transfiya_phone text,
+  signature text, -- image as a data URL, printed on cuentas de cobro and contracts
   updated_at timestamptz default now()
 );
 

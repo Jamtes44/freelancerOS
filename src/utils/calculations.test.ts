@@ -12,7 +12,19 @@ import {
   withOverdueStatus,
   addDaysISO,
   itemSubtotal,
+  matchesQuery,
 } from './calculations';
+
+test('matchesQuery ignores case and accents and needs every word', () => {
+  const fields = ['Bancolombia S.A.', '890.903.938-8', 'Medellín'];
+  assert.equal(matchesQuery(fields, 'BANCO'), true);
+  assert.equal(matchesQuery(fields, 'medellin'), true); // accent-insensitive
+  assert.equal(matchesQuery(fields, '903.938'), true); // part of the NIT
+  assert.equal(matchesQuery(fields, 'banco medellin'), true); // words can be in different fields
+  assert.equal(matchesQuery(fields, 'banco bogota'), false);
+  assert.equal(matchesQuery(fields, '   '), false);
+  assert.equal(matchesQuery([null, undefined], 'x'), false);
+});
 
 test('addDaysISO returns local calendar dates across month and year ends', () => {
   assert.equal(addDaysISO(0, new Date(2026, 9, 29, 23, 30)), '2026-10-29'); // late evening stays the same day

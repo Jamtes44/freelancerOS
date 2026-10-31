@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ScreenId, Client, Invoice, InvoiceItem, CuentaCobro, ServiceItem, Contract, FreelancerProfile } from './types';
 import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
+import { Header, SearchResult } from './components/Header';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { ClientesScreen } from './screens/ClientesScreen';
-import { DocumentosScreen } from './screens/DocumentosScreen';
+import { DocumentosScreen, StatusFilter } from './screens/DocumentosScreen';
 import { GeneradorContratoScreen } from './screens/GeneradorContratoScreen';
 import { GeneradorFacturaScreen } from './screens/GeneradorFacturaScreen';
 import { PerfilClienteScreen } from './screens/PerfilClienteScreen';
@@ -24,7 +24,7 @@ import {
   getFreelancerProfile,
   getInvoiceItems,
 } from './services/supabaseService';
-import { withDocumentTotals, withOverdueStatus } from './utils/calculations';
+import { withDocumentTotals, withOverdueStatus, matchesQuery } from './utils/calculations';
 
 const EMPTY_PROFILE: FreelancerProfile = {
   name: '',
@@ -41,6 +41,7 @@ const EMPTY_PROFILE: FreelancerProfile = {
   bankAccount: '',
   maskedAccount: '',
   transfiyaPhone: '',
+  signature: '',
 };
 
 const SCREEN_TITLES: Record<ScreenId, string> = {
@@ -67,6 +68,7 @@ export default function App() {
   const [profile, setProfile] = useState<FreelancerProfile>(EMPTY_PROFILE);
   const [selectedClientId, setSelectedClientId] = useState<string | undefined>();
   const [documentsClientFilter, setDocumentsClientFilter] = useState<string | undefined>();
+  const [documentsStatusFilter, setDocumentsStatusFilter] = useState<StatusFilter | undefined>();
   // First invoice line chosen with "Usar en Factura" in the services catalog.
   const [invoiceStartItem, setInvoiceStartItem] = useState<InvoiceItem | undefined>();
   // A saved document opened read-only in its generator (to review it or download its PDF again).
@@ -131,6 +133,7 @@ export default function App() {
 
   const handleNavigate = (screen: ScreenId) => {
     setDocumentsClientFilter(undefined); // only openDocuments() sets a client filter
+    setDocumentsStatusFilter(undefined);
     setViewing(undefined); // only openDocument() opens a saved document
     setInvoiceStartItem(undefined);
     setCurrentScreen(screen);
@@ -208,6 +211,42 @@ export default function App() {
 
   const clientsWithTotals = withDocumentTotals(clients, [...invoices, ...cuentasCobro]);
 
+  const overdueCount = [...invoices, ...cuentasCobro].filter((d) => d.status === 'Vencida').length;
+  const openOverdue = () => {
+    handleNavigate('documentos');
+    setDocumentsStatusFilter('Vencida');
+  };
+
+  // shortcut: scans everything on each keystroke, fine for hundreds of records; index if it ever lags.
+  const searchResults: SearchResult[] = searchQuery.trim()
+    ? [
+        ...clients
+          .filter((c) => matchesQuery([c.name, c.legalName, c.nit, c.contactName, c.email, c.city], searchQuery))
+          .slice(0, 5)
+          .map((c) => ({
+            key: `client-${c.id}`,
+            icon: 'corporate_fare',
+            label: c.name,
+            sublabel: `Cliente · NIT ${c.nit}`,
+            onSelect: () => openClient(c.id),
+          })),
+        ...[
+          ...invoices.map((d) => ({ kind: 'invoice' as const, id: d.id, number: d.number, client: d.clientName, nit: d.nit, text: '', label: 'Factura', icon: 'receipt_long', status: d.status })),
+          ...cuentasCobro.map((d) => ({ kind: 'cuenta' as const, id: d.id, number: d.number, client: d.clientName, nit: d.nit, text: d.concept, label: 'Cuenta de cobro', icon: 'payments', status: d.status })),
+          ...contracts.map((d) => ({ kind: 'contrato' as const, id: d.id, number: d.number, client: d.clientName, nit: d.nit, text: d.object, label: 'Contrato', icon: 'description', status: d.status })),
+        ]
+          .filter((d) => matchesQuery([d.number, d.client, d.nit, d.text], searchQuery))
+          .slice(0, 6)
+          .map((d) => ({
+            key: `${d.kind}-${d.id}`,
+            icon: d.icon,
+            label: `${d.number} · ${d.client}`,
+            sublabel: `${d.label} · ${d.status}`,
+            onSelect: () => openDocument(d.kind, d.id),
+          })),
+      ]
+    : [];
+
   if (!authReady) return null;
   if (isSupabaseConfigured && !session) return <LoginScreen />;
 
@@ -230,6 +269,9 @@ export default function App() {
           onNavigate={handleNavigate}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          searchResults={searchResults}
+          overdueCount={overdueCount}
+          onOpenOverdue={openOverdue}
           onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           onLogout={isSupabaseConfigured ? () => supabase.auth.signOut() : undefined}
         />
@@ -258,6 +300,8 @@ export default function App() {
 
           {dataLoaded && currentScreen === 'documentos' && (
             <DocumentosScreen
+              key={`${documentsClientFilter ?? ''}-${documentsStatusFilter ?? ''}`}
+              initialStatusFilter={documentsStatusFilter}
               onNavigate={handleNavigate}
               onOpenClient={openClient}
               invoices={invoices}
@@ -363,7 +407,16 @@ export default function App() {
           )}
 
           {dataLoaded && currentScreen === 'configuracion' && (
-            <ConfiguracionScreen onNavigate={handleNavigate} profile={profile} onProfileSaved={setProfile} />
+            <ConfiguracionScreen
+              onNavigate={handleNavigate}
+              profile={profile}
+              onProfileSaved={setProfile}
+              documentNumbers={{
+                invoices: invoices.map((i) => i.number),
+                cuentas: cuentasCobro.map((c) => c.number),
+                contracts: contracts.map((c) => c.number),
+              }}
+            />
           )}
         </main>
       </div>
